@@ -27,7 +27,7 @@ export function ConditionWeTreatCard({
       href={href}
       className={cn(
         serviceIconCardClasses,
-        "h-full items-center px-md py-lg text-center sm:px-lg sm:py-xl",
+        "h-full items-center px-md py-lg text-center sm:px-md sm:py-lg",
         elevated &&
           cn(
             "service-icon-card-active -translate-y-1.5 border-primary/15",
@@ -63,16 +63,16 @@ export function ConditionWeTreatCard({
         />
       </div>
 
-      <h3
+      <p
         className={cn(
-          "mt-md text-body font-bold transition-colors duration-300",
+          "mt-md text-[0.8125rem] font-semibold leading-snug tracking-normal transition-colors duration-300 sm:text-small",
           elevated ? "text-primary" : "text-navy group-hover:text-primary",
         )}
       >
         {title}
-      </h3>
+      </p>
 
-      <p className="mt-sm max-w-[14rem] text-small leading-relaxed text-slate-600">
+      <p className="mt-1 max-w-[14rem] text-[0.75rem] leading-relaxed text-slate-600 sm:text-[0.8125rem]">
         {description}
       </p>
 

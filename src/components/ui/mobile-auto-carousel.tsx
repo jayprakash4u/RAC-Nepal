@@ -39,6 +39,8 @@ export type MobileAutoCarouselProps<T> = {
   showArrows?: boolean;
   showDots?: boolean;
   autoIntervalMs?: number;
+  pauseOnInteraction?: boolean;
+  transitionClassName?: string;
 };
 
 export function MobileAutoCarousel<T>({
@@ -56,6 +58,8 @@ export function MobileAutoCarousel<T>({
   showArrows = true,
   showDots = true,
   autoIntervalMs = DEFAULT_AUTO_INTERVAL_MS,
+  pauseOnInteraction = true,
+  transitionClassName = "transition-transform duration-500 ease-out motion-reduce:transition-none",
 }: MobileAutoCarouselProps<T>) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -78,13 +82,13 @@ export function MobileAutoCarousel<T>({
   }, [items.length]);
 
   useEffect(() => {
-    if (isPaused || reduceMotion || items.length <= 1) {
+    if (isPaused || items.length <= 1) {
       return;
     }
 
     const timer = window.setInterval(goNext, autoIntervalMs);
     return () => window.clearInterval(timer);
-  }, [goNext, isPaused, reduceMotion, items.length, autoIntervalMs]);
+  }, [goNext, isPaused, items.length, autoIntervalMs]);
 
   const pause = () => setIsPaused(true);
   const resume = () => setIsPaused(false);
@@ -93,35 +97,37 @@ export function MobileAutoCarousel<T>({
     return null;
   }
 
+  const interactionHandlers = pauseOnInteraction
+    ? {
+        onMouseEnter: pause,
+        onMouseLeave: resume,
+        onFocus: pause,
+        onBlur: resume,
+        onTouchStart: pause,
+        onTouchEnd: resume,
+        onTouchCancel: resume,
+      }
+    : {};
+
   return (
-    <div
-      className={cn(className)}
-      onMouseEnter={pause}
-      onMouseLeave={resume}
-      onFocus={pause}
-      onBlur={resume}
-      onTouchStart={pause}
-      onTouchEnd={resume}
-    >
+    <div className={cn(className)} {...interactionHandlers}>
       <div
         className={cn("relative w-full", trackClassName)}
         aria-roledescription="carousel"
         aria-label={ariaLabel}
       >
-        <div className="overflow-hidden">
+        <div className="w-full overflow-hidden">
           <ul
-            className={cn(
-              "flex",
-              reduceMotion
-                ? ""
-                : "transition-transform duration-500 ease-out motion-reduce:transition-none",
-            )}
+            className={cn("flex w-full", reduceMotion ? "" : transitionClassName)}
             style={{ transform: `translateX(-${activeIndex * 100}%)` }}
           >
             {items.map((item, index) => (
               <li
                 key={getItemKey(item, index)}
-                className={cn("w-full shrink-0 px-0.5", slideClassName)}
+                className={cn(
+                  "min-w-full shrink-0 grow-0 basis-full px-0.5",
+                  slideClassName,
+                )}
                 aria-hidden={index !== activeIndex}
               >
                 {renderSlide(item, index)}

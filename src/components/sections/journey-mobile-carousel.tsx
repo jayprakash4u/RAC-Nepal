@@ -1,8 +1,11 @@
 "use client";
 
 import Image from "next/image";
+import { useCallback, useEffect, useState } from "react";
 import { journeySection, type JourneyStage } from "@/data/journey";
-import { MobileAutoCarousel } from "@/components/ui/mobile-auto-carousel";
+import { cn } from "@/lib/cn";
+
+const AUTO_INTERVAL_MS = 1200;
 
 function JourneyStageCopy({ stage }: { stage: JourneyStage }) {
   return (
@@ -50,17 +53,61 @@ function JourneyMobileStage({ stage }: { stage: JourneyStage }) {
 }
 
 export function JourneyMobileCarousel() {
+  const items = journeySection.stages;
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduceMotion(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  const goNext = useCallback(() => {
+    setActiveIndex((current) => (current + 1) % items.length);
+  }, [items.length]);
+
+  useEffect(() => {
+    if (items.length <= 1) {
+      return;
+    }
+
+    const timer = window.setInterval(goNext, AUTO_INTERVAL_MS);
+    return () => window.clearInterval(timer);
+  }, [goNext, items.length]);
+
   return (
-    <MobileAutoCarousel
-      className="lg:hidden"
-      trackClassName="mx-auto max-w-[20rem]"
-      items={journeySection.stages}
-      getItemKey={(stage) => stage.step}
-      ariaLabel="Patient journey steps"
-      showArrows={false}
-      showDots={false}
-      autoIntervalMs={3000}
-      renderSlide={(stage) => <JourneyMobileStage stage={stage} />}
-    />
+    <div className="lg:hidden">
+      <div
+        className="relative mx-auto w-full max-w-[20rem]"
+        aria-roledescription="carousel"
+        aria-label="Patient journey steps"
+        aria-live="polite"
+      >
+        <div className="w-full overflow-hidden">
+          <ul
+            className={cn(
+              "flex w-full",
+              reduceMotion
+                ? ""
+                : "transition-transform duration-300 ease-linear motion-reduce:transition-none",
+            )}
+            style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+          >
+            {items.map((stage, index) => (
+              <li
+                key={stage.step}
+                className="min-w-full shrink-0 grow-0 basis-full"
+                aria-hidden={index !== activeIndex}
+              >
+                <JourneyMobileStage stage={stage} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
   );
 }

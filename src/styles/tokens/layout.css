@@ -1,0 +1,40 @@
+/**
+ * Layout, container, and z-index tokens
+ */
+@theme {
+  --container-content: 72rem;
+  --container-narrow: 48rem;
+  --container-wide: 80rem;
+
+  --z-base: 0;
+  --z-dropdown: 10;
+  --z-sticky: 20;
+  --z-header: 30;
+  --z-overlay: 40;
+  --z-modal: 50;
+
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+}
+
+@utility z-dropdown {
+  z-index: 10;
+}
+
+@utility z-sticky {
+  z-index: 20;
+}
+
+@utility z-header {
+  z-index: 30;
+}
+
+@utility z-overlay {
+  z-index: 40;
+}
+
+@utility z-modal {
+  z-index: 50;
+}

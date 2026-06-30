@@ -1,0 +1,24 @@
+/**
+ * Brand & neutral color tokens
+ * Usage: bg-primary, text-navy, border-slate-200, etc.
+ */
+@theme {
+  --color-primary: #1496a8;
+  --color-primary-dark: #0b5d6b;
+  --color-primary-soft: color-mix(in srgb, var(--color-primary-dark) 22%, white);
+  --color-navy: #0f172a;
+  --color-hero: var(--color-primary-soft);
+  --color-hero-glow: color-mix(in srgb, var(--color-primary-dark) 10%, transparent);
+
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-600: #475569;
+
+  --color-background: #ffffff;
+  --color-foreground: var(--color-navy);
+  --color-muted: var(--color-slate-600);
+  --color-border: var(--color-slate-200);
+  --color-surface: var(--color-slate-50);
+  --color-accent: #e07a4f;
+}

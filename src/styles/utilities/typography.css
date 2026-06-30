@@ -1,0 +1,40 @@
+@utility font-display {
+  font-family: var(--font-display);
+}
+
+@utility joint-accent-i {
+  position: relative;
+  display: inline;
+}
+
+@utility joint-accent-s {
+  position: relative;
+  display: inline;
+}
+
+@utility text-hero-display {
+  font-size: var(--text-hero-display);
+  line-height: var(--text-hero-display--line-height);
+  font-weight: var(--text-hero-display--font-weight);
+  letter-spacing: var(--text-hero-display--letter-spacing);
+  text-wrap: pretty;
+}
+
+@utility text-eyebrow {
+  font-size: var(--text-eyebrow);
+  line-height: var(--text-eyebrow--line-height);
+  font-weight: var(--text-eyebrow--font-weight);
+  letter-spacing: var(--text-eyebrow--letter-spacing);
+}
+
+@utility text-body-loose {
+  font-size: var(--text-body-loose);
+  line-height: var(--text-body-loose--line-height);
+  font-weight: var(--text-body-loose--font-weight);
+}
+
+@utility text-body-muted {
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+  color: var(--color-muted);
+}

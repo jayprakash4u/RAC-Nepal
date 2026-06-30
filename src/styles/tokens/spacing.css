@@ -1,0 +1,27 @@
+/**
+ * Spacing scale (px): 4, 8, 16, 24, 32, 48, 64, 96, 128
+ * Usage: p-xs, gap-md, mt-3xl, section-y, etc.
+ *
+ * Note: In Tailwind v4, max-w-lg / max-w-xl / max-w-md etc. use --spacing-* values,
+ * not container widths. Use section-intro, page-hero-media, hero-copy, or rem arbitrary values.
+ */
+@theme {
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+  --spacing-4xl: 96px;
+  --spacing-5xl: 128px;
+
+  /* Semantic layout aliases */
+  --spacing-section-y: var(--spacing-3xl);
+  --spacing-section-y-lg: var(--spacing-4xl);
+  --spacing-page-hero-y: var(--spacing-2xl);
+  --spacing-page-hero-y-lg: var(--spacing-3xl);
+  --spacing-header-content: var(--spacing-2xl);
+  --spacing-section-x: var(--spacing-lg);
+  --spacing-container: var(--spacing-5xl);
+}

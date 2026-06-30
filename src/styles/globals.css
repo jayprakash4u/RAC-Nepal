@@ -1,0 +1,180 @@
+@import "tailwindcss";
+
+@import "./tokens/index.css";
+@import "./utilities/layout.css";
+@import "./utilities/typography.css";
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    font-weight: var(--text-body--font-weight);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3 {
+    color: var(--color-navy);
+    font-family: var(--font-sans);
+    text-wrap: pretty;
+  }
+
+  h1 {
+    font-size: var(--text-h1);
+    line-height: var(--text-h1--line-height);
+    font-weight: var(--text-h1--font-weight);
+    letter-spacing: var(--text-h1--letter-spacing);
+  }
+
+  h2 {
+    font-size: var(--text-h2);
+    line-height: var(--text-h2--line-height);
+    font-weight: var(--text-h2--font-weight);
+    letter-spacing: var(--text-h2--letter-spacing);
+  }
+
+  h3 {
+    font-size: var(--text-h3);
+    line-height: var(--text-h3--line-height);
+    font-weight: var(--text-h3--font-weight);
+    letter-spacing: var(--text-h3--letter-spacing);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  @keyframes service-orbit {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes service-orbit-reverse {
+    to {
+      transform: rotate(-360deg);
+    }
+  }
+
+  @keyframes symptom-icon-bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-0.45rem);
+    }
+  }
+
+  .joint-accent-i::before {
+    content: "";
+    position: absolute;
+    left: -0.1em;
+    right: -0.1em;
+    top: 52%;
+    height: 0.08em;
+    transform: translateY(-50%);
+    background: currentColor;
+    border-radius: 1px;
+    pointer-events: none;
+  }
+
+  .joint-accent-s::before,
+  .joint-accent-s::after {
+    content: "";
+    position: absolute;
+    width: 0.32em;
+    height: 0.075em;
+    background: currentColor;
+    border-radius: 1px;
+    pointer-events: none;
+  }
+
+  .joint-accent-s::before {
+    top: 0.14em;
+    right: -0.04em;
+  }
+
+  .joint-accent-s::after {
+    bottom: 0.1em;
+    left: 0.04em;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@keyframes symptom-card-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-primary) 28%, transparent);
+  }
+
+  50% {
+    box-shadow: 0 0 0 0.7rem color-mix(in srgb, var(--color-primary) 0%, transparent);
+  }
+}
+
+.group:hover .service-icon-ring {
+  animation: symptom-card-glow 1.8s ease-out infinite;
+}
+
+.group:hover .service-icon-bounce {
+  animation: symptom-icon-bounce 0.85s ease-in-out infinite;
+}
+
+.group.service-icon-card-active .service-icon-ring {
+  animation: symptom-card-glow 1.8s ease-out infinite;
+}
+
+.group.service-icon-card-active .service-icon-bounce {
+  animation: symptom-icon-bounce 0.85s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .group:hover .service-icon-ring {
+    animation: none;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 18%, transparent);
+  }
+
+  .group:hover .service-icon-bounce {
+    animation: none;
+  }
+
+  .group.service-icon-card-active .service-icon-ring {
+    animation: none;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 18%, transparent);
+  }
+
+  .group.service-icon-card-active .service-icon-bounce {
+    animation: none;
+  }
+}

@@ -15,9 +15,10 @@ export type ConditionWeTreatItem = {
 
 export const treatmentsSection = {
   eyebrow: "Our Specialties",
-  title: "Conditions We Treat",
-  description:
-    "Comprehensive care for a wide range of joint, arthritis, and autoimmune conditions.",
+  title: {
+    prefix: "Conditions We",
+    highlight: "Treat",
+  },
   items: [
     {
       id: "rheumatoid-arthritis",
@@ -110,8 +111,7 @@ export const treatmentsSection = {
   },
 } as const satisfies {
   eyebrow: string;
-  title: string;
-  description: string;
+  title: { prefix: string; highlight: string };
   items: readonly ConditionWeTreatItem[];
   primaryCta: { label: string; href: string };
   secondaryCta: { label: string; href: string };

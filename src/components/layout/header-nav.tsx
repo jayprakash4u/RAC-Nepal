@@ -58,8 +58,8 @@ export function HeaderNav() {
   return (
     <>
       <div className="flex min-w-0 flex-1 items-center justify-start gap-md lg:gap-lg">
-        <div className="hidden items-center justify-start gap-md lg:flex lg:gap-lg">
-          <NavLinks />
+        <div className="hidden items-center justify-start gap-md overflow-visible lg:flex lg:gap-lg">
+          <NavLinks className="overflow-visible" />
           <Button
             href={siteConfig.links.appointment}
             size="sm"

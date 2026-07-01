@@ -359,7 +359,7 @@ export function Testimonials() {
           eyebrow={testimonialsSection.eyebrow}
           title={testimonialsSection.title}
           align="center"
-          className="mx-auto max-w-[40rem]"
+          decoratedEyebrow
         />
 
         <TestimonialsMobileCarousel />

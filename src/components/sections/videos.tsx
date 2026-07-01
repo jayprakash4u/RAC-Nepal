@@ -174,7 +174,8 @@ export function Videos() {
         <SectionHeader
           eyebrow={videosSection.eyebrow}
           title={videosSection.title}
-          description={videosSection.description}
+          align="center"
+          decoratedEyebrow
         />
 
         <VideosMobileCarousel items={featuredVideos} />

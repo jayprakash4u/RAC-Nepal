@@ -21,8 +21,6 @@ export const videosSection = {
     highlight: "Patient Stories",
     connector: "&",
   },
-  description:
-    "Expert rheumatology insights, patient experiences, and awareness updates from RAC Nepal — in Nepali and English.",
   featuredLimit: 3,
 } as const;
 

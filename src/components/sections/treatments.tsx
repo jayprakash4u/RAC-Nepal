@@ -1,7 +1,7 @@
 import { treatmentsSection } from "@/data/treatments";
 import { ConditionWeTreatCard } from "@/components/sections/condition-we-treat-card";
 import { TreatmentsMobileCarousel } from "@/components/sections/treatments-mobile-carousel";
-import { Button, Container, Section } from "@/components/ui";
+import { Button, Container, Section, SectionHeader } from "@/components/ui";
 import { cn } from "@/lib/cn";
 
 function SectionDecor() {
@@ -105,7 +105,7 @@ function SpecialistIcon() {
 }
 
 export function Treatments() {
-  const { eyebrow, title, description, items, primaryCta, secondaryCta } =
+  const { eyebrow, title, items, primaryCta, secondaryCta } =
     treatmentsSection;
 
   return (
@@ -113,21 +113,12 @@ export function Treatments() {
       <SectionDecor />
 
       <Container size="wide" className="relative">
-        <header className="section-intro mx-auto flex flex-col items-center text-center">
-          <div className="flex items-center gap-3">
-            <span aria-hidden="true" className="h-px w-10 bg-primary sm:w-12" />
-            <p className="font-display text-eyebrow font-semibold tracking-[0.18em] text-primary uppercase">
-              {eyebrow}
-            </p>
-            <span aria-hidden="true" className="h-px w-10 bg-primary sm:w-12" />
-          </div>
-
-          <h2 className="font-display mt-sm text-h2 font-bold leading-[1.15] tracking-tight text-pretty text-navy lg:text-[2.5rem]">
-            {title}
-          </h2>
-
-          <p className="text-body mt-md text-pretty text-slate-600">{description}</p>
-        </header>
+        <SectionHeader
+          eyebrow={eyebrow}
+          title={title}
+          align="center"
+          decoratedEyebrow
+        />
 
         <TreatmentsMobileCarousel items={items} />
 

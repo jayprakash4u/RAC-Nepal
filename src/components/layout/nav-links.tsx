@@ -6,7 +6,8 @@ import { isNavDropdown, type NavItem } from "@/types/navigation";
 import { cn } from "@/lib/cn";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { DesktopNavDropdown } from "@/components/layout/desktop-nav-dropdown";
 
 type NavLinksProps = {
   className?: string;
@@ -112,65 +113,6 @@ function DesktopNavLink({
   );
 }
 
-function DesktopNavDropdown({
-  item,
-  pathname,
-}: {
-  item: Extract<NavItem, { children: readonly unknown[] }>;
-  pathname: string;
-}) {
-  const isActive = isNavItemActive(pathname, item);
-
-  return (
-    <li className="group relative">
-      <button
-        type="button"
-        aria-haspopup="true"
-        className={cn(
-          "inline-flex items-center gap-1 whitespace-nowrap py-1 text-small font-medium transition-colors duration-normal",
-          isActive
-            ? "text-primary"
-            : "text-slate-600 hover:text-primary",
-        )}
-      >
-        {item.label}
-        <ChevronIcon />
-      </button>
-
-      <div className="invisible absolute top-full left-0 z-dropdown pt-3 opacity-0 transition-all duration-normal group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-        <DropdownPanel
-          className={cn(
-            item.label === "Conditions Treated" || item.label === "Services"
-              ? "w-[18rem]"
-              : "w-52",
-          )}
-        >
-          <ul className="divide-y divide-slate-100">
-            {item.href ? (
-              <li>
-                <DropdownMenuLink
-                  href={item.href}
-                  label={`All ${item.label}`}
-                  isActive={isLinkActive(pathname, item.href)}
-                />
-              </li>
-            ) : null}
-            {item.children.map((child) => (
-              <li key={child.href}>
-                <DropdownMenuLink
-                  href={child.href}
-                  label={child.label}
-                  isActive={isLinkActive(pathname, child.href)}
-                />
-              </li>
-            ))}
-          </ul>
-        </DropdownPanel>
-      </div>
-    </li>
-  );
-}
-
 function MobileNavDropdown({
   item,
   pathname,
@@ -264,13 +206,23 @@ export function NavLinks({
   onNavigate,
 }: NavLinksProps) {
   const pathname = usePathname();
+  const [openDropdownLabel, setOpenDropdownLabel] = useState<string | null>(
+    null,
+  );
+
+  const handleDropdownOpenChange = useCallback(
+    (label: string, open: boolean) => {
+      setOpenDropdownLabel(open ? label : null);
+    },
+    [],
+  );
 
   return (
     <nav aria-label="Main navigation" className={className}>
       <ul
         className={cn(
           orientation === "horizontal"
-            ? "flex flex-wrap items-center justify-start gap-md lg:gap-lg"
+            ? "flex flex-wrap items-center justify-start gap-md overflow-visible lg:gap-lg"
             : "flex flex-col gap-md",
         )}
       >
@@ -281,6 +233,10 @@ export function NavLinks({
                 key={item.label}
                 item={item}
                 pathname={pathname}
+                isOpen={openDropdownLabel === item.label}
+                onOpenChange={(open) =>
+                  handleDropdownOpenChange(item.label, open)
+                }
               />
             ) : (
               <DesktopNavLink key={item.href} item={item} pathname={pathname} />

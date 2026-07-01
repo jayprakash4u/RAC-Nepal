@@ -41,6 +41,11 @@ const categoryGradients: Record<string, string> = {
   "Patient Tips": "from-primary-soft/50 via-white to-primary/10",
   Conditions: "from-primary-dark/15 via-primary-soft/35 to-white",
   "नेपाली": "from-primary/15 via-primary-soft/45 to-white",
+  Gout: "from-amber-100/60 via-primary-soft/30 to-white",
+  Lifestyle: "from-emerald-100/50 via-primary-soft/35 to-white",
+  Autoimmune: "from-violet-100/40 via-primary-soft/40 to-white",
+  Physiotherapy: "from-sky-100/50 via-primary-soft/30 to-white",
+  Telehealth: "from-primary/10 via-white to-primary-soft/50",
 };
 
 function BlogPlaceholder({ category }: { category: string }) {
@@ -183,7 +188,7 @@ function BlogCard({ post, elevated = false }: { post: BlogPost; elevated?: boole
           <PostMeta post={post} />
           <h2
             className={cn(
-              "mt-md line-clamp-2 text-body font-bold leading-snug transition-colors duration-300 lg:text-h3",
+              "mt-md line-clamp-2 text-[0.9375rem] font-bold leading-snug transition-colors duration-300 sm:text-body",
               elevated ? "text-primary" : "text-navy group-hover:text-primary",
             )}
           >
@@ -240,6 +245,20 @@ export function BlogGrid() {
 
         {remainingPosts.length > 0 ? (
           <>
+            <div className="mt-2xl mb-lg flex flex-col gap-xs sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="font-display text-eyebrow font-semibold tracking-[0.16em] text-primary uppercase">
+                  All articles
+                </p>
+                <h2 className="mt-xs text-h3 font-bold text-navy">
+                  More from our specialists
+                </h2>
+              </div>
+              <p className="text-small text-slate-600">
+                {remainingPosts.length} articles to explore
+              </p>
+            </div>
+
             <BlogMobileCarousel
               posts={remainingPosts}
               renderPost={(post) => <BlogCard post={post} elevated />}

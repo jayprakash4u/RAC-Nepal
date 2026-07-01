@@ -8,6 +8,7 @@ export type SectionHeaderProps = {
   description?: string;
   align?: "left" | "center";
   inverted?: boolean;
+  decoratedEyebrow?: boolean;
   className?: string;
 };
 
@@ -17,6 +18,7 @@ export function SectionHeader({
   description,
   align = "left",
   inverted = false,
+  decoratedEyebrow = false,
   className,
 }: SectionHeaderProps) {
   return (
@@ -29,14 +31,41 @@ export function SectionHeader({
       )}
     >
       {eyebrow ? (
-        <p
-          className={cn(
-            "font-display text-eyebrow font-semibold tracking-[0.18em] uppercase",
-            inverted ? "text-primary-soft" : "text-primary",
-          )}
-        >
-          {eyebrow}
-        </p>
+        decoratedEyebrow && align === "center" ? (
+          <div className="flex items-center gap-3">
+            <span
+              aria-hidden="true"
+              className={cn(
+                "h-px w-10 sm:w-12",
+                inverted ? "bg-white/70" : "bg-primary",
+              )}
+            />
+            <p
+              className={cn(
+                "font-display text-eyebrow font-semibold tracking-[0.18em] uppercase",
+                inverted ? "text-primary-soft" : "text-primary",
+              )}
+            >
+              {eyebrow}
+            </p>
+            <span
+              aria-hidden="true"
+              className={cn(
+                "h-px w-10 sm:w-12",
+                inverted ? "bg-white/70" : "bg-primary",
+              )}
+            />
+          </div>
+        ) : (
+          <p
+            className={cn(
+              "font-display text-eyebrow font-semibold tracking-[0.18em] uppercase",
+              inverted ? "text-primary-soft" : "text-primary",
+            )}
+          >
+            {eyebrow}
+          </p>
+        )
       ) : null}
 
       <div

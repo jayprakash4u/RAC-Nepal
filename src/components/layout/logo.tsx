@@ -7,18 +7,21 @@ type LogoProps = {
   className?: string;
   imageClassName?: string;
   priority?: boolean;
+  onNavigate?: () => void;
 };
 
 export function Logo({
   className,
   imageClassName,
   priority = false,
+  onNavigate,
 }: LogoProps) {
   const { logo } = siteConfig;
 
   return (
     <Link
       href="/"
+      onClick={onNavigate}
       className={cn("inline-flex shrink-0 items-center", className)}
       aria-label={siteConfig.name}
     >

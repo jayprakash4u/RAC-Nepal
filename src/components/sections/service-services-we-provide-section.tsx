@@ -83,32 +83,6 @@ function ServiceProvideCard({
   );
 }
 
-function ServicesGrid({
-  items,
-  gridClassName,
-}: {
-  items: ServiceServicesWeProvideSectionData["items"];
-  gridClassName: string;
-}) {
-  return (
-    <ul className={cn("mt-3xl grid gap-3 sm:gap-4", gridClassName)}>
-      {items.map((item, index) => (
-        <li
-          key={item.title}
-          className="flex motion-safe:animate-[fadeIn_0.55s_ease-out_both] motion-reduce:animate-none"
-          style={{ animationDelay: `${index * 70}ms` }}
-        >
-          <ServiceProvideCard
-            title={item.title}
-            description={item.description}
-            icon={item.icon}
-          />
-        </li>
-      ))}
-    </ul>
-  );
-}
-
 export function ServiceServicesWeProvideSection({
   section,
 }: {
@@ -129,7 +103,6 @@ export function ServiceServicesWeProvideSection({
         ? "grid-cols-1 sm:grid-cols-2"
         : "grid-cols-2 sm:grid-cols-4";
 
-  const useMobileCarousel = gridColumns === 4;
 
   return (
     <Section
@@ -144,7 +117,7 @@ export function ServiceServicesWeProvideSection({
             headerAlign === "center" && "mx-auto text-center",
           )}
         >
-          <h2 className="font-display text-[1.75rem] font-semibold leading-tight tracking-tight text-pretty sm:text-h2 lg:text-[2.375rem]">
+          <h2 className="font-display text-[1.5rem] font-semibold leading-tight tracking-tight text-pretty sm:text-h2 lg:text-[2.375rem]">
             {isInlineTitle ? (
               <>
                 <span className="text-navy">{title.prefix} </span>
@@ -171,27 +144,23 @@ export function ServiceServicesWeProvideSection({
           />
         </header>
 
-        {useMobileCarousel ? (
-          <ResponsiveItemCarousel
-            items={section.items}
-            getItemKey={(item) => item.title}
-            ariaLabel="Services we provide"
-            dotLabel={(item) => `Go to ${item.title}`}
-            desktopGridClassName={cn("mt-3xl gap-3 sm:gap-4", gridClassName)}
-            mobileCarouselClassName="mt-xl sm:hidden sm:mt-3xl"
-            listItemClassName="flex"
-            renderItem={(item, { elevated }) => (
-              <ServiceProvideCard
-                title={item.title}
-                description={item.description}
-                icon={item.icon}
-                elevated={elevated}
-              />
-            )}
-          />
-        ) : (
-          <ServicesGrid items={section.items} gridClassName={gridClassName} />
-        )}
+        <ResponsiveItemCarousel
+          items={section.items}
+          getItemKey={(item) => item.title}
+          ariaLabel="Services we provide"
+          dotLabel={(item) => `Go to ${item.title}`}
+          desktopGridClassName={cn("mt-3xl gap-3 sm:gap-4", gridClassName)}
+          mobileCarouselClassName="mt-xl sm:hidden sm:mt-3xl"
+          listItemClassName="flex"
+          renderItem={(item, { elevated }) => (
+            <ServiceProvideCard
+              title={item.title}
+              description={item.description}
+              icon={item.icon}
+              elevated={elevated}
+            />
+          )}
+        />
       </Container>
     </Section>
   );

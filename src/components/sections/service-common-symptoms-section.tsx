@@ -84,10 +84,10 @@ function SymptomsCtaBanner({
     <div
       className={cn(
         "mt-3xl overflow-hidden rounded-2xl bg-primary-soft/30",
-        "px-lg py-xl sm:px-xl sm:py-2xl",
+        "px-md py-lg sm:px-xl sm:py-2xl",
       )}
     >
-      <div className="grid gap-xl lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:gap-2xl">
+      <div className="grid gap-lg lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:gap-2xl">
         <div className="flex items-start gap-md">
           <div
             className={cn(
@@ -107,7 +107,7 @@ function SymptomsCtaBanner({
           className="hidden h-full w-px bg-primary/20 lg:block"
         />
 
-        <div className="flex flex-col gap-lg sm:flex-row sm:items-center sm:justify-between lg:justify-start lg:gap-xl">
+        <div className="flex flex-col gap-lg">
           <div className="flex items-start gap-md">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
               <CalendarIcon />
@@ -122,7 +122,7 @@ function SymptomsCtaBanner({
             </div>
           </div>
 
-          <Button href={buttonHref} size="lg" className="shrink-0">
+          <Button href={buttonHref} size="lg" className="w-full sm:w-auto sm:shrink-0">
             {buttonLabel}
           </Button>
         </div>
@@ -152,7 +152,7 @@ export function ServiceCommonSymptomsSection({
         <header className="mx-auto flex max-w-[44rem] flex-col items-center text-center">
           <SectionEyebrow label={section.eyebrow ?? "Common Symptoms"} />
 
-          <h2 className="font-display mt-md text-h2 font-semibold leading-tight tracking-tight text-pretty lg:text-[2.5rem]">
+          <h2 className="font-display mt-md text-[1.5rem] font-semibold leading-tight tracking-tight text-pretty sm:text-h2 lg:text-[2.5rem]">
             <span className="text-navy">{title.prefix} </span>
             <span className="text-primary">{title.highlight}</span>
             {title.suffix ? (

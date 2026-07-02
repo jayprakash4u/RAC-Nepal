@@ -319,6 +319,7 @@ export type ServiceInfographicSectionData = {
     src: string;
     alt: string;
   };
+  mobileHighlights?: readonly string[];
 };
 
 export type ServicePreventionTipItem = {

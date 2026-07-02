@@ -1,11 +1,9 @@
 import {
-  OurAllianceBenefits,
-  OurAllianceComparison,
+  OurAllianceCollaborationImpact,
   OurAllianceHero,
-  OurAllianceHowItWorks,
-  OurAlliancePartners,
-  OurAlliancePartnership,
-  OurAllianceWhatIs,
+  OurAllianceKeyPartners,
+  OurAllianceTrustedBy,
+  OurAllianceTypes,
 } from "@/components/sections/our-alliance-page";
 import { ourAlliancePage } from "@/data/our-alliance-page";
 import type { Metadata } from "next";
@@ -19,12 +17,10 @@ export default function OurAlliancePage() {
   return (
     <>
       <OurAllianceHero />
-      <OurAllianceWhatIs />
-      <OurAlliancePartners />
-      <OurAllianceComparison />
-      <OurAllianceHowItWorks />
-      <OurAllianceBenefits />
-      <OurAlliancePartnership />
+      <OurAllianceTrustedBy />
+      <OurAllianceKeyPartners />
+      <OurAllianceTypes />
+      <OurAllianceCollaborationImpact />
     </>
   );
 }

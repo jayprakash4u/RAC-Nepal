@@ -52,7 +52,7 @@ function PanelImage({
   imageFit: string;
 }) {
   return (
-    <div className="flex h-full min-h-[16rem] items-center justify-center bg-linear-to-br from-slate-50 to-white p-2xl sm:min-h-[20rem] lg:p-3xl">
+    <div className="flex h-full min-h-[14rem] items-center justify-center bg-linear-to-br from-slate-50 to-white p-lg sm:min-h-[20rem] sm:p-2xl lg:p-3xl">
       <div
         className={cn(
           "relative w-full max-w-[16rem] overflow-hidden rounded-2xl",
@@ -86,8 +86,8 @@ function PanelContent({
   footer?: ReactNode;
 }) {
   return (
-    <div className="flex h-full flex-col justify-center bg-primary-dark px-xl py-2xl sm:px-2xl sm:py-3xl lg:px-3xl">
-      <h3 className="font-display text-[1.75rem] leading-tight text-white sm:text-[2rem]">
+    <div className="flex h-full flex-col justify-center bg-primary-dark px-lg py-xl sm:px-2xl sm:py-3xl lg:px-3xl">
+      <h3 className="font-display text-[1.375rem] leading-tight text-white sm:text-[1.75rem] lg:text-[2rem]">
         <span className="font-normal">{headingPrefix} </span>
         <span className="font-bold">{title}</span>
       </h3>
@@ -215,7 +215,7 @@ export function ServiceOverlappedPanelsSection({
                   id={`arthritis-tab-${tab.id}`}
                   onClick={() => setActiveTab(tab.id)}
                   className={cn(
-                    "relative px-md py-lg text-small font-medium transition-colors duration-normal sm:text-body",
+                    "relative min-w-0 px-2 py-3 text-[0.8125rem] font-medium transition-colors duration-normal sm:px-md sm:py-lg sm:text-body",
                     isActive
                       ? "bg-white text-primary"
                       : "text-slate-600 hover:bg-white/60 hover:text-navy",

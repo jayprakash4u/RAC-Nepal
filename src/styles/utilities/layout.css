@@ -57,19 +57,37 @@
 }
 
 @utility page-hero-padding {
-  padding-top: var(--spacing-md);
+  padding-top: var(--spacing-page-hero-top);
   padding-bottom: var(--spacing-xl);
 }
 
 @media (min-width: 640px) {
   .page-hero-padding {
-    padding-block: var(--spacing-page-hero-y);
+    padding-top: var(--spacing-page-hero-top-lg);
+    padding-bottom: var(--spacing-page-hero-y);
   }
 }
 
 @media (min-width: 1024px) {
   .page-hero-padding {
-    padding-block: var(--spacing-page-hero-y-lg);
+    padding-top: var(--spacing-lg);
+    padding-bottom: var(--spacing-page-hero-y-lg);
+  }
+}
+
+@utility page-hero-padding-compact {
+  padding-bottom: var(--spacing-xl);
+}
+
+@media (min-width: 640px) {
+  .page-hero-padding-compact {
+    padding-bottom: var(--spacing-page-hero-y);
+  }
+}
+
+@media (min-width: 1024px) {
+  .page-hero-padding-compact {
+    padding-bottom: var(--spacing-page-hero-y-lg);
   }
 }
 

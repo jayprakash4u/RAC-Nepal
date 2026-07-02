@@ -20,7 +20,7 @@ function StepCard({
   return (
     <article
       className={cn(
-        "group relative flex items-center overflow-hidden",
+        "group relative flex items-start gap-3 overflow-hidden sm:gap-4",
         "rounded-2xl border border-slate-100 bg-white px-4 py-4 sm:px-5 sm:py-5",
         "shadow-[0_8px_28px_-12px_rgba(15,23,42,0.12)]",
         "transition-all duration-300 ease-out",
@@ -31,10 +31,10 @@ function StepCard({
     >
       <ServiceCardHoverOverlay />
 
-      <div className="flex w-[4.5rem] shrink-0 items-center justify-center sm:w-20">
+      <div className="relative shrink-0">
         <div
           className={cn(
-            "flex h-[4.25rem] w-[4.25rem] items-center justify-center overflow-hidden rounded-full sm:h-[4.5rem] sm:w-[4.5rem]",
+            "flex h-[3.75rem] w-[3.75rem] items-center justify-center overflow-hidden rounded-full sm:h-[4.25rem] sm:w-[4.25rem]",
             "bg-primary-soft/45 transition-colors duration-300 group-hover:bg-primary-soft/65",
           )}
         >
@@ -44,25 +44,23 @@ function StepCard({
               alt={step.icon.alt}
               fill
               className="scale-[1.45] object-contain object-center transition-transform duration-300 group-hover:scale-[1.55] motion-reduce:transition-none motion-reduce:group-hover:scale-[1.45]"
-              sizes="3.5rem"
+              sizes="3rem"
               unoptimized
             />
           </div>
         </div>
+
+        <span
+          className={cn(
+            "absolute -top-1 -right-1 flex h-7 w-7 items-center justify-center sm:h-8 sm:w-8",
+            "rounded-full bg-primary font-display text-[0.6875rem] font-bold text-white shadow-md sm:text-[0.75rem]",
+          )}
+        >
+          {stepNumber}
+        </span>
       </div>
 
-      <div
-        className={cn(
-          "absolute top-1/2 z-20 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center sm:h-11 sm:w-11",
-          "left-[calc(1rem+4.5rem+1.375rem)] sm:left-[calc(1.25rem+5rem+1.5rem)]",
-          "rounded-full bg-primary font-display text-[0.8125rem] font-bold text-white shadow-md sm:text-small",
-          "transition-transform duration-300 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100",
-        )}
-      >
-        {stepNumber}
-      </div>
-
-      <div className="min-w-0 flex-1 pl-10 sm:pl-12">
+      <div className="min-w-0 flex-1 pt-0.5">
         <p className="text-[0.9375rem] font-semibold leading-snug tracking-normal text-navy transition-colors duration-300 group-hover:text-primary sm:text-body">
           {step.title}
         </p>
@@ -97,7 +95,7 @@ export function ServiceStepByStepSection({
             {section.eyebrow ?? "Our Rehabilitation Process"}
           </p>
 
-          <h2 className="font-display mt-sm text-[1.75rem] font-semibold leading-tight tracking-tight text-pretty text-navy sm:mt-md sm:text-h2 lg:text-[2.375rem]">
+          <h2 className="font-display mt-sm text-[1.5rem] font-semibold leading-tight tracking-tight text-pretty text-navy sm:mt-md sm:text-h2 lg:text-[2.375rem]">
             {section.title ?? "Step-by-Step Care for Lasting Results"}
           </h2>
 
@@ -107,37 +105,25 @@ export function ServiceStepByStepSection({
           />
         </header>
 
-        <div className="relative mx-auto mt-3xl max-w-[42rem]">
-          <div
-            aria-hidden="true"
-            className={cn(
-              "absolute top-8 bottom-8 w-px -translate-x-1/2 bg-slate-200",
-              "left-[calc(1rem+4.5rem+1.375rem)] sm:left-[calc(1.25rem+5rem+1.5rem)]",
-            )}
-          />
+        <ol className="relative mx-auto mt-2xl max-w-[42rem] border-l-2 border-slate-200 pl-5 sm:mt-3xl sm:pl-6">
+          {section.items.map((item, index) => (
+            <li
+              key={item.title}
+              className={cn(
+                "relative pb-5 last:pb-0 sm:pb-6",
+                "motion-safe:animate-[fadeIn_0.55s_ease-out_both] motion-reduce:animate-none",
+              )}
+              style={{ animationDelay: `${index * 90}ms` }}
+            >
+              <span
+                aria-hidden="true"
+                className="absolute top-6 -left-[calc(1.25rem+1px)] h-2.5 w-2.5 -translate-x-1/2 rounded-full bg-primary sm:-left-[calc(1.5rem+1px)]"
+              />
 
-          <ol className="flex flex-col gap-5 sm:gap-6">
-            {section.items.map((item, index) => (
-              <li
-                key={item.title}
-                className="relative motion-safe:animate-[fadeIn_0.55s_ease-out_both] motion-reduce:animate-none"
-                style={{ animationDelay: `${index * 90}ms` }}
-              >
-                {index > 0 ? (
-                  <span
-                    aria-hidden="true"
-                    className={cn(
-                      "absolute top-0 z-10 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary",
-                      "left-[calc(1rem+4.5rem+1.375rem)] sm:left-[calc(1.25rem+5rem+1.5rem)]",
-                    )}
-                  />
-                ) : null}
-
-                <StepCard step={item} index={index} />
-              </li>
-            ))}
-          </ol>
-        </div>
+              <StepCard step={item} index={index} />
+            </li>
+          ))}
+        </ol>
       </Container>
     </Section>
   );

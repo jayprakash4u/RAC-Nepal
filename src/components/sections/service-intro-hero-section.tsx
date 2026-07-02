@@ -73,7 +73,7 @@ function StatItem({
 function HeroSideImage({ image }: { image: { src: string; alt: string } }) {
   return (
     <div className="flex h-full w-full justify-center self-stretch lg:justify-end">
-      <div className="relative min-h-[18rem] w-full overflow-hidden rounded-2xl shadow-[0_16px_40px_-28px_rgba(15,23,42,0.28)] sm:min-h-[22rem] lg:min-h-[28rem] xl:min-h-[32rem]">
+      <div className="relative min-h-[14rem] w-full overflow-hidden rounded-2xl shadow-[0_16px_40px_-28px_rgba(15,23,42,0.28)] sm:min-h-[22rem] lg:min-h-[28rem] xl:min-h-[32rem]">
         <Image
           src={image.src}
           alt={image.alt}
@@ -115,7 +115,7 @@ export function ServiceIntroHeroSection({
                 </p>
               </div>
 
-              <h1 className="font-display mt-5 text-[2rem] font-semibold leading-[1.12] tracking-tight text-pretty sm:mt-6 sm:text-[2.5rem] lg:text-[2.75rem]">
+              <h1 className="font-display mt-5 text-[1.625rem] font-semibold leading-[1.12] tracking-tight text-pretty sm:mt-6 sm:text-[2.5rem] lg:text-[2.75rem]">
                 <span className="text-navy">{section.title.prefix} </span>
                 <span className="text-primary">{section.title.highlight}</span>
               </h1>
@@ -124,7 +124,7 @@ export function ServiceIntroHeroSection({
                 {section.description}
               </p>
 
-              <div className="mt-7 flex w-full max-w-[20rem] flex-col gap-3 sm:mt-8">
+              <div className="mt-7 flex w-full flex-col gap-3 sm:mt-8 sm:max-w-[20rem]">
                 <Link
                   href={section.primaryCta.href}
                   className={cn(
@@ -154,7 +154,7 @@ export function ServiceIntroHeroSection({
 
           <div
             className={cn(
-              "relative z-10 -mt-6 overflow-hidden rounded-t-2xl border border-slate-100 bg-white sm:-mt-8",
+              "relative z-10 mt-6 overflow-hidden rounded-t-2xl border border-slate-100 bg-white sm:-mt-8",
               "shadow-[0_12px_40px_-20px_rgba(15,23,42,0.14)]",
             )}
           >

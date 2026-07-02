@@ -13,6 +13,7 @@ type NavLinksProps = {
   className?: string;
   linkClassName?: string;
   orientation?: "horizontal" | "vertical";
+  variant?: "default" | "drawer";
   onNavigate?: () => void;
 };
 
@@ -41,45 +42,40 @@ function DropdownMenuLink({
   label,
   isActive,
   onNavigate,
+  nested = false,
+  variant = "default",
 }: {
   href: string;
   label: string;
   isActive: boolean;
   onNavigate?: () => void;
+  nested?: boolean;
+  variant?: "default" | "drawer";
 }) {
+  const isDrawer = variant === "drawer";
+
   return (
     <Link
       href={href}
       onClick={onNavigate}
       aria-current={isActive ? "page" : undefined}
       className={cn(
-        "block w-full px-md py-2.5 text-left text-small font-normal leading-snug text-navy transition-colors duration-normal",
+        "block w-full text-left font-medium leading-snug transition-colors duration-normal",
+        nested
+          ? cn(
+              "block w-full min-w-0 break-words",
+              isDrawer
+                ? "rounded-md px-3 py-2 text-[0.875rem] hover:bg-slate-100"
+                : "rounded-md py-2 pr-2 pl-3 text-[0.9375rem]",
+            )
+          : "px-md py-2.5 text-small",
         isActive
-          ? "bg-surface text-primary"
-          : "hover:bg-surface hover:text-primary",
+          ? "font-medium text-primary"
+          : "text-slate-600 hover:text-primary",
       )}
     >
       {label}
     </Link>
-  );
-}
-
-function DropdownPanel({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <div
-      className={cn(
-        "overflow-hidden border border-slate-200 border-t-4 border-t-primary bg-white shadow-md",
-        className,
-      )}
-    >
-      {children}
-    </div>
   );
 }
 
@@ -117,57 +113,84 @@ function MobileNavDropdown({
   item,
   pathname,
   onNavigate,
+  variant = "default",
 }: {
   item: Extract<NavItem, { children: readonly unknown[] }>;
   pathname: string;
   onNavigate?: () => void;
+  variant?: "default" | "drawer";
 }) {
-  const [expanded, setExpanded] = useState(false);
   const isActive = isNavItemActive(pathname, item);
+  const [expanded, setExpanded] = useState(isActive);
+  const isDrawer = variant === "drawer";
 
   return (
-    <li className="border-b border-slate-200 pb-md last:border-b-0 last:pb-0">
+    <li className={cn(!isDrawer && "border-b border-slate-100 last:border-b-0")}>
       <button
         type="button"
         aria-expanded={expanded}
         onClick={() => setExpanded((current) => !current)}
         className={cn(
-          "flex w-full items-center justify-between py-2 text-left text-small font-semibold transition-colors duration-normal",
+          "flex w-full min-w-0 items-center justify-between gap-3 text-left font-medium leading-snug transition-colors duration-normal",
+          isDrawer
+            ? "rounded-lg px-3 py-2.5 text-[0.9375rem] hover:bg-slate-100"
+            : "py-3.5 text-[1.0625rem]",
           isActive ? "text-primary" : "text-navy",
         )}
       >
-        {item.label}
+        <span
+          className={cn(
+            "relative min-w-0 flex-1 pr-2",
+            !isDrawer && "pl-3.5",
+            isDrawer && isActive && "font-semibold",
+          )}
+        >
+          {!isDrawer && isActive ? (
+            <span
+              aria-hidden="true"
+              className="absolute top-1/2 left-0 h-5 w-0.5 -translate-y-1/2 rounded-full bg-primary"
+            />
+          ) : null}
+          {item.label}
+        </span>
         <ChevronIcon open={expanded} />
       </button>
 
-      {expanded ? (
-        <div className="mt-sm">
-          <DropdownPanel>
-            <ul className="divide-y divide-slate-100">
-              {item.href ? (
-                <li>
-                  <DropdownMenuLink
-                    href={item.href}
-                    label={`All ${item.label}`}
-                    isActive={isLinkActive(pathname, item.href)}
-                    onNavigate={onNavigate}
-                  />
-                </li>
-              ) : null}
-              {item.children.map((child) => (
-                <li key={child.href}>
-                  <DropdownMenuLink
-                    href={child.href}
-                    label={child.label}
-                    isActive={isLinkActive(pathname, child.href)}
-                    onNavigate={onNavigate}
-                  />
-                </li>
-              ))}
-            </ul>
-          </DropdownPanel>
+      <div
+        className={cn(
+          "grid transition-[grid-template-rows] duration-normal ease-default",
+          expanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+        )}
+      >
+        <div className="min-w-0 overflow-hidden">
+          <ul className={cn("space-y-0.5", isDrawer ? "pb-1 pl-2" : "pb-3 pl-4")}>
+            {item.href ? (
+              <li>
+                <DropdownMenuLink
+                  href={item.href}
+                  label={`All ${item.label}`}
+                  isActive={isLinkActive(pathname, item.href)}
+                  onNavigate={onNavigate}
+                  nested
+                  variant={variant}
+                />
+              </li>
+            ) : null}
+            {item.children.map((child) => (
+              <li key={child.href}>
+                <DropdownMenuLink
+                  href={child.href}
+                  label={child.label}
+                  isActive={isLinkActive(pathname, child.href)}
+                  onNavigate={onNavigate}
+                  nested
+                  variant={variant}
+                />
+              </li>
+            ))}
+          </ul>
         </div>
-      ) : null}
+      </div>
     </li>
   );
 }
@@ -176,24 +199,38 @@ function MobileNavLink({
   item,
   pathname,
   onNavigate,
+  variant = "default",
 }: {
   item: Extract<NavItem, { href: string }>;
   pathname: string;
   onNavigate?: () => void;
+  variant?: "default" | "drawer";
 }) {
   const isActive = isLinkActive(pathname, item.href);
+  const isDrawer = variant === "drawer";
 
   return (
-    <li className="border-b border-slate-200 pb-md last:border-b-0 last:pb-0">
+    <li className={cn(!isDrawer && "border-b border-slate-100 last:border-b-0")}>
       <Link
         href={item.href}
         onClick={onNavigate}
         aria-current={isActive ? "page" : undefined}
         className={cn(
-          "block py-2 text-small font-semibold transition-colors duration-normal",
-          isActive ? "text-primary" : "text-navy hover:text-primary",
+          "relative block w-full min-w-0 pr-2 font-medium leading-snug break-words transition-colors duration-normal",
+          isDrawer
+            ? "rounded-lg px-3 py-2.5 text-[0.9375rem] hover:bg-slate-100"
+            : "py-3.5 pl-3.5 text-[1.0625rem]",
+          isActive
+            ? "font-semibold text-primary"
+            : "text-navy hover:text-primary",
         )}
       >
+        {!isDrawer && isActive ? (
+          <span
+            aria-hidden="true"
+            className="absolute top-1/2 left-0 h-5 w-0.5 -translate-y-1/2 rounded-full bg-primary"
+          />
+        ) : null}
         {item.label}
       </Link>
     </li>
@@ -203,6 +240,7 @@ function MobileNavLink({
 export function NavLinks({
   className,
   orientation = "horizontal",
+  variant = "default",
   onNavigate,
 }: NavLinksProps) {
   const pathname = usePathname();
@@ -218,12 +256,15 @@ export function NavLinks({
   );
 
   return (
-    <nav aria-label="Main navigation" className={className}>
+    <nav aria-label="Main navigation" className={cn("w-full min-w-0", className)}>
       <ul
         className={cn(
           orientation === "horizontal"
             ? "flex flex-wrap items-center justify-start gap-md overflow-visible lg:gap-lg"
-            : "flex flex-col gap-md",
+            : cn(
+                "flex w-full min-w-0 flex-col",
+                variant === "drawer" && "gap-0.5",
+              ),
         )}
       >
         {mainNavigation.map((item) =>
@@ -247,6 +288,7 @@ export function NavLinks({
               item={item}
               pathname={pathname}
               onNavigate={onNavigate}
+              variant={variant}
             />
           ) : (
             <MobileNavLink
@@ -254,6 +296,7 @@ export function NavLinks({
               item={item}
               pathname={pathname}
               onNavigate={onNavigate}
+              variant={variant}
             />
           ),
         )}

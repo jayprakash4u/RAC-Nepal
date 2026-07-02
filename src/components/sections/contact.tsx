@@ -1,6 +1,7 @@
 import { contactPage } from "@/data/contact-page";
 import { ContactForm } from "@/components/forms/contact-form";
-import { Container, Heading, PageHero, Section } from "@/components/ui";
+import { CenteredPageHero } from "@/components/sections/centered-page-hero";
+import { Container, Heading, Section } from "@/components/ui";
 
 function PhoneIcon() {
   return (
@@ -91,18 +92,13 @@ function ContactDetailCard({
 
 export function ContactPageHero() {
   return (
-    <Section
-      background="hero"
-      spacing="none"
-      className="border-b border-primary-dark/10"
-    >
-      <Container size="wide" className="page-hero-padding">
-        <PageHero
-          title={contactPage.title}
-          description={contactPage.description}
-        />
-      </Container>
-    </Section>
+    <CenteredPageHero
+      content={{
+        eyebrow: "Get in Touch",
+        title: contactPage.title,
+        description: contactPage.description,
+      }}
+    />
   );
 }
 

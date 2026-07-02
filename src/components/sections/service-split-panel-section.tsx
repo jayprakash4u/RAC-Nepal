@@ -51,7 +51,7 @@ export function ServiceSplitPanelSection({
             className={cn(
               "relative flex items-center justify-center",
               "bg-linear-to-br from-slate-100 to-white",
-              "px-xl py-2xl sm:px-2xl sm:py-3xl lg:py-4xl",
+              "px-lg py-xl sm:px-2xl sm:py-3xl lg:py-4xl",
               variant === "causes" && "lg:pr-2xl",
             )}
           >
@@ -98,10 +98,10 @@ export function ServiceSplitPanelSection({
           <div
             className={cn(
               "flex flex-col justify-center",
-              "bg-primary-dark px-xl py-2xl sm:px-2xl sm:py-3xl lg:px-3xl lg:py-4xl",
+              "bg-primary-dark px-lg py-xl sm:px-2xl sm:py-3xl lg:px-3xl lg:py-4xl",
             )}
           >
-            <h2 className="font-display text-[2rem] leading-tight text-white sm:text-[2.25rem]">
+            <h2 className="font-display text-[1.5rem] leading-tight text-white sm:text-[2rem] lg:text-[2.25rem]">
               <span className="font-normal">{section.headingPrefix} </span>
               <span className="font-bold">{section.title}</span>
             </h2>

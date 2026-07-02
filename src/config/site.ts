@@ -11,9 +11,9 @@ export const siteConfig = {
     height: 90,
   },
   contact: {
-    phone: "+977-1-XXXXXXX",
-    email: "info@racnepal.com",
-    address: "Kathmandu, Nepal",
+    phone: "+977-986-3097509",
+    email: "racnepal77@gmail.com",
+    address: "Naxal, Kathmandu, Nepal (Beside Telecom)",
     hours: "Sun – Fri: 9:00 AM – 5:00 PM",
   },
   topBar: {

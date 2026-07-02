@@ -107,7 +107,7 @@ function DefaultOverviewContent({
         className="mt-sm block h-0.5 w-10 rounded-full bg-primary sm:h-1 sm:w-12"
       />
 
-      <h1 className="font-display mt-md text-[2rem] font-semibold leading-[1.15] tracking-tight text-pretty sm:text-[2.5rem] lg:text-[2.75rem]">
+      <h1 className="font-display mt-md text-[1.625rem] font-semibold leading-[1.15] tracking-tight text-pretty sm:text-[2.5rem] lg:text-[2.75rem]">
         <span className="text-navy">{title.prefix} </span>
         <span className="text-primary">{title.highlight}</span>
         {title.suffix ? (
@@ -377,7 +377,7 @@ function SplitIntroLeftColumn({
 
   return (
     <div className="w-full motion-safe:animate-[fadeIn_0.55s_ease-out_both] motion-reduce:animate-none lg:py-1">
-      <h1 className="font-display text-[1.875rem] font-bold uppercase leading-[1.1] tracking-[0.04em] text-pretty sm:text-[2.25rem] lg:text-[2.5rem]">
+      <h1 className="font-display text-[1.5rem] font-bold leading-[1.15] tracking-[0.02em] text-pretty sm:text-[2.25rem] sm:tracking-[0.04em] lg:text-[2.5rem]">
         <span className="text-navy">{title.prefix} </span>
         <span className="text-primary">{title.highlight}</span>
         {title.suffix ? (
@@ -627,7 +627,7 @@ function EditorialSideImage({
 }) {
   return (
     <div className="flex h-full w-full justify-center self-stretch motion-safe:animate-[fadeIn_0.55s_ease-out_both] motion-reduce:animate-none lg:justify-start">
-      <div className="relative min-h-[18rem] w-full overflow-hidden rounded-2xl shadow-[0_16px_40px_-28px_rgba(15,23,42,0.28)] sm:min-h-[22rem] lg:min-h-[28rem] lg:max-h-[32rem] xl:min-h-[30rem]">
+      <div className="relative min-h-[14rem] w-full overflow-hidden rounded-2xl shadow-[0_16px_40px_-28px_rgba(15,23,42,0.28)] sm:min-h-[22rem] lg:min-h-[28rem] lg:max-h-[32rem] xl:min-h-[30rem]">
         <Image
           src={sideImage.src}
           alt={sideImage.alt}

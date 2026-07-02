@@ -53,18 +53,18 @@ function ColumnPillHeader({
   const isAvoid = variant === "avoid";
 
   return (
-    <div className="absolute left-1/2 top-0 z-10 -translate-x-1/2 -translate-y-1/2">
+    <div className="absolute top-0 left-1/2 z-10 w-[calc(100%-2rem)] max-w-[16rem] -translate-x-1/2 -translate-y-1/2 sm:max-w-none sm:min-w-[12.5rem]">
       <div
         className={cn(
-          "flex items-center gap-2.5 rounded-full px-5 py-2.5 text-white shadow-md",
-          "min-w-[11.5rem] justify-center sm:min-w-[12.5rem] sm:px-6 sm:py-3",
+          "flex items-center gap-2 rounded-full px-4 py-2 text-white shadow-md sm:gap-2.5 sm:px-6 sm:py-3",
+          "justify-center",
           isAvoid ? "bg-[#d32f2f]" : "bg-[#388e3c]",
         )}
       >
         <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/25 text-white sm:h-7 sm:w-7">
           <ColumnHeaderIcon variant={variant} />
         </span>
-        <h3 className="text-[0.875rem] font-semibold leading-none sm:text-[0.9375rem]">
+        <h3 className="text-[0.8125rem] font-semibold leading-snug sm:text-[0.9375rem]">
           {title}
         </h3>
       </div>
@@ -175,7 +175,7 @@ function FooterWellnessIcons() {
   return (
     <div
       aria-hidden="true"
-      className="flex shrink-0 items-end gap-2 text-primary"
+      className="hidden shrink-0 items-end gap-2 text-primary sm:flex"
     >
       <svg viewBox="0 0 40 48" className="h-11 w-9" fill="currentColor">
         <circle cx="20" cy="7" r="5" />

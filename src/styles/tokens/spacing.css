@@ -21,6 +21,8 @@
   --spacing-section-y-lg: var(--spacing-4xl);
   --spacing-page-hero-y: var(--spacing-2xl);
   --spacing-page-hero-y-lg: var(--spacing-3xl);
+  --spacing-page-hero-top: var(--spacing-sm);
+  --spacing-page-hero-top-lg: var(--spacing-md);
   --spacing-header-content: var(--spacing-2xl);
   --spacing-section-x: var(--spacing-lg);
   --spacing-container: var(--spacing-5xl);

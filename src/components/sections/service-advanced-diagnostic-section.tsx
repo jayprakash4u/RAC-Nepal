@@ -43,7 +43,7 @@ function DiagnosticServiceCard({
     <article className={cn(serviceIconCardClasses, "h-full w-full")}>
       <ServiceCardHoverOverlay />
 
-      <div className="flex items-start gap-md p-lg pb-md sm:p-xl sm:pb-lg">
+      <div className="flex items-start gap-md p-md pb-md sm:p-xl sm:pb-lg">
         <div
           className={cn(
             serviceIconRingClasses,
@@ -110,7 +110,7 @@ export function ServiceAdvancedDiagnosticSection({
             label={section.eyebrow ?? "Advanced Diagnostic Services"}
           />
 
-          <h2 className="font-display mt-md text-h2 font-semibold leading-tight tracking-tight text-pretty lg:text-[2.5rem]">
+          <h2 className="font-display mt-md text-[1.5rem] font-semibold leading-tight tracking-tight text-pretty sm:text-h2 lg:text-[2.5rem]">
             <span className="text-navy">{title.prefix} </span>
             <span className="text-primary">{title.highlight}</span>
           </h2>

@@ -78,19 +78,19 @@ export function ServiceDiagnosticServicesSection({
           }
           description={section.description}
           align="left"
-          className={section.heroImage ? "max-w-[46%]" : undefined}
+          className={
+            section.heroImage
+              ? "w-full max-w-none lg:max-w-[46%]"
+              : "w-full max-w-[40rem]"
+          }
         />
 
-        {section.heroImage ? (
-          <div className="relative mt-xl overflow-hidden rounded-2xl lg:hidden">
-            <SectionHeroImage
-              image={section.heroImage}
-              className="aspect-[5/3] w-full"
-            />
-          </div>
-        ) : null}
-
-        <ul className="mt-3xl grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+        <ul
+          className={cn(
+            "grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3",
+            section.heroImage ? "mt-xl sm:mt-2xl lg:mt-3xl" : "mt-3xl",
+          )}
+        >
           {section.items.map((item) => (
             <li key={item.label} className="flex">
               <ServiceIconCard

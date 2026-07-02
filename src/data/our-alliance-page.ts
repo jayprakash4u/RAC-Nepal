@@ -1,200 +1,178 @@
 import { siteConfig } from "@/config/site";
+import type { PageHeroContent } from "@/types/page-hero-content";
+
+const heroIcons = "/images/aboutpage";
+const ourAllianceAssets = "/images/Our allience";
+
+export const ourAlliancePageHero = {
+  eyebrow: "Partnerships",
+  title: "Our Alliance for",
+  titleAccent: "Better Rheumatology Care",
+  description:
+    "We collaborate with trusted healthcare partners to expand access, improve outcomes, and deliver seamless care for patients with arthritis and autoimmune conditions.",
+  stats: [
+    {
+      value: "Trusted",
+      label: "Healthcare Network",
+      icon: {
+        src: `${heroIcons}/5.png`,
+        alt: "Trusted healthcare network",
+      },
+    },
+    {
+      value: "Coordinated",
+      label: "Referral Pathways",
+      icon: {
+        src: `${heroIcons}/3.png`,
+        alt: "Coordinated referral pathways",
+      },
+    },
+    {
+      value: "Improved",
+      label: "Patient Outcomes",
+      icon: {
+        src: `${heroIcons}/4.png`,
+        alt: "Improved patient outcomes",
+      },
+    },
+  ],
+  image: {
+    src: `${ourAllianceAssets}/ouraliance hero section.jpg`,
+    alt: "Healthcare professionals collaborating in support of rheumatology patients",
+  },
+  primaryCta: {
+    label: "Become a Partner",
+    href: siteConfig.links.appointment,
+    icon: {
+      src: `${heroIcons}/1.png`,
+      alt: "",
+    },
+  },
+  secondaryCta: {
+    label: "Contact Our Team",
+    href: "/contact",
+    icon: {
+      src: `${heroIcons}/2.png`,
+      alt: "",
+    },
+  },
+} satisfies PageHeroContent;
 
 export const ourAlliancePage = {
   meta: {
     title: "Our Alliance",
     description: `Learn how ${siteConfig.name} partners with hospitals, laboratories, and healthcare organizations to deliver coordinated rheumatology care across Nepal.`,
   },
-  hero: {
-    eyebrow: "Partnerships",
-    title: "Our Alliance for",
-    titleAccent: "Better Rheumatology Care",
-    description:
-      "We collaborate with trusted healthcare partners to expand access, improve outcomes, and deliver seamless care for patients with arthritis and autoimmune conditions.",
-    primaryCta: {
-      label: "Become a Partner",
-      href: siteConfig.links.appointment,
-    },
-    secondaryCta: {
-      label: "Contact Our Team",
-      href: "/contact",
-    },
-  },
-  whatIs: {
-    eyebrow: "Collaborative Care",
+  hero: ourAlliancePageHero,
+  trustedBy: {
+    eyebrow: "Trusted By",
     title: {
-      prefix: "What is",
-      highlight: "Our Alliance?",
+      prefix: "Our",
+      highlight: "Partner Network",
     },
-    paragraphs: [
-      "Our Alliance is a network of hospitals, diagnostic centers, physiotherapy providers, pharmacies, and academic institutions working together with RAC Nepal to strengthen rheumatology care.",
-      "Through shared expertise, referral pathways, and coordinated treatment planning, we ensure patients receive timely diagnosis, consistent follow-up, and comprehensive support at every stage of care.",
+    description:
+      "We collaborate with hospitals, laboratories, diagnostic centers, and insurance partners to deliver reliable rheumatology care across Nepal.",
+    items: [
+      { name: "Kathmandu City Hospital", type: "Hospital" },
+      { name: "Everest Specialty Clinic", type: "Hospital" },
+      { name: "Himalaya Diagnostic Lab", type: "Laboratory" },
+      { name: "National Arthritis Lab", type: "Laboratory" },
+      { name: "Central Imaging Center", type: "Diagnostic Center" },
+      { name: "Valley Diagnostic Hub", type: "Diagnostic Center" },
+      { name: "NepaCare Insurance", type: "Insurance Partner" },
+      { name: "HealthSure Nepal", type: "Insurance Partner" },
+      { name: "Metro Referral Hospital", type: "Hospital" },
+      { name: "Prime Rheuma Diagnostics", type: "Diagnostic Center" },
+      { name: "LifeLine Lab Services", type: "Laboratory" },
+      { name: "Guardian Health Cover", type: "Insurance Partner" },
     ],
   },
-  partners: {
-    eyebrow: "Network Focus",
+  keyPartners: {
+    eyebrow: "Key Partners",
     title: {
-      prefix: "Areas of",
-      highlight: "Collaboration",
+      prefix: "Highlighted",
+      highlight: "Collaborators",
     },
     description:
-      "Our partnerships span clinical, diagnostic, rehabilitative, and patient-support services to deliver complete rheumatology care.",
+      "These strategic partners help us deliver coordinated rheumatology services with stronger referral pathways, diagnostics, and long-term patient support.",
     items: [
       {
-        label: "Hospital & Clinic Referrals",
-        href: "/services/rheumatology-consultation",
-      },
-      {
-        label: "Diagnostic Laboratory Services",
-        href: "/services/arthritis-management",
-      },
-      {
-        label: "Physiotherapy & Rehabilitation",
-        href: "/services/physiotherapy-rehabilitation",
-      },
-      {
-        label: "Pharmacy & Medication Support",
-        href: "/services/pharmacy-services",
-      },
-      {
-        label: "Home Care Coordination",
-        href: "/services/home-care",
-      },
-      {
-        label: "Research & Academics",
+        logoText: "KCH",
+        name: "Kathmandu City Hospital",
+        description:
+          "Supports specialist referrals and joint clinical pathways for complex rheumatology cases.",
         href: "/contact",
       },
       {
-        label: "Telehealth Network Access",
-        href: "/telehealth-services",
+        logoText: "HDL",
+        name: "Himalaya Diagnostic Lab",
+        description:
+          "Provides timely lab testing and reporting to accelerate diagnosis and treatment decisions.",
+        href: "/services/arthritis-management",
+      },
+      {
+        logoText: "CIC",
+        name: "Central Imaging Center",
+        description:
+          "Improves access to imaging services for earlier detection and better disease monitoring.",
+        href: "/services/rheumatology-consultation",
+      },
+      {
+        logoText: "NCI",
+        name: "NepaCare Insurance",
+        description:
+          "Works with our team to streamline coverage guidance and continuity of patient care.",
+        href: "/contact",
       },
     ],
   },
-  comparison: {
-    eyebrow: "Shared Value",
+  allianceTypes: {
+    eyebrow: "Alliance Categories",
     title: {
-      prefix: "Alliance Benefits for",
-      highlight: "Patients & Partners",
+      prefix: "Types of",
+      highlight: "Alliances",
     },
     description:
-      "Our alliance model is designed to support both patients seeking expert care and partner organizations delivering coordinated services.",
-    forPatients: {
-      title: "Benefits for patients",
-      items: [
-        "Faster access to rheumatology specialists",
-        "Coordinated referrals and follow-up care",
-        "Integrated diagnostics and treatment planning",
-        "Continuity across clinic, lab, and rehab services",
-        "Support for remote and home-based care",
-      ],
-    },
-    forPartners: {
-      title: "Benefits for partners",
-      items: [
-        "Trusted referral pathways for complex cases",
-        "Shared clinical protocols and best practices",
-        "Continuing medical education opportunities",
-        "Collaborative patient management",
-        "Stronger community rheumatology outreach",
-      ],
-    },
-  },
-  howItWorks: {
-    eyebrow: "How We Collaborate",
-    title: {
-      prefix: "How Our Alliance",
-      highlight: "Works",
-    },
-    steps: [
-      {
-        title: "Partnership agreement",
-        description:
-          "We establish collaboration with hospitals, labs, and care providers aligned with our clinical standards.",
-      },
-      {
-        title: "Referral & coordination setup",
-        description:
-          "Clear pathways are created for patient referrals, report sharing, and follow-up communication.",
-      },
-      {
-        title: "Joint care planning",
-        description:
-          "Specialists and partner teams align on diagnosis, treatment, and rehabilitation goals for each patient.",
-      },
-      {
-        title: "Ongoing patient support",
-        description:
-          "Patients move smoothly between services — consultation, diagnostics, pharmacy, physio, and home care.",
-      },
-      {
-        title: "Review & quality improvement",
-        description:
-          "Partnerships are reviewed regularly to improve access, outcomes, and patient experience.",
-      },
-    ],
-  },
-  benefits: {
-    eyebrow: "Why It Matters",
-    title: {
-      prefix: "Benefits of",
-      highlight: "Our Alliance",
-    },
+      "We build partnerships across the full care journey — from specialist treatment to diagnostics, medication, and coverage support.",
     items: [
       {
-        title: "Expanded access to care",
+        icon: "hospital" as const,
+        title: "Hospital Partnerships",
         description:
-          "Patients across Nepal can reach expert rheumatology services through our partner network.",
+          "Referral collaborations with hospitals and clinics for specialist rheumatology and autoimmune care.",
       },
       {
-        title: "Coordinated treatment",
+        icon: "lab" as const,
+        title: "Diagnostic & Lab Services",
         description:
-          "Care teams work together so nothing falls through the cracks between visits and services.",
+          "Trusted laboratory and imaging partners for accurate, timely testing and disease monitoring.",
       },
       {
-        title: "Faster diagnostics",
+        icon: "pharmacy" as const,
+        title: "Pharmacy Networks",
         description:
-          "Partner laboratories and imaging centers help speed up testing and treatment decisions.",
+          "Pharmacy partners ensuring reliable access to medications and long-term treatment support.",
       },
       {
-        title: "Holistic support",
+        icon: "insurance" as const,
+        title: "Insurance Providers",
         description:
-          "Rehabilitation, pharmacy, and home care partners support long-term disease management.",
-      },
-      {
-        title: "Trusted collaboration",
-        description:
-          "Partners share a commitment to evidence-based, compassionate rheumatology care.",
+          "Insurance collaborations that simplify coverage guidance and continuity of patient care.",
       },
     ],
   },
-  partnership: {
-    eyebrow: "Join Our Network",
+  collaborationImpact: {
+    eyebrow: "Collaboration Impact",
     title: {
-      prefix: "Partnership",
-      highlight: "Opportunities",
+      prefix: "Our Alliance in",
+      highlight: "Numbers",
     },
     description:
-      "Hospitals, clinics, laboratories, and healthcare organizations interested in collaborating with RAC Nepal are welcome to reach out.",
-    items: [
-      {
-        label: "Clinical partnerships",
-        value:
-          "Referral collaborations with hospitals and specialty clinics for rheumatology and autoimmune care.",
-      },
-      {
-        label: "Diagnostic alliances",
-        value:
-          "Laboratory and imaging partnerships to support timely testing and monitoring.",
-      },
-      {
-        label: "Academic collaboration",
-        value:
-          "Research, training, and continuing education initiatives with medical institutions.",
-      },
+      "Together with our partners, we are expanding access to expert rheumatology care and delivering measurable impact across Nepal.",
+    stats: [
+      { value: "10+", label: "Partner Hospitals" },
+      { value: "25+", label: "Diagnostic Labs" },
+      { value: "5000+", label: "Patients Served" },
     ],
-    cta: {
-      label: "Inquire About Partnership",
-      href: "/contact",
-    },
   },
 } as const;

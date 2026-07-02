@@ -63,7 +63,7 @@ function CausesRiskSideImage({
 }) {
   return (
     <div className="flex h-full w-full justify-center self-stretch motion-safe:animate-[fadeIn_0.55s_ease-out_both] motion-reduce:animate-none lg:justify-end">
-      <div className="relative min-h-[20rem] w-full overflow-hidden rounded-2xl shadow-[0_16px_40px_-28px_rgba(15,23,42,0.28)] sm:min-h-[24rem] lg:min-h-[28rem] lg:max-h-[32rem] xl:min-h-[30rem]">
+      <div className="relative min-h-[14rem] w-full overflow-hidden rounded-2xl shadow-[0_16px_40px_-28px_rgba(15,23,42,0.28)] sm:min-h-[24rem] lg:min-h-[28rem] lg:max-h-[32rem] xl:min-h-[30rem]">
         <Image
           src={sideImage.src}
           alt={sideImage.alt}

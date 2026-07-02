@@ -1,24 +1,137 @@
 import { siteConfig } from "@/config/site";
+import type { PageHeroContent } from "@/types/page-hero-content";
+
+const telehealthAssets = "/images/Telehealthservices";
+const heroIcons = "/images/aboutpage";
+
+export const telehealthPageHero = {
+  eyebrow: "Virtual Care",
+  title: "Telehealth Rheumatology",
+  titleAccent: "Services",
+  description:
+    "Consult specialists from the comfort of your home. Secure, convenient rheumatology care — wherever you are in Nepal.",
+  stats: [
+    {
+      value: "Secure",
+      label: "Private Consults",
+      icon: {
+        src: `${heroIcons}/5.png`,
+        alt: "Secure consultations",
+      },
+    },
+    {
+      value: "Save",
+      label: "Travel Time",
+      icon: {
+        src: `${heroIcons}/3.png`,
+        alt: "Save travel time",
+      },
+    },
+    {
+      value: "Expert",
+      label: "Rheumatology Care",
+      icon: {
+        src: `${heroIcons}/4.png`,
+        alt: "Expert rheumatology care",
+      },
+    },
+  ],
+  image: {
+    src: `${telehealthAssets}/herosectiontelehealth.jpg`,
+    alt: "Patient consulting a rheumatologist via secure video call from home",
+  },
+  primaryCta: {
+    label: "Book Virtual Appointment",
+    href: siteConfig.links.appointment,
+    icon: {
+      src: `${heroIcons}/1.png`,
+      alt: "",
+    },
+  },
+  secondaryCta: {
+    label: "Contact Our Team",
+    href: "/contact",
+    icon: {
+      src: `${heroIcons}/2.png`,
+      alt: "",
+    },
+  },
+} satisfies PageHeroContent;
+
+const telehealthConditionIconDir =
+  "/images/Telehealthservices/condition we treate";
+
+function telehealthConditionIcon(filename: string) {
+  return encodeURI(`${telehealthConditionIconDir}/${filename}`);
+}
 
 export const telehealthPage = {
   meta: {
     title: "Telehealth Services",
     description: `Consult with ${siteConfig.shortName} rheumatologists from home via secure video or phone. Follow-ups, medication reviews, and expert care — wherever you are in Nepal.`,
   },
-  hero: {
-    eyebrow: "Virtual Care",
-    title: "Telehealth Rheumatology Care",
-    titleAccent: "Consult from Home",
+  hero: telehealthPageHero,
+  servicesOffer: {
+    eyebrow: "Our Services",
+    title: "Telehealth Services We Offer",
     description:
-      "Get expert rheumatology care without visiting the clinic. Secure, convenient, and accessible from anywhere.",
-    primaryCta: {
-      label: "Book Teleconsultation",
+      "High-quality rheumatology care delivered to you, wherever you are.",
+    cta: {
+      label: "Book Virtual Appointment",
       href: siteConfig.links.appointment,
     },
-    secondaryCta: {
-      label: "Schedule Online Visit",
-      href: siteConfig.links.appointment,
-    },
+    items: [
+      {
+        title: "Arthritis Consultation",
+        description:
+          "Expert evaluation and diagnosis for all types of arthritis and autoimmune conditions.",
+        image: {
+          src: "/images/Telehealthservices/teleheath services/image1.jpg",
+          alt: "Doctor consulting with a patient about arthritis",
+        },
+        icon: "arthritis" as const,
+      },
+      {
+        title: "Follow-up Visits",
+        description:
+          "Convenient follow-up appointments to monitor your progress and adjust treatment as needed.",
+        image: {
+          src: "/images/Telehealthservices/teleheath services/image2.jpg",
+          alt: "Patient on a video follow-up visit with their doctor",
+        },
+        icon: "followUp" as const,
+      },
+      {
+        title: "Medication Review",
+        description:
+          "Review of your current medications to ensure safety, effectiveness, and proper management.",
+        image: {
+          src: "/images/Telehealthservices/teleheath services/image3..jpg",
+          alt: "Medication bottles for rheumatology treatment review",
+        },
+        icon: "medication" as const,
+      },
+      {
+        title: "Lab Result Discussion",
+        description:
+          "Detailed discussion of your lab results and what they mean for your condition and treatment.",
+        image: {
+          src: "/images/Telehealthservices/teleheath services/image4.jpg",
+          alt: "Doctor reviewing laboratory test results with a patient",
+        },
+        icon: "lab" as const,
+      },
+      {
+        title: "Chronic Pain Management",
+        description:
+          "Personalized strategies and treatment plans to help manage chronic pain and improve quality of life.",
+        image: {
+          src: "/images/Telehealthservices/teleheath services/image5.jpg",
+          alt: "Patient receiving guidance for chronic pain management",
+        },
+        icon: "pain" as const,
+      },
+    ],
   },
   whatIs: {
     eyebrow: "Understanding Virtual Care",
@@ -26,10 +139,8 @@ export const telehealthPage = {
       prefix: "What is",
       highlight: "Telehealth?",
     },
-    paragraphs: [
-      "Telehealth allows you to consult your rheumatologist via secure video or phone — from the comfort of your home or office.",
-      "It is ideal for follow-up visits, medication reviews, symptom discussions, lab report reviews, and second opinions when an in-person physical examination is not immediately required.",
-    ],
+    description:
+      "Telehealth allows you to consult your rheumatologist via secure video or phone — from the comfort of your home or office, anywhere in Nepal. It brings specialist rheumatology care to you without the time, travel, or expense of visiting the clinic in person. It is ideal for follow-up visits, medication reviews, symptom discussions, lab report reviews, and second opinions when an in-person physical examination is not immediately required. Your consultation takes place over a private, encrypted connection with the same clinicians who care for you in person. For many stable or mild-to-moderate conditions, virtual visits are a safe and effective way to stay on track with your treatment.",
   },
   conditions: {
     eyebrow: "Rheumatology Focus",
@@ -41,29 +152,74 @@ export const telehealthPage = {
       "Many rheumatology conditions can be monitored and managed effectively through telehealth when symptoms are stable or mild to moderate.",
     items: [
       {
-        label: "Rheumatoid Arthritis",
+        id: "rheumatoid-arthritis",
+        title: "Rheumatoid Arthritis",
+        description: "Chronic autoimmune joint inflammation.",
         href: "/conditions/rheumatoid-arthritis",
+        icon: {
+          src: telehealthConditionIcon("icons1.png"),
+          alt: "Rheumatoid arthritis icon",
+        },
       },
       {
-        label: "Osteoarthritis",
+        id: "osteoarthritis",
+        title: "Osteoarthritis",
+        description: "Degenerative joint pain and stiffness.",
         href: "/conditions/osteoarthritis",
+        icon: {
+          src: telehealthConditionIcon("icons2.png"),
+          alt: "Osteoarthritis icon",
+        },
       },
       {
-        label: "Systemic Lupus (SLE)",
+        id: "systemic-lupus",
+        title: "Systemic Lupus (SLE)",
+        description: "Autoimmune disease affecting multiple organs.",
         href: "/conditions/systemic-lupus-erythematosus",
+        icon: {
+          src: telehealthConditionIcon("icons3.png"),
+          alt: "Systemic lupus icon",
+        },
       },
-      { label: "Gout", href: "/conditions/gout" },
       {
-        label: "Ankylosing Spondylitis",
+        id: "gout",
+        title: "Gout",
+        description: "Sudden joint pain due to uric acid buildup.",
+        href: "/conditions/gout",
+        icon: {
+          src: telehealthConditionIcon("icons4.png"),
+          alt: "Gout icon",
+        },
+      },
+      {
+        id: "ankylosing-spondylitis",
+        title: "Ankylosing Spondylitis",
+        description: "Inflammation affecting spine and mobility.",
         href: "/conditions/ankylosing-spondylitis",
+        icon: {
+          src: telehealthConditionIcon("icons5.png"),
+          alt: "Ankylosing spondylitis icon",
+        },
       },
       {
-        label: "Chronic Joint Pain",
+        id: "chronic-joint-pain",
+        title: "Chronic Joint Pain",
+        description: "Persistent pain from injury or inflammation.",
         href: "/conditions/chronic-back-pain-joint-pain",
+        icon: {
+          src: telehealthConditionIcon("icons6.png"),
+          alt: "Chronic joint pain icon",
+        },
       },
       {
-        label: "Autoimmune Conditions",
+        id: "autoimmune-conditions",
+        title: "Autoimmune Conditions",
+        description: "Disorders where the immune system attacks the body.",
         href: "/conditions/connective-tissue-diseases",
+        icon: {
+          src: telehealthConditionIcon("icons7.png"),
+          alt: "Autoimmune conditions icon",
+        },
       },
     ],
   },
@@ -76,23 +232,29 @@ export const telehealthPage = {
     description:
       "We help you choose the most appropriate visit type so you receive safe, effective care every time.",
     telehealth: {
-      title: "Telehealth is suitable for",
+      title: "Telehealth",
+      image: {
+        src: encodeURI(`${telehealthAssets}/inpersoncare/Telehealth.jpg`),
+        alt: "Patient on a telehealth video consultation with a doctor",
+      },
       items: [
-        "Follow-up visits",
-        "Reviewing test reports",
-        "Medication adjustments",
-        "Mild to moderate symptoms",
-        "Care planning and education",
+        "For stable or mild to moderate symptoms",
+        "Follow-ups and treatment adjustments",
+        "Lab or imaging review",
+        "Convenient and secure from home",
       ],
     },
     inPerson: {
-      title: "In-person visit needed for",
+      title: "In-Person Care",
+      image: {
+        src: encodeURI(`${telehealthAssets}/inpersoncare/in-person care.jpg`),
+        alt: "Doctor performing an in-person physical examination",
+      },
       items: [
-        "Severe pain or swelling",
-        "Joint injections or procedures",
-        "Physical examination required",
-        "New or rapidly worsening symptoms",
-        "Initial complex diagnostic workup",
+        "New or complex symptoms",
+        "Physical examination or procedures",
+        "Urgent or severe flare-ups",
+        "Personalized hands-on evaluation",
       ],
     },
   },
@@ -124,61 +286,5 @@ export const telehealthPage = {
         description: "Get updated prescriptions, lifestyle guidance, and follow-up instructions.",
       },
     ],
-  },
-  benefits: {
-    eyebrow: "Why Choose Virtual Care",
-    title: {
-      prefix: "Benefits of",
-      highlight: "Telehealth",
-    },
-    items: [
-      {
-        title: "No travel required",
-        description: "Save time and consult from home, work, or anywhere with connectivity.",
-      },
-      {
-        title: "Saves time",
-        description: "Shorter wait times and no commute for routine follow-up appointments.",
-      },
-      {
-        title: "Access from remote areas",
-        description: "Expert rheumatology care across Nepal without traveling to Kathmandu.",
-      },
-      {
-        title: "Reduced infection exposure",
-        description: "Limit contact in waiting areas when you are immunocompromised or unwell.",
-      },
-      {
-        title: "Easy follow-ups",
-        description: "Stay on track with treatment plans through convenient check-in visits.",
-      },
-    ],
-  },
-  pricing: {
-    eyebrow: "Fees & Payment",
-    title: {
-      prefix: "Pricing &",
-      highlight: "Insurance",
-    },
-    description:
-      "Transparent consultation fees and flexible payment options. Contact us for the latest rates and insurance guidance.",
-    items: [
-      {
-        label: "Teleconsultation fee",
-        value: "Please contact the clinic for current consultation charges.",
-      },
-      {
-        label: "Payment methods",
-        value: "Cash, bank transfer, and online payment options available.",
-      },
-      {
-        label: "Insurance coverage",
-        value: "Coverage varies by provider. Our team can help verify eligibility before your visit.",
-      },
-    ],
-    cta: {
-      label: "Ask About Fees",
-      href: siteConfig.links.appointment,
-    },
   },
 } as const;

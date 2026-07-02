@@ -1,10 +1,6 @@
-import Link from "next/link";
+import Image from "next/image";
 import { telehealthPage } from "@/data/telehealth-page";
-import {
-  ServiceCardHoverOverlay,
-  serviceIconCardClasses,
-} from "@/components/sections/service-icon-card";
-import { Button, Container, Section } from "@/components/ui";
+import { Container, Section, SectionHeader } from "@/components/ui";
 import { cn } from "@/lib/cn";
 
 function SectionHeading({
@@ -77,167 +73,86 @@ function CheckListItem({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function TelehealthHero() {
-  const { hero } = telehealthPage;
-
-  return (
-    <Section
-      background="hero"
-      spacing="none"
-      className="border-b border-primary-dark/10"
-    >
-      <Container size="wide" className="page-hero-padding">
-        <div className="section-intro mx-auto flex flex-col items-center text-center">
-          <p className="font-display text-eyebrow font-semibold tracking-[0.18em] text-primary uppercase">
-            {hero.eyebrow}
-          </p>
-
-          <h1 className="font-display mt-sm text-h2 font-bold leading-[1.12] tracking-tight text-pretty text-navy lg:text-[2.75rem]">
-            {hero.title}
-            <br />
-            <span className="text-primary">{hero.titleAccent}</span>
-          </h1>
-
-          <span
-            aria-hidden="true"
-            className="mt-sm block h-1 w-14 rounded-full bg-primary"
-          />
-
-          <p className="text-body mt-md max-w-[38rem] text-pretty text-slate-600">
-            {hero.description}
-          </p>
-
-          <div className="mt-lg flex w-full max-w-[38rem] flex-col gap-sm sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-sm">
-            <Button
-              href={hero.primaryCta.href}
-              size="lg"
-              className="w-full whitespace-normal sm:w-auto sm:whitespace-nowrap"
-            >
-              {hero.primaryCta.label}
-            </Button>
-            <Button
-              href={hero.secondaryCta.href}
-              variant="outline"
-              size="lg"
-              className="w-full whitespace-normal sm:w-auto sm:whitespace-nowrap"
-            >
-              {hero.secondaryCta.label}
-            </Button>
-          </div>
-        </div>
-      </Container>
-    </Section>
-  );
-}
-
 export function TelehealthWhatIs() {
   const { whatIs } = telehealthPage;
 
   return (
-    <Section background="default" spacing="default">
-      <Container size="wide">
-        <div className="mx-auto grid max-w-[56rem] gap-xl lg:grid-cols-2 lg:items-start lg:gap-4xl">
-          <header className="text-left">
-            <p className="font-display text-eyebrow font-semibold tracking-[0.18em] text-primary uppercase">
-              {whatIs.eyebrow}
-            </p>
-            <h2 className="font-display mt-sm text-[1.75rem] font-semibold leading-tight tracking-tight text-navy sm:text-h2 lg:text-[2.375rem]">
-              {whatIs.title.prefix}{" "}
-              <span className="text-primary">{whatIs.title.highlight}</span>
-            </h2>
-            <span
-              aria-hidden="true"
-              className="mt-md block h-1 w-14 rounded-full bg-primary"
-            />
-          </header>
+    <Section background="default" spacing="default" className="relative overflow-hidden">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-0 right-0 h-40 w-40 rounded-full bg-primary/6 blur-3xl"
+      />
 
-          <div className="flex flex-col gap-md">
-            {whatIs.paragraphs.map((paragraph) => (
-              <p
-                key={paragraph}
-                className="text-body leading-relaxed text-slate-600"
-              >
-                {paragraph}
-              </p>
-            ))}
-          </div>
+      <Container size="wide" className="relative">
+        <div className="motion-safe:animate-[fadeIn_0.55s_ease-out_both] motion-reduce:animate-none">
+          <SectionHeader
+            eyebrow={whatIs.eyebrow}
+            title={whatIs.title}
+            align="center"
+            decoratedEyebrow
+            className="mx-auto"
+          />
         </div>
+
+        <p
+          className={cn(
+            "section-content text-body w-full max-w-none text-pretty leading-[1.85] text-slate-600",
+            "motion-safe:animate-[fadeIn_0.55s_ease-out_both] motion-reduce:animate-none",
+          )}
+          style={{ animationDelay: "100ms" }}
+        >
+          {whatIs.description}
+        </p>
       </Container>
     </Section>
   );
 }
 
-export function TelehealthConditions() {
-  const { conditions } = telehealthPage;
-
-  return (
-    <Section background="surface" spacing="default" className="border-y border-slate-200">
-      <Container size="wide">
-        <SectionHeading
-          eyebrow={conditions.eyebrow}
-          title={conditions.title}
-          description={conditions.description}
-        />
-
-        <ul className="section-content grid grid-cols-1 gap-sm sm:grid-cols-2 lg:grid-cols-3 lg:gap-md">
-          {conditions.items.map((item, index) => (
-            <li
-              key={item.label}
-              className="motion-safe:animate-[fadeIn_0.55s_ease-out_both] motion-reduce:animate-none"
-              style={{ animationDelay: `${index * 60}ms` }}
-            >
-              <Link
-                href={item.href}
-                className={cn(
-                  serviceIconCardClasses,
-                  "flex-row items-center gap-md px-md py-md sm:px-lg sm:py-lg",
-                  "motion-reduce:transition-none motion-reduce:hover:translate-y-0",
-                )}
-              >
-                <ServiceCardHoverOverlay />
-                <span
-                  aria-hidden="true"
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-soft/55 font-display text-small font-bold text-primary"
-                >
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <span className="text-left text-body font-semibold text-navy transition-colors duration-300 group-hover:text-primary">
-                  {item.label}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </Container>
-    </Section>
-  );
-}
-
-function ComparisonCard({
+function ComparisonColumn({
   title,
+  image,
   items,
-  variant,
 }: {
   title: string;
+  image: { src: string; alt: string };
   items: readonly string[];
-  variant: "telehealth" | "in-person";
 }) {
   return (
-    <article
-      className={cn(
-        "h-full rounded-2xl border p-lg sm:p-xl",
-        variant === "telehealth"
-          ? "border-primary/20 bg-white shadow-[0_10px_30px_rgba(20,150,168,0.08)]"
-          : "border-slate-200 bg-background",
-      )}
-    >
-      <h3 className="text-body font-bold text-navy">{title}</h3>
-      <ul className="mt-md flex flex-col gap-sm">
+    <div className="flex flex-col">
+      <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-slate-100 sm:aspect-[3/2]">
+        <Image
+          src={image.src}
+          alt={image.alt}
+          fill
+          sizes="(max-width: 1024px) 90vw, 22rem"
+          className="object-cover object-center"
+        />
+      </div>
+
+      <div className="mt-md flex items-center gap-2.5">
+        <span
+          aria-hidden="true"
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary-soft/55 text-primary"
+        >
+          <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4">
+            <path
+              d="M3.5 8.25l2.75 2.75L12.5 5"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </span>
+        <h3 className="text-body font-bold text-primary">{title}</h3>
+      </div>
+
+      <ul className="mt-sm flex flex-col gap-sm">
         {items.map((item) => (
           <CheckListItem key={item}>{item}</CheckListItem>
         ))}
       </ul>
-    </article>
+    </div>
   );
 }
 
@@ -245,25 +160,45 @@ export function TelehealthComparison() {
   const { comparison } = telehealthPage;
 
   return (
-    <Section background="default" spacing="default">
+    <Section background="surface" spacing="default">
       <Container size="wide">
-        <SectionHeading
-          eyebrow={comparison.eyebrow}
-          title={comparison.title}
-          description={comparison.description}
-        />
+        <div className="grid gap-xl lg:grid-cols-[minmax(0,0.85fr)_minmax(0,2fr)] lg:items-start lg:gap-2xl xl:gap-3xl">
+          <header className="flex flex-col text-left">
+            <p className="font-display text-eyebrow font-semibold tracking-[0.18em] text-primary uppercase">
+              {comparison.eyebrow}
+            </p>
+            <h2 className="font-display mt-sm text-[1.75rem] font-semibold leading-tight tracking-tight text-navy sm:text-h2 lg:text-[2.125rem]">
+              <span>{comparison.title.prefix} </span>
+              <span className="text-primary">{comparison.title.highlight}</span>
+            </h2>
+            <span
+              aria-hidden="true"
+              className="mt-md block h-1 w-14 rounded-full bg-primary"
+            />
+            <p className="text-body mt-md max-w-[22rem] text-pretty leading-relaxed text-slate-600">
+              {comparison.description}
+            </p>
+          </header>
 
-        <div className="section-content grid gap-lg lg:grid-cols-2 lg:gap-xl">
-          <ComparisonCard
-            title={comparison.telehealth.title}
-            items={comparison.telehealth.items}
-            variant="telehealth"
-          />
-          <ComparisonCard
-            title={comparison.inPerson.title}
-            items={comparison.inPerson.items}
-            variant="in-person"
-          />
+          <div className="relative grid gap-lg sm:grid-cols-2 sm:gap-xl">
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute top-[7rem] left-1/2 z-10 hidden h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-navy font-display text-small font-semibold text-white shadow-md sm:flex"
+            >
+              or
+            </span>
+
+            <ComparisonColumn
+              title={comparison.telehealth.title}
+              image={comparison.telehealth.image}
+              items={comparison.telehealth.items}
+            />
+            <ComparisonColumn
+              title={comparison.inPerson.title}
+              image={comparison.inPerson.image}
+              items={comparison.inPerson.items}
+            />
+          </div>
         </div>
       </Container>
     </Section>
@@ -308,114 +243,6 @@ export function TelehealthHowItWorks() {
             </li>
           ))}
         </ol>
-      </Container>
-    </Section>
-  );
-}
-
-function BenefitCard({
-  title,
-  description,
-}: {
-  title: string;
-  description: string;
-}) {
-  return (
-    <article
-      className={cn(
-        serviceIconCardClasses,
-        "items-start px-md py-lg sm:px-lg sm:py-xl",
-        "motion-reduce:transition-none motion-reduce:hover:translate-y-0",
-      )}
-    >
-      <ServiceCardHoverOverlay />
-
-      <span
-        aria-hidden="true"
-        className="flex h-11 w-11 items-center justify-center rounded-full bg-primary-soft/55 text-primary"
-      >
-        <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
-          <path
-            d="M12 3.5l7 3.5v5c0 4.5-3 7.5-7 8.5-4-1-7-4-7-8.5V7l7-3.5z"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </span>
-
-      <h3 className="mt-md text-body font-bold text-navy transition-colors duration-300 group-hover:text-primary">
-        {title}
-      </h3>
-      <p className="mt-sm text-small leading-relaxed text-slate-600">
-        {description}
-      </p>
-
-      <span
-        aria-hidden="true"
-        className="mt-md block h-0.5 w-8 rounded-full bg-primary transition-all duration-300 group-hover:w-10"
-      />
-    </article>
-  );
-}
-
-export function TelehealthBenefits() {
-  const { benefits } = telehealthPage;
-
-  return (
-    <Section background="default" spacing="default">
-      <Container size="wide">
-        <SectionHeading eyebrow={benefits.eyebrow} title={benefits.title} />
-
-        <ul className="section-content grid grid-cols-1 gap-md sm:grid-cols-2 lg:grid-cols-3 lg:gap-lg">
-          {benefits.items.map((item, index) => (
-            <li
-              key={item.title}
-              className="flex motion-safe:animate-[fadeIn_0.55s_ease-out_both] motion-reduce:animate-none"
-              style={{ animationDelay: `${index * 70}ms` }}
-            >
-              <BenefitCard
-                title={item.title}
-                description={item.description}
-              />
-            </li>
-          ))}
-        </ul>
-      </Container>
-    </Section>
-  );
-}
-
-export function TelehealthPricing() {
-  const { pricing } = telehealthPage;
-
-  return (
-    <Section background="hero" spacing="default" className="border-t border-primary-dark/10">
-      <Container size="wide">
-        <SectionHeading
-          eyebrow={pricing.eyebrow}
-          title={pricing.title}
-          description={pricing.description}
-        />
-
-        <div className="section-content mx-auto max-w-[40rem] rounded-2xl border border-white/70 bg-white/90 p-lg shadow-sm backdrop-blur-sm sm:p-xl">
-          <dl className="flex flex-col gap-lg">
-            {pricing.items.map((item) => (
-              <div key={item.label}>
-                <dt className="text-body font-bold text-navy">{item.label}</dt>
-                <dd className="mt-sm text-small leading-relaxed text-slate-600 sm:text-body">
-                  {item.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-
-          <div className="mt-xl flex justify-center">
-            <Button href={pricing.cta.href} size="lg">
-              {pricing.cta.label}
-            </Button>
-          </div>
-        </div>
       </Container>
     </Section>
   );

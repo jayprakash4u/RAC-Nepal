@@ -1,6 +1,9 @@
+"use client";
+
 import Image from "next/image";
-import { Container, Section } from "@/components/ui";
+import { ResponsiveItemCarousel } from "@/components/sections/responsive-item-carousel";
 import { ServiceIconCard } from "@/components/sections/service-icon-card";
+import { Container, Section } from "@/components/ui";
 import type { ServiceSymptomsEvaluationSectionData } from "@/types/service-content";
 import { cn } from "@/lib/cn";
 
@@ -64,7 +67,7 @@ export function ServiceSymptomsEvaluationSection({
 
       <Container size="wide" className="relative z-10">
         <header className="max-w-[36rem] lg:max-w-[46%]">
-          <h2 className="font-display text-h2 font-semibold leading-tight text-navy sm:text-[2.25rem]">
+          <h2 className="font-display text-[1.625rem] font-semibold leading-tight text-navy sm:text-[2.25rem]">
             {section.title}
           </h2>
 
@@ -80,20 +83,32 @@ export function ServiceSymptomsEvaluationSection({
           ) : null}
         </header>
 
-        <div className="relative mt-xl overflow-hidden rounded-2xl lg:hidden">
+        <div className="relative mt-lg overflow-hidden rounded-2xl lg:mt-xl lg:hidden">
           <SectionHeroImage
             image={section.heroImage}
-            className="aspect-[5/3] w-full"
+            className="aspect-[16/10] w-full sm:aspect-[5/3]"
           />
         </div>
 
-        <ul className="mt-2xl grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-5">
-          {section.items.map((item) => (
-            <li key={item.label} className="aspect-square">
-              <ServiceIconCard label={item.label} image={item.image} />
-            </li>
-          ))}
-        </ul>
+        <ResponsiveItemCarousel
+          items={section.items}
+          getItemKey={(item) => item.label}
+          ariaLabel="Symptoms we evaluate"
+          dotLabel={(item) => `Go to ${item.label}`}
+          desktopGridClassName="mt-2xl grid-cols-2 gap-4 sm:gap-5 md:grid-cols-5"
+          mobileCarouselClassName="mt-lg sm:hidden sm:mt-2xl"
+          carouselTrackClassName="mx-auto max-w-[18rem]"
+          listItemClassName="flex aspect-square"
+          renderItem={(item, { elevated }) => (
+            <ServiceIconCard
+              label={item.label}
+              image={item.image}
+              elevated={elevated}
+              imageClassName="h-14 w-14 sm:h-[4.5rem] sm:w-[4.5rem]"
+              sizes="(max-width: 640px) 3.5rem, 4.5rem"
+            />
+          )}
+        />
       </Container>
     </Section>
   );

@@ -64,7 +64,7 @@ function PreventionSideImage({
       <div
         className={cn(
           "relative w-full overflow-hidden",
-          "min-h-[20rem] sm:min-h-[24rem]",
+          "min-h-[14rem] sm:min-h-[24rem]",
           "rounded-[2rem] rounded-tl-[4.5rem] sm:rounded-tl-[5.5rem]",
           "lg:min-h-[32rem] lg:rounded-tl-[6rem] xl:min-h-[36rem] xl:rounded-tl-[7rem]",
           "shadow-[0_22px_50px_-32px_rgba(15,23,42,0.28)]",

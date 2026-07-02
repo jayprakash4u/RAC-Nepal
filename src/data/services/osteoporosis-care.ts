@@ -265,6 +265,16 @@ export const osteoporosisCareService: ServicePageData = {
       src: `${serviceScrollbarImageDir}/osteoporosis-care/benefits.png`,
       alt: "Infographic showing the benefits of osteoporosis care including stronger bones, healthy aging, independence, better posture, reduced fracture risk, pain relief, improved mobility, and better balance",
     },
+    mobileHighlights: [
+      "Stronger bones",
+      "Healthy aging",
+      "Greater independence",
+      "Better posture",
+      "Reduced fracture risk",
+      "Pain relief",
+      "Improved mobility",
+      "Better balance",
+    ],
   },
   preventionTipsSection: {
     eyebrow: "Prevention Tips",

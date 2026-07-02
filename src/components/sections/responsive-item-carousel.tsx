@@ -13,6 +13,7 @@ export type ResponsiveItemCarouselProps<T> = {
   mobileCarouselClassName?: string;
   carouselTrackClassName?: string;
   listItemClassName?: string;
+  staggerDesktopItems?: boolean;
   dotLabel?: (item: T, index: number) => string;
 };
 
@@ -25,6 +26,7 @@ export function ResponsiveItemCarousel<T>({
   mobileCarouselClassName = "section-content sm:hidden",
   carouselTrackClassName = "mx-auto max-w-[22rem]",
   listItemClassName = "flex",
+  staggerDesktopItems = false,
   dotLabel,
 }: ResponsiveItemCarouselProps<T>) {
   return (
@@ -47,7 +49,16 @@ export function ResponsiveItemCarousel<T>({
         {items.map((item, index) => (
           <li
             key={getItemKey(item, index)}
-            className={listItemClassName}
+            className={cn(
+              listItemClassName,
+              staggerDesktopItems &&
+                "motion-safe:animate-[fadeIn_0.55s_ease-out_both] motion-reduce:animate-none",
+            )}
+            style={
+              staggerDesktopItems
+                ? { animationDelay: `${index * 70}ms` }
+                : undefined
+            }
           >
             {renderItem(item, { elevated: false })}
           </li>

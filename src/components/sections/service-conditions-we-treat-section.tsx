@@ -89,7 +89,7 @@ function ArchedSideImage({ image }: { image: { src: string; alt: string } }) {
     <div className="relative mx-auto w-full max-w-[22rem] lg:mx-0 lg:max-w-none lg:self-stretch">
       <div
         className={cn(
-          "relative min-h-[20rem] w-full overflow-hidden",
+          "relative min-h-[14rem] w-full overflow-hidden",
           "rounded-[2rem] rounded-tl-[4.5rem] sm:min-h-[24rem] sm:rounded-tl-[5.5rem]",
           "lg:min-h-[36rem] lg:rounded-tl-[7rem] xl:min-h-[40rem]",
           "shadow-[0_22px_50px_-32px_rgba(15,23,42,0.28)]",
@@ -120,7 +120,7 @@ export function ServiceConditionsWeTreatSection({
 
   const desktopGridClassName =
     section.cardGridColumns === 2
-      ? "mt-6 grid gap-3 sm:mt-8 sm:gap-4 grid-cols-2"
+      ? "mt-6 grid gap-3 sm:mt-8 sm:gap-4 grid-cols-1 sm:grid-cols-2"
       : "mt-6 grid gap-3 sm:mt-8 sm:gap-4 grid-cols-2 sm:grid-cols-4";
 
   return (

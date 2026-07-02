@@ -1,12 +1,11 @@
 import {
-  TelehealthBenefits,
   TelehealthComparison,
-  TelehealthConditions,
-  TelehealthHero,
   TelehealthHowItWorks,
-  TelehealthPricing,
   TelehealthWhatIs,
 } from "@/components/sections/telehealth-page";
+import { TelehealthConditions } from "@/components/sections/telehealth-conditions-section";
+import { TelehealthPageHero } from "@/components/sections/telehealth-page-hero";
+import { TelehealthServicesOffer } from "@/components/sections/telehealth-services-offer";
 import { telehealthPage } from "@/data/telehealth-page";
 import type { Metadata } from "next";
 
@@ -18,13 +17,12 @@ export const metadata: Metadata = {
 export default function TelehealthServicesPage() {
   return (
     <>
-      <TelehealthHero />
+      <TelehealthPageHero />
       <TelehealthWhatIs />
+      <TelehealthServicesOffer />
       <TelehealthConditions />
       <TelehealthComparison />
       <TelehealthHowItWorks />
-      <TelehealthBenefits />
-      <TelehealthPricing />
     </>
   );
 }

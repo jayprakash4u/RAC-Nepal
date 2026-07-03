@@ -1,4 +1,9 @@
+import Image from "next/image";
+import Link from "next/link";
+import { BlogArticleBody } from "@/components/sections/blog-article-body";
+import { BlogRelatedPosts } from "@/components/sections/blog-related-posts";
 import { Button, Container, Section } from "@/components/ui";
+import { getBlogArticleBySlug } from "@/data/blog-articles";
 import { blogPosts, getBlogPostBySlug } from "@/data/blogs";
 import { siteConfig } from "@/config/site";
 import type { Metadata } from "next";
@@ -25,6 +30,11 @@ export async function generateMetadata({
   return {
     title: post.title,
     description: post.excerpt,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      images: [{ url: post.image.src, alt: post.image.alt }],
+    },
   };
 }
 
@@ -39,8 +49,9 @@ function formatDate(isoDate: string) {
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
   const post = getBlogPostBySlug(slug);
+  const article = getBlogArticleBySlug(slug);
 
-  if (!post) {
+  if (!post || !article) {
     notFound();
   }
 
@@ -52,7 +63,15 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         className="border-b border-primary-dark/10"
       >
         <Container size="narrow" className="page-hero-padding">
-          <div className="flex flex-wrap items-center gap-md text-small text-slate-600">
+          <Link
+            href="/blogs"
+            className="inline-flex items-center gap-xs text-small font-semibold text-primary transition-colors hover:text-primary-dark"
+          >
+            <span aria-hidden="true">←</span>
+            Back to all articles
+          </Link>
+
+          <div className="mt-lg flex flex-wrap items-center gap-md text-small text-slate-600">
             <span className="rounded-full bg-white/90 px-md py-xs font-semibold text-primary-dark shadow-sm">
               {post.category}
             </span>
@@ -63,27 +82,57 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <span>{post.readTime}</span>
           </div>
 
-          <h1 className="text-h2 mt-lg font-bold text-navy lg:text-h1">
-            {post.title}
-          </h1>
+          <h1 className="text-h2 mt-lg font-bold text-navy lg:text-h1">{post.title}</h1>
 
           <p className="text-body mt-md text-slate-600">{post.excerpt}</p>
         </Container>
       </Section>
 
       <Section background="default" spacing="default">
-        <Container size="narrow" className="text-center">
-          <div className="rounded-2xl border border-dashed border-primary/25 bg-surface px-xl py-3xl">
-            <p className="text-body text-slate-600">
-              The full article is being prepared. Check back soon for the
-              complete post from {siteConfig.shortName}.
+        <Container size="narrow">
+          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <div className="relative aspect-[16/9] w-full">
+              <Image
+                src={post.image.src}
+                alt={post.image.alt}
+                fill
+                priority
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 42rem"
+              />
+            </div>
+          </div>
+
+          <div className="mt-xl border-b border-slate-200 pb-lg">
+            <p className="text-small text-slate-500">
+              By <span className="font-semibold text-slate-700">{article.author}</span>
             </p>
-            <div className="mt-xl">
-              <Button href="/blogs" variant="outline">
-                Back to all articles
+          </div>
+
+          <BlogArticleBody sections={article.sections} className="mt-2xl" />
+
+          <div className="mt-3xl rounded-2xl border border-primary/20 bg-hero-surface px-lg py-xl sm:px-2xl sm:py-2xl">
+            <h2 className="text-h3 font-bold text-navy">Need specialist guidance?</h2>
+            <p className="text-body mt-sm text-slate-600">
+              If symptoms in this article sound familiar, our rheumatology team at{" "}
+              {siteConfig.shortName} can help with diagnosis, treatment, and long-term
+              follow-up.
+            </p>
+            <div className="mt-lg flex flex-col gap-sm sm:flex-row sm:flex-wrap">
+              <Button href={siteConfig.links.appointment} size="lg">
+                Book a Consultation
+              </Button>
+              <Button href="/blogs" variant="outline" size="lg">
+                More articles
               </Button>
             </div>
           </div>
+
+          <BlogRelatedPosts
+            currentSlug={post.slug}
+            category={post.category}
+            className="mt-3xl border-t border-slate-200 pt-3xl"
+          />
         </Container>
       </Section>
     </>

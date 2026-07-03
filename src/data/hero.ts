@@ -17,12 +17,16 @@ export const heroContent = {
     { value: "8,500+", label: "Patients treated" },
     { value: "40+", label: "Conditions managed" },
   ],
-  image: {
-    src: "/images/home page image.png",
-    alt: "Rheumatology care illustration with joint pain highlights at RAC Nepal",
-    width: 1200,
-    height: 800,
-  },
+  images: [
+    {
+      src: "/images/homeherosectionimage2.png",
+      alt: "Rheumatology consultation and patient care at RAC Nepal",
+    },
+    {
+      src: "/images/homeherosection3.png",
+      alt: "Advanced rheumatology treatment and joint care at RAC Nepal",
+    },
+  ],
   primaryCta: {
     label: "Schedule a Consultation",
     href: siteConfig.links.appointment,

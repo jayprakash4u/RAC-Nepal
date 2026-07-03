@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { heroContent } from "@/data/hero";
+import { HeroImageCarousel } from "@/components/sections/hero-image-carousel";
 import { HeroStat } from "@/components/sections/hero-stats";
 import { Button, Container, Section } from "@/components/ui";
 import { cn } from "@/lib/cn";
@@ -95,27 +95,6 @@ function HeroCopy({ className }: { className?: string }) {
   );
 }
 
-function HeroVisual({ className }: { className?: string }) {
-  const { image } = heroContent;
-
-  return (
-    <div className={cn("relative w-full", className)}>
-      <div className="relative overflow-hidden rounded-2xl shadow-[0_22px_50px_-32px_rgba(11,93,107,0.35)] ring-1 ring-primary/10 lg:rounded-3xl">
-        <div className="relative aspect-[5/4] w-full sm:aspect-[16/11] lg:aspect-[16/12]">
-          <Image
-            src={image.src}
-            alt={image.alt}
-            fill
-            priority
-            className="object-cover object-center sm:object-[84%_center] lg:object-right"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 34rem"
-          />
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export function Hero() {
   return (
     <Section
@@ -133,7 +112,7 @@ export function Hero() {
           </div>
 
           <div className="hero-media order-first w-full max-w-[34rem] lg:order-none lg:max-w-[36rem] xl:max-w-[38rem]">
-            <HeroVisual />
+            <HeroImageCarousel />
           </div>
         </div>
       </Container>

@@ -94,16 +94,13 @@ function DesktopNavLink({
         href={item.href}
         aria-current={isActive ? "page" : undefined}
         className={cn(
-          "relative inline-block whitespace-nowrap py-1 text-small font-medium transition-colors duration-normal",
+          "inline-flex items-center whitespace-nowrap rounded-full px-3 py-2 text-small font-medium transition-colors duration-normal",
           isActive
-            ? "text-primary"
-            : "text-slate-600 hover:text-primary",
+            ? "bg-primary/10 text-primary"
+            : "text-slate-600 hover:bg-slate-100/80 hover:text-navy",
         )}
       >
         {item.label}
-        {isActive ? (
-          <span className="absolute -bottom-1 left-0 h-0.5 w-full rounded-full bg-primary" />
-        ) : null}
       </Link>
     </li>
   );
@@ -260,7 +257,7 @@ export function NavLinks({
       <ul
         className={cn(
           orientation === "horizontal"
-            ? "flex flex-wrap items-center justify-start gap-md overflow-visible lg:gap-lg"
+            ? "flex flex-wrap items-center justify-start gap-1 overflow-visible xl:gap-2"
             : cn(
                 "flex w-full min-w-0 flex-col",
                 variant === "drawer" && "gap-0.5",

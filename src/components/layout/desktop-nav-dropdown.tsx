@@ -46,9 +46,9 @@ function DropdownMenuLink({
       onClick={onSelect}
       aria-current={isActive ? "page" : undefined}
       className={cn(
-        "block w-full px-md py-2.5 text-left text-small font-normal leading-snug text-navy transition-colors duration-normal",
+        "block w-full whitespace-nowrap rounded-lg px-md py-2.5 text-left text-small font-normal leading-snug text-navy transition-colors duration-normal",
         isActive
-          ? "bg-surface text-primary"
+          ? "bg-primary/10 font-medium text-primary"
           : "hover:bg-surface hover:text-primary focus-visible:bg-surface focus-visible:text-primary focus-visible:outline-none",
       )}
     >
@@ -141,8 +141,10 @@ export function DesktopNavDropdown({
     };
   }, [isOpen, closeMenu]);
 
-  const panelWidth =
-    item.label === "Conditions Treated" || item.label === "Services"
+  const isConditions = item.label === "Conditions Treated";
+  const panelWidth = isConditions
+    ? "w-[30rem] max-w-[calc(100vw-2rem)]"
+    : item.label === "Services"
       ? "w-[18rem]"
       : "w-52";
 
@@ -164,11 +166,11 @@ export function DesktopNavDropdown({
             onOpenChangeRef.current(isOpen ? false : true)
           }
           className={cn(
-            "inline-flex items-center gap-1 whitespace-nowrap rounded-sm py-1 text-small font-medium transition-colors duration-normal",
+            "inline-flex items-center gap-1 whitespace-nowrap rounded-full px-3 py-2 text-small font-medium transition-colors duration-normal",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
             isActive || isOpen
-              ? "text-primary"
-              : "text-slate-600 hover:text-primary",
+              ? "bg-primary/10 text-primary"
+              : "text-slate-600 hover:bg-slate-100/80 hover:text-navy",
           )}
         >
           {item.label}
@@ -181,17 +183,18 @@ export function DesktopNavDropdown({
             role="menu"
             aria-labelledby={triggerId}
             className={cn(
-              "absolute top-full left-0 z-dropdown pt-1",
+              "absolute top-full z-dropdown pt-2 motion-safe:animate-[fadeIn_0.18s_ease-out_both] motion-reduce:animate-none",
+              isConditions ? "right-0" : "left-0",
               panelWidth,
             )}
           >
             <div
               className={cn(
-                "overflow-hidden rounded-sm border border-slate-200 border-t-4 border-t-primary bg-white shadow-lg",
+                "overflow-hidden rounded-xl border border-slate-200/80 border-t-2 border-t-primary bg-white p-1.5 shadow-xl shadow-slate-900/10",
                 panelWidth,
               )}
             >
-              <ul className="divide-y divide-slate-100">
+              <ul className="space-y-0.5">
                 {item.href ? (
                   <li role="none">
                     <DropdownMenuLink

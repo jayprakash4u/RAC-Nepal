@@ -85,12 +85,12 @@ export function TopBar() {
   const { contact } = siteConfig;
 
   return (
-    <div className="border-b border-white/10 bg-primary-dark text-slate-100">
+    <div className="relative border-b border-white/10 bg-[linear-gradient(90deg,var(--color-navy),var(--color-primary-dark))] text-slate-100">
       <Container
         size="wide"
         className="flex h-10 items-center justify-between gap-md text-small"
       >
-        <div className="flex min-w-0 items-center gap-md md:gap-lg">
+        <div className="flex min-w-0 items-center [&>*+*]:ml-md [&>*+*]:border-l [&>*+*]:border-white/15 [&>*+*]:pl-md md:[&>*+*]:ml-lg md:[&>*+*]:pl-lg">
           <TopBarItem
             href={`tel:${contact.phone.replace(/\s/g, "")}`}
             icon={<PhoneIcon />}
@@ -112,6 +112,7 @@ export function TopBar() {
         </div>
 
         <SocialLinks
+          className="border-l border-white/15 pl-md md:pl-lg"
           linkClassName="h-7 w-7 text-slate-100 hover:text-white"
         />
       </Container>

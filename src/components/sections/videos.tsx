@@ -169,7 +169,7 @@ function VideoCard({ video }: { video: VideoItem }) {
 
 export function Videos() {
   return (
-    <Section background="surface" spacing="default">
+    <Section background="default" spacing="default">
       <Container size="wide">
         <SectionHeader
           eyebrow={videosSection.eyebrow}

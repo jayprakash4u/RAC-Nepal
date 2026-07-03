@@ -13,10 +13,10 @@ export const mainNavigation: readonly NavItem[] = [
     label: "Conditions Treated",
     children: conditionNavLinks,
   },
-  { label: "Contact Us", href: "/contact" },
   {
     label: "Other",
     children: [
+      { label: "Contact Us", href: "/contact" },
       { label: "Blogs", href: "/blogs" },
       { label: "Gallery", href: "/gallery" },
       { label: "Telehealth Services", href: "/telehealth-services" },

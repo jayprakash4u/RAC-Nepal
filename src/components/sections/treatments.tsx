@@ -105,17 +105,16 @@ function SpecialistIcon() {
 }
 
 export function Treatments() {
-  const { eyebrow, title, items, primaryCta, secondaryCta } =
+  const { eyebrow, title, description, items, primaryCta, secondaryCta } =
     treatmentsSection;
 
   return (
-    <Section background="default" spacing="default" className="relative overflow-hidden">
-      <SectionDecor />
-
-      <Container size="wide" className="relative">
+    <Section background="default" spacing="default">
+      <Container size="wide">
         <SectionHeader
           eyebrow={eyebrow}
           title={title}
+          description={description}
           align="center"
           decoratedEyebrow
         />
@@ -155,3 +154,4 @@ export function Treatments() {
     </Section>
   );
 }
+

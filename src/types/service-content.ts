@@ -315,10 +315,18 @@ export type ServiceInfographicSectionData = {
     prefix: string;
     highlight: string;
   };
-  image: {
+  centerImage?: {
     src: string;
     alt: string;
   };
+  items: readonly {
+    title: string;
+    description: string;
+    icon: {
+      src: string;
+      alt: string;
+    };
+  }[];
   mobileHighlights?: readonly string[];
 };
 

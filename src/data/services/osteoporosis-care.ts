@@ -7,8 +7,9 @@ const osteoporosisSymptomsImageDir = `${serviceScrollbarImageDir}/osteoporosis-c
 const osteoporosisRiskImageDir = `${serviceScrollbarImageDir}/osteoporosis-care/Risk`;
 const osteoporosisPreventionImageDir = `${serviceScrollbarImageDir}/osteoporosis-care/steps for stronger`;
 
+const osteoporosisBenefitsImageDir = `${serviceScrollbarImageDir}/osteoporosis-care/benefits`;
+
 const osteoporosisPreventionIconFiles = [
-  "Screenshot_2026-06-26_173307-removebg-preview.png",
   "Screenshot_2026-06-26_173312-removebg-preview.png",
   "Screenshot_2026-06-26_173315-removebg-preview.png",
   "Screenshot_2026-06-26_173321-removebg-preview.png",
@@ -261,10 +262,76 @@ export const osteoporosisCareService: ServicePageData = {
       prefix: "Benefits of",
       highlight: "Osteoporosis Care",
     },
-    image: {
-      src: `${serviceScrollbarImageDir}/osteoporosis-care/benefits.png`,
-      alt: "Infographic showing the benefits of osteoporosis care including stronger bones, healthy aging, independence, better posture, reduced fracture risk, pain relief, improved mobility, and better balance",
+    centerImage: {
+      src: `${osteoporosisBenefitsImageDir}/human femur bone.png`,
+      alt: "Human femur bone illustration",
     },
+    items: [
+      {
+        title: "Bone Strength",
+        description: "Support bone density and strength",
+        icon: {
+          src: `${osteoporosisBenefitsImageDir}/bone strength.png`,
+          alt: "Bone strength icon",
+        },
+      },
+      {
+        title: "Healthy Aging",
+        description: "Maintain mobility as you age",
+        icon: {
+          src: `${osteoporosisBenefitsImageDir}/healthy Aging.png`,
+          alt: "Healthy aging icon",
+        },
+      },
+      {
+        title: "Independence",
+        description: "Stay active and self-reliant",
+        icon: {
+          src: `${osteoporosisBenefitsImageDir}/independence.png`,
+          alt: "Independence icon",
+        },
+      },
+      {
+        title: "Posture",
+        description: "Improve spinal alignment",
+        icon: {
+          src: `${osteoporosisBenefitsImageDir}/Posture.png`,
+          alt: "Posture icon",
+        },
+      },
+      {
+        title: "Fracture Protection",
+        description: "Reduce fracture risk",
+        icon: {
+          src: `${osteoporosisBenefitsImageDir}/fracture protection.png`,
+          alt: "Fracture protection icon",
+        },
+      },
+      {
+        title: "Pain Relief",
+        description: "Alleviate joint discomfort",
+        icon: {
+          src: `${osteoporosisBenefitsImageDir}/Pain relif.png`,
+          alt: "Pain relief icon",
+        },
+      },
+      {
+        title: "Mobility",
+        description: "Move freely without limitation",
+        icon: {
+          src: `${osteoporosisBenefitsImageDir}/Mobility.png`,
+          alt: "Mobility icon",
+        },
+      },
+      {
+        title: "Balance",
+        description: "Prevent falls and instability",
+        icon: {
+          src: `${osteoporosisBenefitsImageDir}/balance.png`,
+          alt: "Balance icon",
+        },
+      },
+    ],
     mobileHighlights: [
       "Stronger bones",
       "Healthy aging",

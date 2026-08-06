@@ -11,7 +11,7 @@ export function Header() {
     >
       <TopBar />
 
-      <div className="overflow-visible border-b border-slate-200 bg-white/95 backdrop-blur-md">
+      <div className="overflow-visible border-b border-slate-200/80 bg-white/95 shadow-sm backdrop-blur-md">
         <Container
           size="wide"
           className="flex h-20 w-full items-center justify-start gap-md overflow-visible lg:gap-xl"

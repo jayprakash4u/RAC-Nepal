@@ -130,6 +130,45 @@
       transform: translateY(0);
     }
   }
+
+  @keyframes journeyReveal {
+    from {
+      opacity: 0;
+      transform: translateY(1.25rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes journeyDotPop {
+    0% {
+      opacity: 0;
+      transform: scale(0.2);
+    }
+
+    60% {
+      opacity: 1;
+      transform: scale(1.12);
+    }
+
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes journeyLineGrow {
+    from {
+      transform: scaleX(0);
+    }
+
+    to {
+      transform: scaleX(1);
+    }
+  }
 }
 
 @keyframes symptom-card-glow {

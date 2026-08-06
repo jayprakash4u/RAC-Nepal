@@ -344,7 +344,7 @@ function TestimonialsDesktopCarousel() {
 
 export function Testimonials() {
   return (
-    <Section background="default" spacing="default" className="relative overflow-hidden">
+    <Section background="surface" spacing="default" className="relative overflow-hidden">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -top-24 -left-24 h-64 w-64 rounded-full bg-primary/8 blur-3xl"

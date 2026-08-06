@@ -15,6 +15,13 @@ export type JourneyStage = {
 };
 
 export const journeySection = {
+  eyebrow: "The RAC Nepal Difference",
+  title: {
+    prefix: "Your Path to",
+    highlight: "Recovery",
+  },
+  description:
+    "A structured, physician-led process that carries you from first diagnosis to lasting mobility.",
   stages: [
     {
       step: "01",
@@ -72,5 +79,8 @@ export const journeySection = {
     },
   ],
 } as const satisfies {
+  eyebrow: string;
+  title: { prefix: string; highlight: string };
+  description: string;
   stages: readonly JourneyStage[];
 };

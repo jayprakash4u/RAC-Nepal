@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { AppointmentBookingLink } from "@/components/appointment-booking";
 import { Container, Section } from "@/components/ui";
 import { serviceIconRingClasses } from "@/components/sections/service-icon-card";
 import type { ServiceOverviewSectionData } from "@/types/service-content";
@@ -286,7 +286,7 @@ function IntroCtaButton({
   const isPrimary = variant === "primary";
 
   return (
-    <Link
+    <AppointmentBookingLink
       href={href}
       className={cn(
         "inline-flex h-12 flex-1 items-center justify-center gap-2.5 rounded-full px-5",
@@ -317,7 +317,7 @@ function IntroCtaButton({
       >
         →
       </span>
-    </Link>
+    </AppointmentBookingLink>
   );
 }
 
@@ -335,7 +335,7 @@ function SplitIntroCtaButton({
   const isPrimary = variant === "primary";
 
   return (
-    <Link
+    <AppointmentBookingLink
       href={href}
       className={cn(
         "inline-flex h-12 flex-1 items-center justify-center gap-2.5 rounded-full px-5",
@@ -364,7 +364,7 @@ function SplitIntroCtaButton({
       >
         →
       </span>
-    </Link>
+    </AppointmentBookingLink>
   );
 }
 

@@ -1,3 +1,7 @@
+"use client";
+
+import { useAppointmentBooking } from "@/components/appointment-booking";
+import { isAppointmentBookingHref } from "@/lib/appointment-booking";
 import { cn } from "@/lib/cn";
 import Link from "next/link";
 
@@ -55,12 +59,31 @@ function getButtonClassName({
 export function Button(props: ButtonProps) {
   const { variant, size, className, href, ...rest } = props;
   const classes = getButtonClassName({ variant, size, className });
+  const { openBookingModal, registerTrigger } = useAppointmentBooking();
 
   if (href) {
     const linkProps = rest as Omit<
       ButtonAsLinkProps,
       "href" | "variant" | "size" | "className"
     >;
+
+    if (isAppointmentBookingHref(href)) {
+      const { onClick, ...buttonProps } = linkProps;
+
+      return (
+        <button
+          type="button"
+          className={classes}
+          onClick={(event) => {
+            registerTrigger(event.currentTarget);
+            openBookingModal();
+            onClick?.(event as unknown as React.MouseEvent<HTMLAnchorElement>);
+          }}
+          {...(buttonProps as React.ButtonHTMLAttributes<HTMLButtonElement>)}
+        />
+      );
+    }
+
     return <Link href={href} className={classes} {...linkProps} />;
   }
 

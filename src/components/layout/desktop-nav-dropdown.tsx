@@ -141,12 +141,70 @@ export function DesktopNavDropdown({
     };
   }, [isOpen, closeMenu]);
 
+  const isServices = item.label === "Services";
   const isConditions = item.label === "Conditions Treated";
-  const panelWidth = isConditions
-    ? "w-[30rem] max-w-[calc(100vw-2rem)]"
-    : item.label === "Services"
-      ? "w-[18rem]"
+
+  const panelWidth = isServices
+    ? "w-72 max-w-[calc(100vw-2rem)]"
+    : isConditions
+      ? "w-72 max-w-[calc(100vw-2rem)]"
       : "w-52";
+
+  const renderTableContent = () => {
+    if (isServices || isConditions) {
+      return (
+        <ul className="space-y-0">
+          {item.children.map((child, index) => (
+            <li key={child.href} role="none">
+              <Link
+                href={child.href}
+                onClick={closeMenu}
+                aria-current={
+                  isLinkActive(pathname, child.href) ? "page" : undefined
+                }
+                className={cn(
+                  "block px-4 py-2 text-left text-small font-medium leading-snug transition-colors duration-normal",
+                  isLinkActive(pathname, child.href)
+                    ? "bg-primary/10 text-primary"
+                    : "text-navy hover:bg-surface hover:text-primary",
+                )}
+              >
+                {child.label}
+              </Link>
+              {index < item.children.length - 1 ? (
+                <div className="mx-4 h-px bg-slate-200" />
+              ) : null}
+            </li>
+          ))}
+        </ul>
+      );
+    }
+
+    return (
+      <ul className="space-y-0.5">
+        {item.href ? (
+          <li role="none">
+            <DropdownMenuLink
+              href={item.href}
+              label={`All ${item.label}`}
+              isActive={isLinkActive(pathname, item.href)}
+              onSelect={closeMenu}
+            />
+          </li>
+        ) : null}
+        {item.children.map((child) => (
+          <li key={child.href} role="none">
+            <DropdownMenuLink
+              href={child.href}
+              label={child.label}
+              isActive={isLinkActive(pathname, child.href)}
+              onSelect={closeMenu}
+            />
+          </li>
+        ))}
+      </ul>
+    );
+  };
 
   return (
     <li className="relative">
@@ -190,32 +248,11 @@ export function DesktopNavDropdown({
           >
             <div
               className={cn(
-                "overflow-hidden rounded-xl border border-slate-200/80 border-t-2 border-t-primary bg-white p-1.5 shadow-xl shadow-slate-900/10",
+                "overflow-hidden rounded-xl border border-slate-200/80 border-t-2 border-t-primary bg-white p-2 shadow-xl shadow-slate-900/10",
                 panelWidth,
               )}
             >
-              <ul className="space-y-0.5">
-                {item.href ? (
-                  <li role="none">
-                    <DropdownMenuLink
-                      href={item.href}
-                      label={`All ${item.label}`}
-                      isActive={isLinkActive(pathname, item.href)}
-                      onSelect={closeMenu}
-                    />
-                  </li>
-                ) : null}
-                {item.children.map((child) => (
-                  <li key={child.href} role="none">
-                    <DropdownMenuLink
-                      href={child.href}
-                      label={child.label}
-                      isActive={isLinkActive(pathname, child.href)}
-                      onSelect={closeMenu}
-                    />
-                  </li>
-                ))}
-              </ul>
+              {renderTableContent()}
             </div>
           </div>
         ) : null}

@@ -1,3 +1,4 @@
+import { AppointmentBookingProvider } from "@/components/appointment-booking";
 import { Footer, Header } from "@/components/layout";
 import { Preloader } from "@/components/preloader";
 import { siteConfig } from "@/config/site";
@@ -37,10 +38,12 @@ export default function RootLayout({
       className={`${inter.variable} ${outfit.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        <Preloader />
-        <Header />
-        <main className="flex flex-1 flex-col">{children}</main>
-        <Footer />
+        <AppointmentBookingProvider>
+          <Preloader />
+          <Header />
+          <main className="flex flex-1 flex-col">{children}</main>
+          <Footer />
+        </AppointmentBookingProvider>
       </body>
     </html>
   );

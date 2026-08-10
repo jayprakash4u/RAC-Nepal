@@ -15,27 +15,27 @@ function TypeCard({ item }: { item: ServiceArthritisTypeItem }) {
         "transition-shadow duration-normal hover:shadow-md",
       )}
     >
-      <div className="relative aspect-[4/3] w-full bg-slate-50">
+      <div className="relative aspect-[16/9] w-full bg-slate-50 sm:aspect-[4/3]">
         <Image
           src={item.image.src}
           alt={item.image.alt}
           fill
           className="object-cover"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
         />
       </div>
 
-      <div className="flex flex-1 flex-col p-lg">
-        <h3 className="font-display text-body font-semibold text-navy">
+      <div className="flex flex-1 flex-col p-3 sm:p-lg">
+        <h3 className="text-[0.9375rem] font-semibold text-navy sm:text-body">
           {item.name}
           {item.shortName ? (
             <span className="ml-xs font-medium text-primary">{item.shortName}</span>
           ) : null}
         </h3>
 
-        <ul className="mt-md flex flex-col gap-sm">
+        <ul className="mt-2 flex flex-col gap-1 sm:mt-md sm:gap-sm">
           {item.points.map((point) => (
-            <li key={point} className="text-small leading-relaxed text-slate-600">
+            <li key={point} className="text-[0.75rem] leading-relaxed text-slate-600 sm:text-small">
               {point}
             </li>
           ))}
@@ -64,7 +64,7 @@ export function ServiceTypesSection({
           className="mx-auto"
         />
 
-        <div className="mt-3xl grid grid-cols-1 gap-xl sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-3xl grid grid-cols-2 gap-3 sm:gap-xl lg:grid-cols-4">
           {section.items.map((item) => (
             <TypeCard key={item.name} item={item} />
           ))}

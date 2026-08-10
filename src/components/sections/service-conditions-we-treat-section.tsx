@@ -29,7 +29,7 @@ function ConditionCard({
     <article
       className={cn(
         serviceIconCardClasses,
-        "items-center px-sm py-md text-center sm:px-md sm:py-lg",
+        "items-center px-3 py-3 text-center sm:px-md sm:py-lg",
         elevated && serviceIconCardElevatedClasses,
         !elevated && "motion-reduce:transition-none motion-reduce:hover:translate-y-0",
       )}
@@ -39,7 +39,7 @@ function ConditionCard({
       <div
         className={cn(
           serviceIconRingClasses,
-          "h-[4.5rem] w-[4.5rem] p-2 sm:h-20 sm:w-20 sm:p-2.5",
+          "h-14 w-14 p-2 sm:h-20 sm:w-20 sm:p-2.5",
           elevated && serviceIconRingElevatedClasses,
         )}
       >
@@ -54,13 +54,13 @@ function ConditionCard({
               ? serviceIconImageElevatedClasses
               : "group-hover:scale-105",
           )}
-          sizes="5rem"
+          sizes="3.5rem"
         />
       </div>
 
       <p
         className={cn(
-          "mt-md text-[0.8125rem] font-semibold leading-snug tracking-normal transition-colors duration-300 sm:text-small",
+          "mt-2 text-[0.75rem] font-semibold leading-snug tracking-normal transition-colors duration-300 sm:mt-md sm:text-small",
           elevated ? "text-primary" : "text-navy group-hover:text-primary",
         )}
       >
@@ -68,7 +68,7 @@ function ConditionCard({
       </p>
 
       {description ? (
-        <p className="mt-1 text-[0.75rem] leading-relaxed text-slate-600 sm:text-[0.8125rem]">
+        <p className="mt-1 text-[0.7rem] leading-relaxed text-slate-600 sm:mt-1 sm:text-[0.8125rem]">
           {description}
         </p>
       ) : null}
@@ -76,8 +76,8 @@ function ConditionCard({
       <span
         aria-hidden="true"
         className={cn(
-          "mt-md block h-0.5 rounded-full bg-primary transition-all duration-300",
-          elevated ? "w-10" : "w-8 group-hover:w-10",
+          "mt-2 block h-0.5 rounded-full bg-primary transition-all duration-300 sm:mt-md",
+          elevated ? "w-8" : "w-6 group-hover:w-10",
         )}
       />
     </article>
@@ -122,6 +122,8 @@ export function ServiceConditionsWeTreatSection({
     section.cardGridColumns === 2
       ? "mt-6 grid gap-3 sm:mt-8 sm:gap-4 grid-cols-1 sm:grid-cols-2"
       : "mt-6 grid gap-3 sm:mt-8 sm:gap-4 grid-cols-2 sm:grid-cols-4";
+
+  const mobileGridClassName = "grid-cols-2 gap-3";
 
   return (
     <Section
@@ -187,7 +189,8 @@ export function ServiceConditionsWeTreatSection({
               ariaLabel="Conditions we treat"
               dotLabel={(item) => `Go to ${item.title}`}
               desktopGridClassName={desktopGridClassName}
-              mobileCarouselClassName="mt-6 sm:hidden sm:mt-8"
+              mobileGridClassName={mobileGridClassName}
+              mobileCarouselClassName="hidden sm:hidden sm:mt-8"
               listItemClassName="flex"
               renderItem={(item, { elevated }) => (
                 <ConditionCard

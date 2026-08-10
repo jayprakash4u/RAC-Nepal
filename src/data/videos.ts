@@ -24,34 +24,7 @@ export const videosSection = {
   featuredLimit: 3,
 } as const;
 
-export const videos: readonly VideoItem[] = [
-  {
-    id: "intro-rac-nepal",
-    youtubeId: "ppCdSEBjNNM",
-    title: "Introduction to RAC Nepal and Arthritis",
-    category: "education",
-  },
-  {
-    id: "timely-treatment",
-    youtubeId: "srhjVxafJRg",
-    title: "बाथ रोगको उपचार समयमा गर्नु पर्छ ।।।",
-    category: "awareness",
-  },
-  {
-    id: "patient-life-butwal",
-    youtubeId: "4rETghJfDlk",
-    title:
-      "बाथ रोगीका पिडा तथा औषधि उपचार पछि नयाँ जीवन प्रतिको अनुभुति । बुटवल",
-    category: "patient-story",
-    startSeconds: 147,
-  },
-  {
-    id: "uric-acid-arthritis",
-    youtubeId: "VapX4HeeBCg",
-    title:
-      "यूरिक ऐसिड सम्बन्धि बाथ रोग.. #डा. अरुण कुमार गुप्ता, बाथ रोग विशेषज्ञ",
-    category: "education",
-  },
-];
+import videosJson from "./videos.json";
 
+export const videos: readonly VideoItem[] = videosJson as VideoItem[];
 export const featuredVideos = videos.slice(0, videosSection.featuredLimit);

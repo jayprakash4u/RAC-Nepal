@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import "tailwindcss";
 
 @import "./tokens/index.css";
@@ -13,9 +17,13 @@
 
   html {
     scroll-behavior: smooth;
+    width: 100%;
   }
 
   body {
+    margin: 0;
+    width: 100%;
+    min-width: 0;
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);

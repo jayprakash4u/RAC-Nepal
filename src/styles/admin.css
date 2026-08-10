@@ -1,0 +1,17 @@
+@layer base {
+  #admin-login,
+  #admin-gallery {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
+
+  #admin-login input,
+  #admin-login button,
+  #admin-gallery input,
+  #admin-gallery button {
+    width: auto;
+    max-width: none;
+    min-width: 0;
+  }
+}

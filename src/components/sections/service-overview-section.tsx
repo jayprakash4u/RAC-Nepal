@@ -62,7 +62,7 @@ function EditorialFeatureItem({
       <div
         className={cn(
           serviceIconRingClasses,
-          "h-14 w-14 shrink-0 bg-white p-2 sm:h-16 sm:w-16 sm:p-2.5",
+          "h-14 w-14 shrink-0 bg-white p-1.5 sm:h-16 sm:w-16 sm:p-2",
         )}
       >
         <Image
@@ -170,7 +170,7 @@ function CardFeatureItem({
         <div
           className={cn(
             serviceIconRingClasses,
-            "h-14 w-14 shrink-0 border-primary/15 bg-primary-soft/35 p-2 sm:h-16 sm:w-16 sm:p-2.5",
+            "h-14 w-14 shrink-0 border-primary/15 bg-primary-soft/35 p-1.5 sm:h-16 sm:w-16 sm:p-2",
           )}
         >
           <Image

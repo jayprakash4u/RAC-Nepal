@@ -59,14 +59,14 @@ function TopBarItem({
   className?: string;
 }) {
   const itemClassName = cn(
-    "inline-flex items-center gap-sm text-slate-100 transition-colors duration-normal hover:text-white",
+    "inline-flex min-w-0 items-center gap-sm text-slate-100 transition-colors duration-normal hover:text-white",
     className,
   );
 
   const content = (
     <>
       {icon}
-      <span className="truncate">{children}</span>
+      <span className="min-w-0 truncate">{children}</span>
     </>
   );
 
@@ -112,7 +112,7 @@ export function TopBar() {
         </div>
 
         <SocialLinks
-          className="border-l border-white/15 pl-md md:pl-lg"
+          className="hidden border-l border-white/15 pl-md sm:flex md:pl-lg"
           linkClassName="h-7 w-7 text-slate-100 hover:text-white"
         />
       </Container>

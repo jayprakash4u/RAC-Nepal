@@ -2,77 +2,92 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { cn } from "@/lib/cn";
+
+const MIN_VISIBLE_MS = 900;
+const MAX_VISIBLE_MS = 5000;
+const EXIT_DURATION_MS = 450;
+
+type Phase = "visible" | "exiting" | "hidden";
 
 export function Preloader() {
-  const [visible, setVisible] = useState(true);
-  const MIN_VISIBLE_MS = 3500;
+  const [phase, setPhase] = useState<Phase>("visible");
 
   useEffect(() => {
-    const minTimer = setTimeout(() => setVisible(false), MIN_VISIBLE_MS);
-
-    const onReady = () => {
-      setVisible(false);
+    const beginExit = () => {
+      setPhase((current) => (current === "visible" ? "exiting" : current));
     };
 
-    if (document.readyState !== "complete") {
-      window.addEventListener("load", onReady);
+    // Wait for BOTH the minimum display time and the real page load before
+    // exiting, so a fast connection can't skip the floor and a slow one
+    // can't hide the loader before the page is actually ready. The max
+    // timer is just a safety net in case `load` never fires.
+    let minTimeElapsed = false;
+    let pageLoaded = document.readyState === "complete";
+
+    const tryExit = () => {
+      if (minTimeElapsed && pageLoaded) beginExit();
+    };
+
+    const minTimer = setTimeout(() => {
+      minTimeElapsed = true;
+      tryExit();
+    }, MIN_VISIBLE_MS);
+
+    const maxTimer = setTimeout(beginExit, MAX_VISIBLE_MS);
+
+    const onLoad = () => {
+      pageLoaded = true;
+      tryExit();
+    };
+
+    if (!pageLoaded) {
+      window.addEventListener("load", onLoad);
     }
 
     return () => {
-      window.removeEventListener("load", onReady);
+      window.removeEventListener("load", onLoad);
       clearTimeout(minTimer);
+      clearTimeout(maxTimer);
     };
   }, []);
 
-  if (!visible) return null;
+  useEffect(() => {
+    if (phase !== "exiting") return;
+
+    const timer = setTimeout(() => setPhase("hidden"), EXIT_DURATION_MS);
+    return () => clearTimeout(timer);
+  }, [phase]);
+
+  if (phase === "hidden") return null;
+
+  const exiting = phase === "exiting";
 
   return (
-    <div className="preloader">
+    <div
+      className={cn("preloader", exiting && "preloader--exiting")}
+      role="status"
+      aria-live="polite"
+      aria-label="Loading Rheumatology and Arthritis Center"
+    >
       <div className="preloader__bg" aria-hidden="true" />
       <div className="preloader__vignette" aria-hidden="true" />
 
       <div className="preloader__content">
         <div className="preloader__logo-wrap">
           <div className="preloader__logo-glow" aria-hidden="true" />
-          <svg
-            className="preloader__ring"
-            viewBox="0 0 200 200"
-            aria-hidden="true"
-          >
-            <defs>
-              <linearGradient id="preloader-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#22d3ee" />
-                <stop offset="50%" stopColor="#1496a8" />
-                <stop offset="100%" stopColor="#0e7490" />
-              </linearGradient>
-              <filter id="preloader-glow" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="2.5" result="blur" />
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
+          <svg className="preloader__ring" viewBox="0 0 200 200" aria-hidden="true">
             <circle
               className="preloader__ring-track"
               cx="100"
               cy="100"
               r="88"
-              fill="none"
-              stroke="rgba(20, 150, 168, 0.15)"
-              strokeWidth="1.5"
             />
             <circle
               className="preloader__ring-arc"
               cx="100"
               cy="100"
               r="88"
-              fill="none"
-              stroke="url(#preloader-gradient)"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeDasharray="140 400"
-              filter="url(#preloader-glow)"
             />
           </svg>
           <div className="preloader__logo">
@@ -88,18 +103,20 @@ export function Preloader() {
         </div>
 
         <div className="preloader__text">
-          <p className="preloader__title">RHEUMATOLOGY AND ARTHRITIS CENTER</p>
-          <p className="preloader__subtitle">ENHANCING LIVES</p>
+          <p className="preloader__title">Rheumatology and Arthritis Center</p>
+          <p className="preloader__subtitle">Enhancing Lives</p>
         </div>
 
-        <div className="preloader__footer">
-          <p className="preloader__tagline">CARING. HEALING. ENHANCING LIVES</p>
-          <p className="preloader__wait">
-            PLEASE WAIT
-            <span className="preloader__dot" />
-            <span className="preloader__dot" />
-            <span className="preloader__dot" />
-          </p>
+        <div className="preloader__progress">
+          <span className="preloader__progress-track">
+            <span
+              className={cn(
+                "preloader__progress-fill",
+                exiting && "preloader__progress-fill--complete",
+              )}
+            />
+          </span>
+          <p className="preloader__loading-label">Loading</p>
         </div>
       </div>
     </div>

@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import AdminLayout from "../admin-layout";
+import { PencilIcon, PlusIcon, TrashIcon, VideoIcon } from "../_components/icons";
+import { Badge, ConfirmDialog, EmptyState, FormSection, PageHeader, RowSkeleton, StatCard, inputClass, labelClass } from "../_components/ui";
 
 type Video = {
   id: string;
@@ -11,12 +14,28 @@ type Video = {
   startSeconds?: number;
 };
 
+const CATEGORY_LABELS: Record<Video["category"], string> = {
+  education: "Expert Talk",
+  "patient-story": "Patient Story",
+  awareness: "Awareness",
+};
+
+const CATEGORY_TONES: Record<Video["category"], "teal" | "amber" | "slate"> = {
+  education: "teal",
+  "patient-story": "amber",
+  awareness: "slate",
+};
+
+const EMPTY_FORM = { youtubeId: "", title: "", category: "education" as Video["category"], startSeconds: 0 };
+
 export default function AdminVideosPage() {
   const [videos, setVideos] = useState<Video[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<Video | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [form, setForm] = useState({ youtubeId: "", title: "", category: "education" as Video["category"], startSeconds: 0 });
+  const [form, setForm] = useState(EMPTY_FORM);
 
   const fetchVideos = async () => {
     try {
@@ -68,7 +87,7 @@ export default function AdminVideosPage() {
       });
 
       if (res.ok) {
-        setForm({ youtubeId: "", title: "", category: "education", startSeconds: 0 });
+        setForm(EMPTY_FORM);
         fetchVideos();
       }
     } catch {
@@ -79,8 +98,7 @@ export default function AdminVideosPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this video?")) return;
-
+    setDeletingId(id);
     try {
       const res = await fetch(`/api/admin/videos/${id}`, { method: "DELETE" });
       if (res.ok) {
@@ -88,6 +106,9 @@ export default function AdminVideosPage() {
       }
     } catch {
       console.error("Failed to delete video");
+    } finally {
+      setDeletingId(null);
+      setPendingDelete(null);
     }
   };
 
@@ -118,7 +139,7 @@ export default function AdminVideosPage() {
 
       if (res.ok) {
         setEditingId(null);
-        setForm({ youtubeId: "", title: "", category: "education", startSeconds: 0 });
+        setForm(EMPTY_FORM);
         fetchVideos();
       }
     } catch {
@@ -130,131 +151,173 @@ export default function AdminVideosPage() {
 
   const cancelEdit = () => {
     setEditingId(null);
-    setForm({ youtubeId: "", title: "", category: "education", startSeconds: 0 });
+    setForm(EMPTY_FORM);
   };
 
   return (
     <AdminLayout>
       <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
-        <div className="mb-8">
-          <h1 className="text-xl font-semibold text-navy sm:text-2xl">Watch & Learn Videos</h1>
-          <p className="mt-1 text-xs text-slate-600 sm:text-small">
-            Manage video content for the home page
-          </p>
+        <PageHeader
+          title="Watch & Learn Videos"
+          description="Manage video content shown on the home page"
+        />
+
+        <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <StatCard label="Total Videos" value={loading ? "–" : videos.length} icon={<VideoIcon className="h-5 w-5" />} />
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Form */}
-          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-medium text-navy">
-              {editingId ? "Edit Video" : "Add New Video"}
-            </h2>
+          <FormSection title={editingId ? "Edit Video" : "Add New Video"}>
             <form onSubmit={editingId ? handleUpdateSubmit : handleSubmit} className="mt-4 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-navy">YouTube ID</label>
+                <label className={labelClass}>YouTube ID</label>
                 <input
                   type="text"
                   value={form.youtubeId}
                   onChange={(e) => setForm({ ...form, youtubeId: e.target.value })}
-                  className="mt-1 w-full rounded-md border border-slate-200 px-3 py-2 text-sm"
+                  className={inputClass}
                   placeholder="e.g. ppCdSEBjNNM"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-navy">Title</label>
+                <label className={labelClass}>Title</label>
                 <input
                   type="text"
                   value={form.title}
                   onChange={(e) => setForm({ ...form, title: e.target.value })}
-                  className="mt-1 w-full rounded-md border border-slate-200 px-3 py-2 text-sm"
+                  className={inputClass}
                   placeholder="Video title"
                   required
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-navy">Category</label>
-                <select
-                  value={form.category}
-                  onChange={(e) => setForm({ ...form, category: e.target.value as Video["category"] })}
-                  className="mt-1 w-full rounded-md border border-slate-200 px-3 py-2 text-sm"
-                >
-                  <option value="education">Expert Talk</option>
-                  <option value="patient-story">Patient Story</option>
-                  <option value="awareness">Awareness</option>
-                </select>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className={labelClass}>Category</label>
+                  <select
+                    value={form.category}
+                    onChange={(e) => setForm({ ...form, category: e.target.value as Video["category"] })}
+                    className={inputClass}
+                  >
+                    <option value="education">Expert Talk</option>
+                    <option value="patient-story">Patient Story</option>
+                    <option value="awareness">Awareness</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className={labelClass}>Start Time (sec)</label>
+                  <input
+                    type="number"
+                    value={form.startSeconds}
+                    onChange={(e) => setForm({ ...form, startSeconds: Number(e.target.value) })}
+                    className={inputClass}
+                    placeholder="0"
+                  />
+                </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-navy">Start Time (seconds)</label>
-                <input
-                  type="number"
-                  value={form.startSeconds}
-                  onChange={(e) => setForm({ ...form, startSeconds: Number(e.target.value) })}
-                  className="mt-1 w-full rounded-md border border-slate-200 px-3 py-2 text-sm"
-                  placeholder="0"
-                />
-              </div>
+              {form.youtubeId && (
+                <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
+                  <Image
+                    src={`https://img.youtube.com/vi/${form.youtubeId}/mqdefault.jpg`}
+                    alt="Video thumbnail preview"
+                    fill
+                    unoptimized
+                    className="object-cover"
+                  />
+                </div>
+              )}
 
-              <div className="flex gap-2">
+              <div className="flex gap-2 pt-1">
                 <button
                   type="submit"
                   disabled={saving}
-                  className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-dark disabled:opacity-50"
                 >
+                  {!editingId && <PlusIcon className="h-4 w-4" />}
                   {saving ? "Saving..." : editingId ? "Update Video" : "Add Video"}
                 </button>
                 {editingId && (
                   <button
                     type="button"
                     onClick={cancelEdit}
-                    className="rounded-md border border-slate-200 px-4 py-2 text-sm font-medium text-navy hover:bg-slate-50"
+                    className="rounded-lg border border-slate-200 px-4 py-2.5 text-sm font-medium text-navy transition-colors hover:bg-slate-50"
                   >
                     Cancel
                   </button>
                 )}
               </div>
             </form>
-          </div>
+          </FormSection>
 
           {/* List */}
-          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-medium text-navy">Existing Videos</h2>
+          <FormSection title="Existing Videos">
             {loading ? (
-              <p className="mt-4 text-sm text-slate-600">Loading...</p>
+              <div className="mt-4 space-y-3">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <RowSkeleton key={i} />
+                ))}
+              </div>
             ) : videos.length === 0 ? (
-              <p className="mt-4 text-sm text-slate-600">No videos yet</p>
+              <div className="mt-4">
+                <EmptyState icon={<VideoIcon className="h-6 w-6" />} title="No videos yet" description="Add your first video using the form." />
+              </div>
             ) : (
               <ul className="mt-4 space-y-3">
                 {videos.map((video) => (
-                  <li key={video.id} className="flex items-start justify-between gap-3 rounded-lg border border-slate-100 p-3">
+                  <li key={video.id} className="flex items-start gap-3 rounded-lg border border-slate-100 p-3 transition-colors hover:border-slate-200 hover:bg-slate-50/60">
+                    <div className="relative h-12 w-20 shrink-0 overflow-hidden rounded-md border border-slate-200 bg-slate-100">
+                      <Image
+                        src={`https://img.youtube.com/vi/${video.youtubeId}/mqdefault.jpg`}
+                        alt={video.title}
+                        fill
+                        unoptimized
+                        className="object-cover"
+                      />
+                    </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-navy truncate">{video.title}</p>
-                      <p className="text-xs text-slate-500">ID: {video.youtubeId} | Category: {video.category}</p>
+                      <p className="truncate text-sm font-medium text-navy">{video.title}</p>
+                      <div className="mt-1 flex items-center gap-2">
+                        <Badge tone={CATEGORY_TONES[video.category]}>{CATEGORY_LABELS[video.category]}</Badge>
+                        <span className="text-xs text-slate-400">{video.youtubeId}</span>
+                      </div>
                     </div>
                     <div className="flex shrink-0 gap-1">
                       <button
                         onClick={() => handleUpdate(video.id)}
-                        className="rounded-md px-2 py-1 text-xs font-medium text-primary hover:bg-primary-soft/20"
+                        className="flex h-8 w-8 items-center justify-center rounded-md text-primary transition-colors hover:bg-primary-soft/15"
+                        aria-label={`Edit ${video.title}`}
                       >
-                        Edit
+                        <PencilIcon className="h-4 w-4" />
                       </button>
                       <button
-                        onClick={() => handleDelete(video.id)}
-                        className="rounded-md px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
+                        onClick={() => setPendingDelete(video)}
+                        className="flex h-8 w-8 items-center justify-center rounded-md text-rose-600 transition-colors hover:bg-rose-50"
+                        aria-label={`Delete ${video.title}`}
                       >
-                        Delete
+                        <TrashIcon className="h-4 w-4" />
                       </button>
                     </div>
                   </li>
                 ))}
               </ul>
             )}
-          </div>
+          </FormSection>
         </div>
       </div>
+
+      <ConfirmDialog
+        open={!!pendingDelete}
+        title="Delete this video?"
+        description={pendingDelete ? `"${pendingDelete.title}" will be removed from Watch & Learn.` : undefined}
+        busy={!!deletingId}
+        onCancel={() => setPendingDelete(null)}
+        onConfirm={() => pendingDelete && handleDelete(pendingDelete.id)}
+      />
     </AdminLayout>
   );
 }

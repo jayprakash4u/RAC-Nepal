@@ -16,7 +16,7 @@ export function Header() {
           size="wide"
           className="flex h-20 w-full items-center justify-start gap-md overflow-visible lg:gap-xl"
         >
-          <Logo priority className="shrink-0" />
+          <Logo priority className="shrink-0" imageClassName="h-9 w-auto sm:h-11 md:h-14" />
           <HeaderNav />
         </Container>
       </div>

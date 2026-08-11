@@ -98,12 +98,12 @@ function ContactItem({
       <span className={cn("shrink-0 text-primary", !compact && "mt-0.5")}>
         {icon}
       </span>
-      <span>{children}</span>
+      <span className="min-w-0 break-words">{children}</span>
     </>
   );
 
   const className = cn(
-    "flex items-start gap-sm text-slate-300 transition-colors duration-normal hover:text-white",
+    "flex min-w-0 items-start gap-sm text-slate-300 transition-colors duration-normal hover:text-white",
     compact ? "text-xs leading-snug" : "text-small leading-snug",
   );
 
@@ -180,14 +180,14 @@ export function Footer() {
       <Container className="py-xl md:py-3xl">
         {/* Mobile layout */}
         <div className="flex flex-col gap-md md:hidden">
-          <div className="flex items-center justify-between gap-md">
+          <div className="flex flex-wrap items-center justify-between gap-x-md gap-y-sm">
             <Logo imageClassName="h-9" />
             <SocialLinks />
           </div>
 
           <div>
             <FooterHeading>Contact Us</FooterHeading>
-            <ul className="grid grid-cols-2 gap-x-md gap-y-sm">
+            <ul className="grid grid-cols-2 gap-x-md gap-y-sm [&>li]:min-w-0">
               <li>
                 <ContactItem
                   icon={<PhoneIcon />}
@@ -292,11 +292,6 @@ export function Footer() {
           <p>
             &copy; {currentYear} {siteConfig.shortName}. All rights reserved.
           </p>
-          <div className="mt-xs hidden text-slate-400 md:mt-0 md:flex md:items-center md:gap-4">
-            <Link href="/admin/login" className="transition-colors hover:text-white">
-              Admin
-            </Link>
-          </div>
         </Container>
       </div>
     </footer>

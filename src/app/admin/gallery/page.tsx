@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import AdminLayout from "../admin-layout";
+import { GalleryIcon, ImagePlaceholderIcon, TrashIcon, UploadIcon } from "../_components/icons";
+import { Alert, CardSkeleton, ConfirmDialog, EmptyState, PageHeader, StatCard } from "../_components/ui";
 import "@/styles/admin.css";
 
 type GalleryImage = {
@@ -11,18 +13,12 @@ type GalleryImage = {
   alt: string;
 };
 
-function TrashIcon() {
-  return (
-    <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4" aria-hidden="true">
-      <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
 export default function AdminGalleryPage() {
   const [images, setImages] = useState<GalleryImage[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<GalleryImage | null>(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -82,11 +78,12 @@ export default function AdminGalleryPage() {
       setError("Upload failed");
     } finally {
       setUploading(false);
+      e.target.value = "";
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this image?")) return;
+    setDeletingId(id);
 
     try {
       const res = await fetch(`/api/admin/gallery/${id}`, {
@@ -103,47 +100,53 @@ export default function AdminGalleryPage() {
       }
     } catch {
       setError("Delete failed");
+    } finally {
+      setDeletingId(null);
+      setPendingDelete(null);
     }
   };
 
   return (
     <AdminLayout>
       <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
-        <div className="mb-6 flex flex-col gap-3 sm:mb-8 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-xl font-semibold text-navy sm:text-2xl">Gallery Management</h1>
-            <p className="mt-1 text-xs text-slate-600 sm:text-small">
-              Upload, manage, and delete gallery images
-            </p>
-          </div>
+        <PageHeader
+          title="Gallery Management"
+          description="Upload, manage, and delete images shown in the site gallery"
+          action={
+            <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-dark disabled:opacity-50">
+              <UploadIcon className="h-4 w-4" />
+              {uploading ? "Uploading..." : "Upload Image"}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleUpload}
+                disabled={uploading}
+                className="hidden"
+              />
+            </label>
+          }
+        />
 
-          <label className="cursor-pointer rounded-md bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-dark disabled:opacity-50">
-            {uploading ? "Uploading..." : "Upload Image"}
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleUpload}
-              disabled={uploading}
-              className="hidden"
-            />
-          </label>
+        <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <StatCard label="Total Images" value={loading ? "–" : images.length} icon={<GalleryIcon className="h-5 w-5" />} />
         </div>
 
-        {error && (
-          <div className="mb-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
-            {error}
-          </div>
-        )}
+        {error && <Alert tone="error">{error}</Alert>}
 
         {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <p className="text-small text-slate-600">Loading images...</p>
-          </div>
+          <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            {Array.from({ length: 10 }).map((_, i) => (
+              <li key={i}>
+                <CardSkeleton />
+              </li>
+            ))}
+          </ul>
         ) : images.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <p className="text-body text-slate-600">No images yet</p>
-            <p className="mt-1 text-small text-slate-600">Upload your first image to get started</p>
-          </div>
+          <EmptyState
+            icon={<ImagePlaceholderIcon className="h-6 w-6" />}
+            title="No images yet"
+            description="Upload your first image to get started building the gallery."
+          />
         ) : (
           <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {images.map((image) => (
@@ -153,28 +156,37 @@ export default function AdminGalleryPage() {
                     src={image.src}
                     alt={image.alt}
                     fill
-                    className="object-cover"
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                   />
+                  <div className="absolute inset-0 flex items-end justify-end bg-gradient-to-t from-navy/60 via-transparent to-transparent p-2 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                    <button
+                      onClick={() => setPendingDelete(image)}
+                      className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/90 text-rose-600 shadow-sm transition-colors hover:bg-white"
+                      aria-label={`Delete ${image.alt}`}
+                    >
+                      <TrashIcon className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
 
-                <div className="mt-2 flex items-start justify-between gap-2">
-                  <p className="flex-1 truncate text-xs text-navy" title={image.alt}>
-                    {image.alt}
-                  </p>
-                  <button
-                    onClick={() => handleDelete(image.id)}
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-red-50 hover:text-red-600"
-                    aria-label={`Delete ${image.alt}`}
-                  >
-                    <TrashIcon />
-                  </button>
-                </div>
+                <p className="mt-2 truncate text-xs text-slate-600" title={image.alt}>
+                  {image.alt}
+                </p>
               </li>
             ))}
           </ul>
         )}
       </div>
+
+      <ConfirmDialog
+        open={!!pendingDelete}
+        title="Delete this image?"
+        description={pendingDelete ? `"${pendingDelete.alt}" will be permanently removed from the gallery.` : undefined}
+        busy={!!deletingId}
+        onCancel={() => setPendingDelete(null)}
+        onConfirm={() => pendingDelete && handleDelete(pendingDelete.id)}
+      />
     </AdminLayout>
   );
 }

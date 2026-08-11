@@ -28,6 +28,20 @@ function ChevronIcon({ open }: { open: boolean }) {
   );
 }
 
+function ChevronRightIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" {...props}>
+      <path
+        d="M6 3.5L10 8l-4 4.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 function DropdownMenuLink({
   href,
   label,
@@ -46,13 +60,20 @@ function DropdownMenuLink({
       onClick={onSelect}
       aria-current={isActive ? "page" : undefined}
       className={cn(
-        "block w-full whitespace-nowrap rounded-lg px-md py-2.5 text-left text-small font-normal leading-snug text-navy transition-colors duration-normal",
+        "group flex w-full items-center justify-between gap-2 whitespace-nowrap rounded-lg px-md py-2.5 text-left text-[0.8125rem] font-normal leading-snug text-navy transition-colors duration-normal",
         isActive
           ? "bg-primary/10 font-medium text-primary"
           : "hover:bg-surface hover:text-primary focus-visible:bg-surface focus-visible:text-primary focus-visible:outline-none",
       )}
     >
       {label}
+      <ChevronRightIcon
+        className={cn(
+          "h-3.5 w-3.5 shrink-0 -translate-x-1 text-slate-300 opacity-0 transition-all duration-normal",
+          "group-hover:translate-x-0 group-hover:text-primary group-hover:opacity-100",
+          isActive && "translate-x-0 text-primary opacity-100",
+        )}
+      />
     </Link>
   );
 }
@@ -145,38 +166,48 @@ export function DesktopNavDropdown({
   const isConditions = item.label === "Conditions Treated";
 
   const panelWidth = isServices
-    ? "w-72 max-w-[calc(100vw-2rem)]"
+    ? "w-[32rem] max-w-[calc(100vw-2rem)]"
     : isConditions
-      ? "w-72 max-w-[calc(100vw-2rem)]"
-      : "w-52";
+      ? "w-[34rem] max-w-[calc(100vw-2rem)]"
+      : "w-56";
 
   const renderTableContent = () => {
     if (isServices || isConditions) {
       return (
-        <ul className="space-y-0">
-          {item.children.map((child, index) => (
-            <li key={child.href} role="none">
-              <Link
-                href={child.href}
-                onClick={closeMenu}
-                aria-current={
-                  isLinkActive(pathname, child.href) ? "page" : undefined
-                }
-                className={cn(
-                  "block px-4 py-2 text-left text-small font-medium leading-snug transition-colors duration-normal",
-                  isLinkActive(pathname, child.href)
-                    ? "bg-primary/10 text-primary"
-                    : "text-navy hover:bg-surface hover:text-primary",
-                )}
-              >
-                {child.label}
-              </Link>
-              {index < item.children.length - 1 ? (
-                <div className="mx-4 h-px bg-slate-200" />
-              ) : null}
-            </li>
-          ))}
-        </ul>
+        <div>
+          <p className="px-2.5 pt-1 pb-2 text-[11px] font-semibold tracking-wider text-slate-400 uppercase">
+            {item.label}
+          </p>
+          <ul className="grid grid-cols-2 gap-x-1 gap-y-0.5">
+            {item.children.map((child) => (
+              <li key={child.href} role="none">
+                <Link
+                  href={child.href}
+                  onClick={closeMenu}
+                  aria-current={
+                    isLinkActive(pathname, child.href) ? "page" : undefined
+                  }
+                  className={cn(
+                    "group flex items-center gap-1.5 rounded-lg px-3 py-2 text-left text-[0.8125rem] font-medium leading-snug break-words transition-colors duration-normal",
+                    isLinkActive(pathname, child.href)
+                      ? "bg-primary/10 text-primary"
+                      : "text-navy hover:bg-surface hover:text-primary",
+                  )}
+                >
+                  <span className="min-w-0">{child.label}</span>
+                  <ChevronRightIcon
+                    className={cn(
+                      "h-3 w-3 shrink-0 -translate-x-1 text-slate-300 opacity-0 transition-all duration-normal",
+                      "group-hover:translate-x-0 group-hover:text-primary group-hover:opacity-100",
+                      isLinkActive(pathname, child.href) &&
+                        "translate-x-0 text-primary opacity-100",
+                    )}
+                  />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       );
     }
 

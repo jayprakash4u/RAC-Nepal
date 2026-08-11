@@ -7,7 +7,7 @@ import { servicesSection } from "@/data/services";
 
 export function Services() {
   return (
-    <Section background="surface" spacing="default">
+    <Section background="surface" spacing="default" id="specialized-services">
       <Container size="wide">
         <SectionHeader
           eyebrow={servicesSection.eyebrow}

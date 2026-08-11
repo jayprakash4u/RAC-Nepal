@@ -29,6 +29,7 @@ interface BlogArticle {
 
 const BLOGS_JSON_PATH = path.join(process.cwd(), "src", "data", "blogs.json");
 const BLOG_ARTICLES_JSON_PATH = path.join(process.cwd(), "src", "data", "blog-articles.json");
+const BLOG_IMAGES_DIR = path.join(process.cwd(), "public", "images", "blogs");
 
 export async function DELETE(
   request: Request,
@@ -66,8 +67,56 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
-    const body = await request.json();
-    const { title, excerpt, category, publishedAt, readTime, imageSrc, imageAlt, sections } = body;
+    const contentType = request.headers.get("content-type") || "";
+
+    let title: string = "";
+    let excerpt: string = "";
+    let category: string = "";
+    let publishedAt: string = "";
+    let readTime: string = "";
+    let imageSrc: string = "";
+    let imageAlt: string = "";
+    let sections: BlogArticleBlock[] = [];
+
+    if (contentType.includes("multipart/form-data")) {
+      const formData = await request.formData();
+      title = (formData.get("title") as string) || "";
+      excerpt = (formData.get("excerpt") as string) || "";
+      category = (formData.get("category") as string) || "";
+      publishedAt = (formData.get("publishedAt") as string) || "";
+      readTime = (formData.get("readTime") as string) || "";
+      imageAlt = (formData.get("imageAlt") as string) || "";
+
+      const sectionsRaw = formData.get("sections");
+      if (sectionsRaw) {
+        try {
+          sections = JSON.parse(sectionsRaw as string);
+        } catch {
+          // ignore parse error
+        }
+      }
+
+      const file = formData.get("image") as File | null;
+      if (file && file.size > 0) {
+        const bytes = await file.arrayBuffer();
+        const buffer = Buffer.from(bytes);
+        const originalName = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
+        const fileName = `${Date.now()}-${originalName}`;
+        const filePath = path.join(BLOG_IMAGES_DIR, fileName);
+        await fs.writeFile(filePath, buffer);
+        imageSrc = `/images/blogs/${fileName}`;
+      }
+    } else {
+      const body = await request.json();
+      title = body.title || "";
+      excerpt = body.excerpt || "";
+      category = body.category || "";
+      publishedAt = body.publishedAt || "";
+      readTime = body.readTime || "";
+      imageSrc = body.imageSrc || "";
+      imageAlt = body.imageAlt || "";
+      sections = body.sections || [];
+    }
 
     const posts = JSON.parse(await fs.readFile(BLOGS_JSON_PATH, "utf-8")) as BlogPost[];
     const index = posts.findIndex((p) => p.id === id);
@@ -91,8 +140,7 @@ export async function PUT(
 
     await fs.writeFile(BLOGS_JSON_PATH, JSON.stringify(posts, null, 2));
 
-    // Update article content if provided
-    if (sections) {
+    if (sections.length > 0) {
       const articles = JSON.parse(await fs.readFile(BLOG_ARTICLES_JSON_PATH, "utf-8")) as Record<string, BlogArticle>;
       articles[posts[index].slug] = {
         author: "RAC Nepal Rheumatology Team",

@@ -17,6 +17,7 @@ interface BlogPost {
 }
 
 const BLOGS_JSON_PATH = path.join(process.cwd(), "src", "data", "blogs.json");
+const BLOG_IMAGES_DIR = path.join(process.cwd(), "public", "images", "blogs");
 
 export async function GET() {
   try {
@@ -30,8 +31,47 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { title, excerpt, category, publishedAt, readTime, imageSrc, imageAlt, slug } = body;
+    const contentType = request.headers.get("content-type") || "";
+    let title: string = "";
+    let excerpt: string = "";
+    let category: string = "";
+    let slug: string = "";
+    let publishedAt: string = "";
+    let readTime: string = "5 min read";
+    let imageSrc: string = "";
+    let imageAlt: string = "";
+
+    if (contentType.includes("multipart/form-data")) {
+      const formData = await request.formData();
+      title = (formData.get("title") as string) || "";
+      excerpt = (formData.get("excerpt") as string) || "";
+      category = (formData.get("category") as string) || "";
+      slug = (formData.get("slug") as string) || "";
+      publishedAt = (formData.get("publishedAt") as string) || "";
+      readTime = (formData.get("readTime") as string) || "5 min read";
+      imageAlt = (formData.get("imageAlt") as string) || "";
+
+      const file = formData.get("image") as File | null;
+      if (file && file.size > 0) {
+        const bytes = await file.arrayBuffer();
+        const buffer = Buffer.from(bytes);
+        const originalName = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
+        const fileName = `${Date.now()}-${originalName}`;
+        const filePath = path.join(BLOG_IMAGES_DIR, fileName);
+        await fs.writeFile(filePath, buffer);
+        imageSrc = `/images/blogs/${fileName}`;
+      }
+    } else {
+      const body = await request.json();
+      title = body.title || "";
+      excerpt = body.excerpt || "";
+      category = body.category || "";
+      slug = body.slug || "";
+      publishedAt = body.publishedAt || "";
+      readTime = body.readTime || "5 min read";
+      imageSrc = body.imageSrc || "";
+      imageAlt = body.imageAlt || "";
+    }
 
     if (!title || !excerpt || !category || !slug) {
       return NextResponse.json({ success: false, message: "Missing required fields" }, { status: 400 });
@@ -45,7 +85,7 @@ export async function POST(request: Request) {
       excerpt,
       category,
       publishedAt: publishedAt || new Date().toISOString().split("T")[0],
-      readTime: readTime || "5 min read",
+      readTime,
       image: {
         src: imageSrc || "/images/Gallery/RacNepal-1-300x225.jpg",
         alt: imageAlt || title,

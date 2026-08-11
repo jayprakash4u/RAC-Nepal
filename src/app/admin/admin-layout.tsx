@@ -4,9 +4,10 @@ import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/cn";
-import { BlogIcon, CloseIcon, ExternalLinkIcon, GalleryIcon, LogoIcon, LogoutIcon, MenuIcon, TestimonialIcon, VideoIcon } from "./_components/icons";
+import { BlogIcon, CalendarIcon, CloseIcon, ExternalLinkIcon, GalleryIcon, LogoIcon, LogoutIcon, MenuIcon, TestimonialIcon, VideoIcon } from "./_components/icons";
 
 const NAV_ITEMS = [
+  { href: "/admin/appointments", label: "Appointments", icon: CalendarIcon },
   { href: "/admin/gallery", label: "Gallery", icon: GalleryIcon },
   { href: "/admin/videos", label: "Watch & Learn", icon: VideoIcon },
   { href: "/admin/testimonials", label: "Patient Experiences", icon: TestimonialIcon },
@@ -46,7 +47,7 @@ export default function AdminLayout({
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex w-64 transform flex-col bg-navy text-slate-200 transition-transform duration-200 lg:static lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-50 flex w-64 transform flex-col bg-navy text-slate-200 transition-transform duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0",
           sidebarOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
@@ -70,7 +71,7 @@ export default function AdminLayout({
             </button>
           </div>
 
-          <nav className="flex-1 overflow-y-auto px-3 py-4">
+          <nav className="min-h-0 flex-1 overflow-y-auto px-3 py-4">
             <p className="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
               Manage Content
             </p>

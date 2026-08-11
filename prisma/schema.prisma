@@ -1,0 +1,30 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlserver"
+}
+
+// A request submitted through the site's "Book an Appointment" form.
+model AppointmentRequest {
+  id              String    @id @default(cuid())
+  name            String    @db.NVarChar(200)
+  phone           String    @db.NVarChar(50)
+  email           String    @db.NVarChar(200)
+  appointmentType String    @db.NVarChar(50)
+  preferredDate   DateTime? @db.Date
+  preferredTime   String?   @db.NVarChar(50)
+  message         String?   @db.NVarChar(2000)
+  source          String?   @db.NVarChar(100)
+  status          String    @default("new") @db.NVarChar(20) // new | contacted | completed | cancelled
+  emailSent       Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@map("appointment_requests")
+}

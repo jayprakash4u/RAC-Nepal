@@ -34,7 +34,7 @@ export const servicesSection = {
       description: "Expert assessment and personalized plans for joint and autoimmune conditions.",
       href: "/services/rheumatology-consultation",
       image: {
-        src: homePageServiceImage("Rheumatology_Consultation.png"),
+        src: homePageServiceImage("Rheumatology consulation.png"),
         alt: "Rheumatology consultation service at RAC Nepal",
       },
     },
@@ -44,7 +44,7 @@ export const servicesSection = {
       description: "Clinical evaluation, imaging, and long-term arthritis care.",
       href: "/services/arthritis-management",
       image: {
-        src: homePageServiceImage("Arthritis_Management.png"),
+        src: homePageServiceImage("Arthritis Management.png"),
         alt: "Arthritis management service at RAC Nepal",
       },
     },
@@ -54,7 +54,7 @@ export const servicesSection = {
       description: "Therapies to ease inflammation and restore comfortable movement.",
       href: "/services/joint-pain-treatment",
       image: {
-        src: homePageServiceImage("Joint_Pain_Treatment.png"),
+        src: homePageServiceImage("Joint Pain Treatment.png"),
         alt: "Joint pain treatment service at RAC Nepal",
       },
     },
@@ -64,7 +64,7 @@ export const servicesSection = {
       description: "Diagnostics and tailored treatment for autoimmune rheumatic disease.",
       href: "/services/autoimmune-care",
       image: {
-        src: homePageServiceImage("Autoimmune_Care.png"),
+        src: homePageServiceImage("Autoimmune Care.png"),
         alt: "Autoimmune care service at RAC Nepal",
       },
     },
@@ -74,7 +74,7 @@ export const servicesSection = {
       description: "Rehabilitation to rebuild strength, mobility, and confidence.",
       href: "/services/physiotherapy-rehabilitation",
       image: {
-        src: homePageServiceImage("Physiotherapy_Rehabilitation.png"),
+        src: homePageServiceImage("Physiotherapy & Rehabilitation.png"),
         alt: "Physiotherapy and rehabilitation service at RAC Nepal",
       },
     },
@@ -84,7 +84,7 @@ export const servicesSection = {
       description: "Rheumatology support at home for eligible patients.",
       href: "/services/home-care",
       image: {
-        src: homePageServiceImage("Home_Care_Services.png"),
+        src: homePageServiceImage("Home Care Services.png"),
         alt: "Home care services at RAC Nepal",
       },
     },
@@ -94,7 +94,7 @@ export const servicesSection = {
       description: "Bone health assessment and fracture risk management.",
       href: "/services/osteoporosis-care",
       image: {
-        src: homePageServiceImage("Osteoporosis_Care.png"),
+        src: homePageServiceImage("Osteoporosis Care.png"),
         alt: "Osteoporosis care service at RAC Nepal",
       },
     },
@@ -104,7 +104,7 @@ export const servicesSection = {
       description: "Uric acid control and flare prevention for gout patients.",
       href: "/services/gout-management",
       image: {
-        src: homePageServiceImage("Gout_Management.png"),
+        src: homePageServiceImage("Gout Management.png"),
         alt: "Gout management service at RAC Nepal",
       },
     },
@@ -114,7 +114,7 @@ export const servicesSection = {
       description: "Targeted injections to relieve joint pain and inflammation.",
       href: "/services/joint-injection-therapy",
       image: {
-        src: homePageServiceImage("Joint_Injection_Therapy.png"),
+        src: homePageServiceImage("Joint Injection Therapy.png"),
         alt: "Joint injection therapy service at RAC Nepal",
       },
     },
@@ -124,7 +124,7 @@ export const servicesSection = {
       description: "DMARDs, biologics, and prescription support on-site.",
       href: "/services/pharmacy",
       image: {
-        src: homePageServiceImage("Pharmacy_Services.png"),
+        src: homePageServiceImage("Pharmacy Services.png"),
         alt: "Pharmacy services at RAC Nepal",
       },
     },

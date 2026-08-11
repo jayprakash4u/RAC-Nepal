@@ -87,7 +87,7 @@ export function ServiceDiagnosticServicesSection({
 
         <ul
           className={cn(
-            "grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3",
+            "grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3",
             section.heroImage ? "mt-xl sm:mt-2xl lg:mt-3xl" : "mt-3xl",
           )}
         >

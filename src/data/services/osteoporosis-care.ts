@@ -10,15 +10,13 @@ const osteoporosisPreventionImageDir = `${serviceScrollbarImageDir}/osteoporosis
 const osteoporosisBenefitsImageDir = `${serviceScrollbarImageDir}/osteoporosis-care/benefits`;
 
 const osteoporosisPreventionIconFiles = [
-  "Screenshot_2026-06-26_173312-removebg-preview.png",
-  "Screenshot_2026-06-26_173315-removebg-preview.png",
-  "Screenshot_2026-06-26_173321-removebg-preview.png",
-  "Screenshot_2026-06-26_173327-removebg-preview.png",
-  "Screenshot_2026-06-26_173330-removebg-preview.png",
+  "Calcium rich dite.png",
+  "vitamin D.png",
+  "regular excercise.png",
+  "Quit smoking.png",
+  "Limit Alcohol.png",
+  "preventive falls.png",
 ] as const;
-
-const osteoporosisPreventionCenterIcon =
-  "Screenshot_2026-06-26_173339-removebg-preview.png";
 
 function osteoporosisIntroIcon(index: number) {
   return `${osteoporosisIntroImageDir}/icons${index}.png`;
@@ -401,7 +399,7 @@ export const osteoporosisCareService: ServicePageData = {
       alt: "Elderly couple walking together in a park for bone health",
     },
     centerIcon: {
-      src: `${osteoporosisPreventionImageDir}/${osteoporosisPreventionCenterIcon}`,
+      src: `${osteoporosisPreventionImageDir}/sideboneiconsofsideimage.png`,
       alt: "Bone health icon",
     },
   },

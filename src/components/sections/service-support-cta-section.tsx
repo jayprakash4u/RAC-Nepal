@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { AppointmentBookingLink } from "@/components/appointment-booking";
 import { Container, Section } from "@/components/ui";
 import type { ServiceSupportCtaSectionData } from "@/types/service-content";
 import { cn } from "@/lib/cn";
@@ -169,7 +169,7 @@ export function ServiceSupportCtaSection({
               </p>
 
               <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                <Link
+                <AppointmentBookingLink
                   href={section.primaryCta.href}
                   className={cn(
                     "inline-flex h-12 items-center justify-center gap-2.5 rounded-full bg-navy px-5",
@@ -181,9 +181,9 @@ export function ServiceSupportCtaSection({
                   <span aria-hidden="true" className="text-white/80">
                     →
                   </span>
-                </Link>
+                </AppointmentBookingLink>
 
-                <Link
+                <AppointmentBookingLink
                   href={section.secondaryCta.href}
                   className={cn(
                     "inline-flex h-12 items-center justify-center gap-2.5 rounded-full border-2 border-primary bg-white px-5",
@@ -195,7 +195,7 @@ export function ServiceSupportCtaSection({
                   <span aria-hidden="true" className="text-primary/70">
                     →
                   </span>
-                </Link>
+                </AppointmentBookingLink>
               </div>
             </div>
 

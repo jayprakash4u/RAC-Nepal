@@ -1,3 +1,5 @@
+import { headers } from "next/headers";
+import { AppointmentBookingProvider } from "@/components/appointment-booking";
 import { Footer, Header } from "@/components/layout";
 import { Preloader } from "@/components/preloader";
 import { siteConfig } from "@/config/site";
@@ -26,21 +28,26 @@ export const metadata: Metadata = {
   description: siteConfig.description,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headersList = await headers();
+  const isAdmin = headersList.get("x-is-admin") === "true";
+
   return (
     <html
       lang="en"
       className={`${inter.variable} ${outfit.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">
-        <Preloader />
-        <Header />
-        <main className="flex flex-1 flex-col">{children}</main>
-        <Footer />
+      <body className="flex w-full min-h-screen flex-col">
+        <AppointmentBookingProvider>
+          {!isAdmin && <Preloader />}
+          {!isAdmin && <Header />}
+          <main className="flex flex-1 flex-col">{children}</main>
+          {!isAdmin && <Footer />}
+        </AppointmentBookingProvider>
       </body>
     </html>
   );

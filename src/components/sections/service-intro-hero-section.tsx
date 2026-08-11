@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { AppointmentBookingLink } from "@/components/appointment-booking";
 import { Container, Section } from "@/components/ui";
 import type { ServiceIntroHeroSectionData } from "@/types/service-content";
 import { cn } from "@/lib/cn";
@@ -125,7 +125,7 @@ export function ServiceIntroHeroSection({
               </p>
 
               <div className="mt-7 flex w-full flex-col gap-3 sm:mt-8 sm:max-w-[20rem]">
-                <Link
+                <AppointmentBookingLink
                   href={section.primaryCta.href}
                   className={cn(
                     "inline-flex h-12 items-center justify-center gap-3 rounded-full bg-primary px-6",
@@ -134,9 +134,9 @@ export function ServiceIntroHeroSection({
                 >
                   <CheckBadge variant="primary" />
                   {section.primaryCta.label}
-                </Link>
+                </AppointmentBookingLink>
 
-                <Link
+                <AppointmentBookingLink
                   href={section.secondaryCta.href}
                   className={cn(
                     "inline-flex h-12 items-center justify-center gap-3 rounded-full border-2 border-primary bg-transparent px-6",
@@ -145,7 +145,7 @@ export function ServiceIntroHeroSection({
                 >
                   <CheckBadge variant="outline" />
                   {section.secondaryCta.label}
-                </Link>
+                </AppointmentBookingLink>
               </div>
             </div>
 

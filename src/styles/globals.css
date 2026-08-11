@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import "tailwindcss";
 
 @import "./tokens/index.css";
@@ -13,9 +17,13 @@
 
   html {
     scroll-behavior: smooth;
+    width: 100%;
   }
 
   body {
+    margin: 0;
+    width: 100%;
+    min-width: 0;
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
@@ -304,7 +312,7 @@
 }
 
 .preloader__logo-img {
-  height: 8rem;
+  height: 5.5rem;
   width: auto;
   object-fit: contain;
   filter: drop-shadow(0 0 18px rgba(20, 150, 168, 0.45));
@@ -418,6 +426,24 @@
   50% {
     opacity: 1;
     transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 639px) {
+  .preloader__logo-glow {
+    inset: -18%;
+    filter: blur(12px);
+  }
+
+  .preloader__ring {
+    inset: -8%;
+    width: calc(100% + 16%);
+    height: calc(100% + 16%);
+  }
+
+  .preloader__content {
+    gap: 1rem;
+    padding: 1rem;
   }
 }
 

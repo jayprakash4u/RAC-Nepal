@@ -134,7 +134,7 @@ export function ServicePreventionTipsSection({
                 aria-hidden="true"
                 className={cn(
                   "pointer-events-none absolute top-1/2 left-0 z-10 hidden -translate-x-1/2 -translate-y-1/2 lg:flex",
-                  "h-20 w-20 items-center justify-center rounded-full border-2 border-primary/20 bg-white p-3 shadow-md",
+                  "h-20 w-20 items-center justify-center rounded-full border-2 border-primary/20 bg-white p-2 shadow-md",
                 )}
               >
                 <Image

@@ -17,16 +17,16 @@ const nodeThemes: Record<
     dot: "bg-primary",
   },
   vision: {
-    ring: "border-primary-dark",
-    dash: "border-primary-dark/30",
-    text: "text-primary-dark",
-    dot: "bg-primary-dark",
+    ring: "border-primary",
+    dash: "border-primary/35",
+    text: "text-primary",
+    dot: "bg-primary",
   },
   goal: {
-    ring: "border-navy",
-    dash: "border-navy/25",
-    text: "text-navy",
-    dot: "bg-navy",
+    ring: "border-primary",
+    dash: "border-primary/35",
+    text: "text-primary",
+    dot: "bg-primary",
   },
 };
 
@@ -141,8 +141,8 @@ function MissionConnector() {
       />
       <circle cx="0" cy="160" r="5" className="fill-primary/20" />
       <circle cx="100" cy="52" r="5" className="fill-primary" />
-      <circle cx="100" cy="160" r="5" className="fill-primary-dark" />
-      <circle cx="100" cy="268" r="5" className="fill-navy" />
+      <circle cx="100" cy="160" r="5" className="fill-primary" />
+      <circle cx="100" cy="268" r="5" className="fill-primary" />
     </svg>
   );
 }

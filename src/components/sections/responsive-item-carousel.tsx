@@ -11,6 +11,7 @@ export type ResponsiveItemCarouselProps<T> = {
   ariaLabel: string;
   desktopGridClassName: string;
   mobileCarouselClassName?: string;
+  mobileGridClassName?: string;
   carouselTrackClassName?: string;
   listItemClassName?: string;
   staggerDesktopItems?: boolean;
@@ -24,6 +25,7 @@ export function ResponsiveItemCarousel<T>({
   ariaLabel,
   desktopGridClassName,
   mobileCarouselClassName = "section-content sm:hidden",
+  mobileGridClassName,
   carouselTrackClassName = "mx-auto max-w-[22rem]",
   listItemClassName = "flex",
   staggerDesktopItems = false,
@@ -31,19 +33,41 @@ export function ResponsiveItemCarousel<T>({
 }: ResponsiveItemCarouselProps<T>) {
   return (
     <>
-      <MobileAutoCarousel
-        className={mobileCarouselClassName}
-        trackClassName={carouselTrackClassName}
-        items={items}
-        getItemKey={getItemKey}
-        ariaLabel={ariaLabel}
-        dotLabel={dotLabel}
-        renderSlide={(item) => (
-          <div className={cn("h-full", listItemClassName)}>
-            {renderItem(item, { elevated: true })}
-          </div>
-        )}
-      />
+      {mobileGridClassName ? (
+        <ul className={cn("grid sm:hidden", mobileGridClassName)}>
+          {items.map((item, index) => (
+            <li
+              key={getItemKey(item, index)}
+              className={cn(
+                listItemClassName,
+                staggerDesktopItems &&
+                  "motion-safe:animate-[fadeIn_0.55s_ease-out_both] motion-reduce:animate-none",
+              )}
+              style={
+                staggerDesktopItems
+                  ? { animationDelay: `${index * 70}ms` }
+                  : undefined
+              }
+            >
+              {renderItem(item, { elevated: true })}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <MobileAutoCarousel
+          className={mobileCarouselClassName}
+          trackClassName={carouselTrackClassName}
+          items={items}
+          getItemKey={getItemKey}
+          ariaLabel={ariaLabel}
+          dotLabel={dotLabel}
+          renderSlide={(item) => (
+            <div className={cn("h-full", listItemClassName)}>
+              {renderItem(item, { elevated: true })}
+            </div>
+          )}
+        />
+      )}
 
       <ul className={cn("hidden sm:grid", desktopGridClassName)}>
         {items.map((item, index) => (

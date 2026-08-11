@@ -15,33 +15,33 @@ function PhotoSymptomCard({
   return (
     <article
       className={cn(
-        "group flex h-full w-full flex-col items-center rounded-2xl border border-slate-200/80 bg-primary-soft/20 px-sm py-md text-center sm:px-md sm:py-lg",
+        "group flex h-full w-full flex-col items-center rounded-2xl border border-slate-200/80 bg-primary-soft/20 px-3 py-3 text-center sm:px-md sm:py-lg",
         "transition-all duration-300 ease-out",
         "hover:-translate-y-1 hover:border-primary/20 hover:bg-primary-soft/30",
         "hover:shadow-[0_14px_30px_-14px_color-mix(in_srgb,var(--color-primary)_28%,transparent)]",
       )}
     >
-      <div className="relative h-24 w-24 overflow-hidden rounded-full border-2 border-white shadow-sm sm:h-28 sm:w-28">
+      <div className="relative h-20 w-20 overflow-hidden rounded-full border-2 border-white shadow-sm sm:h-28 sm:w-28">
         <Image
           src={image.src}
           alt={image.alt}
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105"
-          sizes="7rem"
+          sizes="5rem"
           unoptimized
         />
       </div>
 
-      <p className="mt-md text-[0.875rem] font-semibold leading-snug text-navy transition-colors duration-300 group-hover:text-primary sm:text-small">
+      <p className="mt-2 text-[0.8125rem] font-semibold leading-snug text-navy transition-colors duration-300 group-hover:text-primary sm:mt-md sm:text-small">
         {title}
       </p>
 
       <span
         aria-hidden="true"
-        className="mt-sm block h-0.5 w-8 rounded-full bg-primary transition-all duration-300 group-hover:w-10"
+        className="mt-1 block h-0.5 w-6 rounded-full bg-primary transition-all duration-300 group-hover:w-10"
       />
 
-      <p className="mt-sm text-[0.75rem] leading-relaxed text-slate-600 sm:text-[0.8125rem]">
+      <p className="mt-1 text-[0.7rem] leading-relaxed text-slate-600 sm:text-[0.8125rem]">
         {description}
       </p>
     </article>
@@ -83,7 +83,7 @@ export function ServicePhotoSymptomsSection({
           ) : null}
         </header>
 
-        <ul className="mt-3xl grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 xl:gap-5">
+        <ul className="mt-3xl grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-5 xl:gap-5">
           {section.items.map((item, index) => (
             <li
               key={item.title}

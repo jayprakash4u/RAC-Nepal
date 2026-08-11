@@ -26,6 +26,6 @@ export const siteConfig = {
     },
   },
   links: {
-    appointment: "/contact",
+    appointment: "#book-appointment",
   },
 } as const;

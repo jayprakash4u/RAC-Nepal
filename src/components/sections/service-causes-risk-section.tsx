@@ -22,14 +22,14 @@ function CauseRiskCard({
     >
       <article
         className={cn(
-          "group flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white px-4 py-4 shadow-sm sm:gap-4 sm:px-5 sm:py-4",
+          "group flex items-center gap-2 rounded-xl border border-slate-200/80 bg-white px-3 py-3 shadow-sm sm:gap-4 sm:px-5 sm:py-4",
           "transition-all duration-300 ease-out hover:-translate-y-1 hover:border-primary/20 hover:shadow-md",
         )}
       >
         <div
           className={cn(
             serviceIconRingClasses,
-            "h-14 w-14 shrink-0 border-primary/20 bg-primary-soft/30 p-2 sm:h-16 sm:w-16 sm:p-2.5",
+            "h-11 w-11 shrink-0 border-primary/20 bg-primary-soft/30 p-1.5 sm:h-14 sm:w-14 sm:p-2.5",
           )}
         >
           <Image
@@ -38,16 +38,16 @@ function CauseRiskCard({
             width={128}
             height={128}
             className="service-icon-bounce h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
-            sizes="4rem"
+            sizes="3rem"
             unoptimized
           />
         </div>
 
         <div className="min-w-0 flex-1">
-          <p className="text-[0.9375rem] font-semibold leading-snug text-navy transition-colors duration-300 group-hover:text-primary sm:text-body">
+          <p className="text-[0.8125rem] font-semibold leading-snug text-navy transition-colors duration-300 group-hover:text-primary sm:text-body">
             {title}
           </p>
-          <p className="mt-1 text-[0.8125rem] leading-relaxed text-slate-600 sm:text-small">
+          <p className="mt-1 text-[0.75rem] leading-relaxed text-slate-600 sm:text-[0.8125rem]">
             {description}
           </p>
         </div>
@@ -108,7 +108,7 @@ export function ServiceCausesRiskSection({
               </h2>
             </header>
 
-            <ul className="mt-6 flex flex-col gap-3 sm:mt-8 sm:gap-3.5">
+            <ul className="mt-6 grid grid-cols-2 gap-3 sm:mt-8 sm:gap-3.5">
               {section.items.map((item, index) => (
                 <CauseRiskCard
                   key={item.title}

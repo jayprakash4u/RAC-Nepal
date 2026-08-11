@@ -43,11 +43,11 @@ function DiagnosticServiceCard({
     <article className={cn(serviceIconCardClasses, "h-full w-full")}>
       <ServiceCardHoverOverlay />
 
-      <div className="flex items-start gap-md p-md pb-md sm:p-xl sm:pb-lg">
+      <div className="flex items-start gap-2 p-3 pb-3 sm:gap-md sm:p-xl sm:pb-lg">
         <div
           className={cn(
             serviceIconRingClasses,
-            "h-12 w-12 overflow-hidden p-1.5 sm:h-14 sm:w-14 sm:p-2",
+            "h-11 w-11 overflow-hidden p-1 sm:h-14 sm:w-14 sm:p-2",
           )}
         >
           <Image
@@ -56,32 +56,32 @@ function DiagnosticServiceCard({
             width={124}
             height={161}
             className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
-            sizes="2.5rem"
+            sizes="3rem"
           />
         </div>
 
         <div className="min-w-0 flex-1 pt-0.5">
-          <h3 className="text-body font-semibold leading-snug text-navy transition-colors duration-300 group-hover:text-primary">
+          <h3 className="text-[0.8125rem] font-semibold leading-snug text-navy transition-colors duration-300 group-hover:text-primary sm:text-body">
             {title}
           </h3>
           <span
             aria-hidden="true"
-            className="mt-1.5 block h-0.5 w-10 rounded-full bg-primary transition-all duration-300 group-hover:w-14"
+            className="mt-1 block h-0.5 w-8 rounded-full bg-primary transition-all duration-300 group-hover:w-10"
           />
-          <p className="mt-2 text-small leading-relaxed text-slate-600">
+          <p className="mt-1.5 text-[0.75rem] leading-relaxed text-slate-600 sm:mt-2 sm:text-small">
             {description}
           </p>
         </div>
       </div>
 
-      <div className="mt-auto px-lg pb-lg sm:px-xl sm:pb-xl">
+      <div className="mt-auto px-3 pb-3 sm:px-xl sm:pb-xl">
         <Image
           src={image.src}
           alt={image.alt}
           width={157}
           height={180}
           className="h-auto w-full rounded-xl object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 20rem"
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 20rem"
         />
       </div>
     </article>
@@ -129,7 +129,7 @@ export function ServiceAdvancedDiagnosticSection({
 
         <ul
           className={cn(
-            "mt-3xl grid grid-cols-1 gap-4",
+            "mt-3xl grid grid-cols-2 gap-3",
             "sm:grid-cols-2 sm:gap-5",
             "lg:grid-cols-3",
           )}

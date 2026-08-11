@@ -292,9 +292,11 @@ export function Footer() {
           <p>
             &copy; {currentYear} {siteConfig.shortName}. All rights reserved.
           </p>
-          <p className="mt-xs hidden text-slate-400 md:mt-0 md:block">
-            {siteConfig.name}
-          </p>
+          <div className="mt-xs hidden text-slate-400 md:mt-0 md:flex md:items-center md:gap-4">
+            <Link href="/admin/login" className="transition-colors hover:text-white">
+              Admin
+            </Link>
+          </div>
         </Container>
       </div>
     </footer>

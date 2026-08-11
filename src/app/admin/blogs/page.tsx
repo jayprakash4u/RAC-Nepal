@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
 import AdminLayout from "../admin-layout";
 
 type BlogPost = {
@@ -28,6 +29,8 @@ export default function AdminBlogsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [form, setForm] = useState({
     title: "",
     excerpt: "",
@@ -39,6 +42,7 @@ export default function AdminBlogsPage() {
     imageAlt: "",
   });
   const [articleContent, setArticleContent] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchPosts = async () => {
     try {
@@ -78,32 +82,74 @@ export default function AdminBlogsPage() {
     };
   }, []);
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setImageFile(file);
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImagePreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
 
     try {
-      const payload = {
-        title: form.title,
-        excerpt: form.excerpt,
-        category: form.category,
-        slug: form.slug || form.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
-        publishedAt: form.publishedAt || new Date().toISOString().split("T")[0],
-        readTime: form.readTime,
-        imageSrc: form.imageSrc,
-        imageAlt: form.imageAlt || form.title,
-      };
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append("title", form.title);
+        formData.append("excerpt", form.excerpt);
+        formData.append("category", form.category);
+        formData.append("slug", form.slug || form.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""));
+        formData.append("publishedAt", form.publishedAt || new Date().toISOString().split("T")[0]);
+        formData.append("readTime", form.readTime);
+        formData.append("imageAlt", form.imageAlt || form.title);
+        formData.append("image", imageFile);
 
-      const res = await fetch("/api/admin/blogs", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+        const res = await fetch("/api/admin/blogs", {
+          method: "POST",
+          body: formData,
+        });
 
-      if (res.ok) {
-        setForm({ title: "", excerpt: "", category: "", slug: "", publishedAt: "", readTime: "5 min read", imageSrc: "", imageAlt: "" });
-        setArticleContent("");
-        fetchPosts();
+        if (res.ok) {
+          setForm({ title: "", excerpt: "", category: "", slug: "", publishedAt: "", readTime: "5 min read", imageSrc: "", imageAlt: "" });
+          setImageFile(null);
+          setImagePreview(null);
+          setArticleContent("");
+          if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+          }
+          fetchPosts();
+        }
+      } else {
+        const payload = {
+          title: form.title,
+          excerpt: form.excerpt,
+          category: form.category,
+          slug: form.slug || form.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
+          publishedAt: form.publishedAt || new Date().toISOString().split("T")[0],
+          readTime: form.readTime,
+          imageSrc: form.imageSrc,
+          imageAlt: form.imageAlt || form.title,
+        };
+
+        const res = await fetch("/api/admin/blogs", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (res.ok) {
+          setForm({ title: "", excerpt: "", category: "", slug: "", publishedAt: "", readTime: "5 min read", imageSrc: "", imageAlt: "" });
+          setImageFile(null);
+          setImagePreview(null);
+          setArticleContent("");
+          fetchPosts();
+        }
       }
     } catch {
       console.error("Failed to save post");
@@ -137,8 +183,12 @@ export default function AdminBlogsPage() {
       imageSrc: post.image.src,
       imageAlt: post.image.alt,
     });
+    setImageFile(null);
+    setImagePreview(post.image.src);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
 
-    // Fetch article content
     try {
       const res = await fetch(`/api/admin/blogs/${post.id}/article`);
       const data = await res.json();
@@ -163,29 +213,61 @@ export default function AdminBlogsPage() {
         // ignore parse error
       }
 
-      const payload = {
-        title: form.title,
-        excerpt: form.excerpt,
-        category: form.category,
-        slug: form.slug,
-        publishedAt: form.publishedAt,
-        readTime: form.readTime,
-        imageSrc: form.imageSrc,
-        imageAlt: form.imageAlt,
-        sections,
-      };
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append("title", form.title);
+        formData.append("excerpt", form.excerpt);
+        formData.append("category", form.category);
+        formData.append("slug", form.slug);
+        formData.append("publishedAt", form.publishedAt);
+        formData.append("readTime", form.readTime);
+        formData.append("imageAlt", form.imageAlt);
+        formData.append("sections", JSON.stringify(sections));
+        formData.append("image", imageFile);
 
-      const res = await fetch(`/api/admin/blogs/${editingId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+        const res = await fetch(`/api/admin/blogs/${editingId}`, {
+          method: "PUT",
+          body: formData,
+        });
 
-      if (res.ok) {
-        setEditingId(null);
-        setForm({ title: "", excerpt: "", category: "", slug: "", publishedAt: "", readTime: "5 min read", imageSrc: "", imageAlt: "" });
-        setArticleContent("");
-        fetchPosts();
+        if (res.ok) {
+          setEditingId(null);
+          setForm({ title: "", excerpt: "", category: "", slug: "", publishedAt: "", readTime: "5 min read", imageSrc: "", imageAlt: "" });
+          setImageFile(null);
+          setImagePreview(null);
+          setArticleContent("");
+          if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+          }
+          fetchPosts();
+        }
+      } else {
+        const payload = {
+          title: form.title,
+          excerpt: form.excerpt,
+          category: form.category,
+          slug: form.slug,
+          publishedAt: form.publishedAt,
+          readTime: form.readTime,
+          imageSrc: form.imageSrc,
+          imageAlt: form.imageAlt,
+          sections,
+        };
+
+        const res = await fetch(`/api/admin/blogs/${editingId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (res.ok) {
+          setEditingId(null);
+          setForm({ title: "", excerpt: "", category: "", slug: "", publishedAt: "", readTime: "5 min read", imageSrc: "", imageAlt: "" });
+          setImageFile(null);
+          setImagePreview(null);
+          setArticleContent("");
+          fetchPosts();
+        }
       }
     } catch {
       console.error("Failed to update post");
@@ -197,7 +279,12 @@ export default function AdminBlogsPage() {
   const cancelEdit = () => {
     setEditingId(null);
     setForm({ title: "", excerpt: "", category: "", slug: "", publishedAt: "", readTime: "5 min read", imageSrc: "", imageAlt: "" });
+    setImageFile(null);
+    setImagePreview(null);
     setArticleContent("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   return (
@@ -285,6 +372,35 @@ export default function AdminBlogsPage() {
                   onChange={(e) => setForm({ ...form, publishedAt: e.target.value })}
                   className="mt-1 w-full rounded-md border border-slate-200 px-3 py-2 text-sm"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-navy">Image</label>
+                <div className="mt-1 flex flex-col gap-3">
+                  <label className="cursor-pointer rounded-md border border-dashed border-slate-300 px-4 py-3 text-center text-sm text-slate-600 transition-colors hover:border-primary hover:text-primary">
+                    {imageFile ? imageFile.name : "Click to upload image"}
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                  </label>
+                  {(imagePreview || form.imageSrc) && (
+                    <div className="relative h-40 w-full overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
+                      <Image
+                        src={imagePreview || form.imageSrc}
+                        alt={form.imageAlt || "Preview"}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
+                </div>
+                <p className="mt-1 text-xs text-slate-500">
+                  Upload an image or enter a URL below
+                </p>
               </div>
 
               <div>

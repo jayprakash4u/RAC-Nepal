@@ -113,25 +113,6 @@ export async function PUT(
 async function updateBlogsTsFile() {
   try {
     const blogsTsPath = path.join(process.cwd(), "src", "data", "blogs.ts");
-    const posts = JSON.parse(await fs.readFile(BLOGS_JSON_PATH, "utf-8")) as BlogPost[];
-
-    const postEntries = posts
-      .map(
-        (post) => `  {
-    id: "${post.id}",
-    slug: "${post.slug}",
-    title: "${post.title.replace(/"/g, '\\"')}",
-    excerpt: "${post.excerpt.replace(/"/g, '\\"')}",
-    category: "${post.category}",
-    publishedAt: "${post.publishedAt}",
-    readTime: "${post.readTime}",
-    image: {
-      src: "${post.image.src}",
-      alt: "${post.image.alt.replace(/"/g, '\\"')}",
-    },
-  }`,
-      )
-      .join(",\n");
 
     const newContent = `export type BlogPost = {
   id: string;

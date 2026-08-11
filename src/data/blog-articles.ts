@@ -1,4 +1,4 @@
-import type { BlogArticle, BlogArticleBlock } from "@/types/blog-content";
+import type { BlogArticle } from "@/types/blog-content";
 
 export const author = "RAC Nepal Rheumatology Team";
 

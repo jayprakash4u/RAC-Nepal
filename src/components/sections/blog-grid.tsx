@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { blogPage, blogPosts, type BlogPost } from "@/data/blogs";
+import { blogPage, type BlogPost } from "@/data/blogs";
 import { BlogMobileCarousel } from "@/components/sections/blog-mobile-carousel";
 import { ServiceCardHoverOverlay } from "@/components/sections/service-icon-card";
 import { Button, Container, Section } from "@/components/ui";
@@ -233,8 +233,12 @@ function BlogCta() {
   );
 }
 
-export function BlogGrid() {
-  const [featuredPost, ...remainingPosts] = blogPosts;
+export function BlogGrid({ posts }: { posts: readonly BlogPost[] }) {
+  const [featuredPost, ...remainingPosts] = posts;
+
+  if (!featuredPost) {
+    return null;
+  }
 
   return (
     <Section background="surface" spacing="default" className="border-t border-slate-200">

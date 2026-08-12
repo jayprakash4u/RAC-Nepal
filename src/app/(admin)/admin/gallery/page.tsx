@@ -5,7 +5,6 @@ import Image from "next/image";
 import AdminLayout from "../admin-layout";
 import { GalleryIcon, ImagePlaceholderIcon, TrashIcon, UploadIcon } from "../_components/icons";
 import { Alert, CardSkeleton, ConfirmDialog, EmptyState, PageHeader, StatCard } from "../_components/ui";
-import "@/styles/admin.css";
 
 type GalleryImage = {
   id: string;

@@ -1,9 +1,7 @@
 import { CenteredPageHero } from "@/components/sections/centered-page-hero";
-import { blogPage, blogPosts } from "@/data/blogs";
+import { blogPage } from "@/data/blogs";
 
-export function BlogPageHero() {
-  const postCount = blogPosts.length;
-
+export function BlogPageHero({ postCount }: { postCount: number }) {
   return (
     <CenteredPageHero
       content={{

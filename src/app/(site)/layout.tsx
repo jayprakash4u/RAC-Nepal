@@ -1,24 +1,10 @@
-import { headers } from "next/headers";
 import { AppointmentBookingProvider } from "@/components/appointment-booking";
 import { Footer, Header } from "@/components/layout";
 import { Preloader } from "@/components/preloader";
 import { siteConfig } from "@/config/site";
 import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { fontVariables } from "../fonts";
 import "@/styles/globals.css";
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const outfit = Outfit({
-  variable: "--font-outfit",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["500", "600", "700"],
-});
 
 export const metadata: Metadata = {
   title: {
@@ -28,25 +14,19 @@ export const metadata: Metadata = {
   description: siteConfig.description,
 };
 
-export default async function RootLayout({
+export default function SiteLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const headersList = await headers();
-  const isAdmin = headersList.get("x-is-admin") === "true";
-
   return (
-    <html
-      lang="en"
-      className={`${inter.variable} ${outfit.variable} h-full antialiased`}
-    >
+    <html lang="en" className={`${fontVariables} h-full antialiased`}>
       <body className="flex w-full min-h-screen flex-col">
         <AppointmentBookingProvider>
-          {!isAdmin && <Preloader />}
-          {!isAdmin && <Header />}
+          <Preloader />
+          <Header />
           <main className="flex flex-1 flex-col">{children}</main>
-          {!isAdmin && <Footer />}
+          <Footer />
         </AppointmentBookingProvider>
       </body>
     </html>

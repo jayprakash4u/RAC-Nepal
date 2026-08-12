@@ -1,9 +1,8 @@
 import type { NextRequest } from "next/server";
+import { getSessionUser, SESSION_COOKIE_NAME } from "@/lib/auth";
 
-// Mirrors the token issued in /api/admin/auth. Kept in one place so every
-// admin-only API route checks the same value.
-const ADMIN_TOKEN = "rac-admin-token-2024";
-
-export function isAuthorizedAdminRequest(request: NextRequest): boolean {
-  return request.cookies.get("admin-auth")?.value === ADMIN_TOKEN;
+export async function isAuthorizedAdminRequest(request: NextRequest): Promise<boolean> {
+  const token = request.cookies.get(SESSION_COOKIE_NAME)?.value;
+  const user = await getSessionUser(token);
+  return !!user;
 }

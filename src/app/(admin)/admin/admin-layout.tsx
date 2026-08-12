@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/cn";
@@ -14,6 +14,11 @@ const NAV_ITEMS = [
   { href: "/admin/blogs", label: "Blogs", icon: BlogIcon },
 ] as const;
 
+// Auto-logout after this long with no mouse/keyboard/touch activity on the
+// admin panel. Adjust freely — it's the only place this needs to change.
+const IDLE_TIMEOUT_MS = 60 * 1000;
+const ACTIVITY_EVENTS = ["mousemove", "mousedown", "keydown", "scroll", "touchstart"] as const;
+
 export default function AdminLayout({
   children,
 }: {
@@ -25,14 +30,30 @@ export default function AdminLayout({
 
   const activeItem = NAV_ITEMS.find((item) => pathname?.startsWith(item.href));
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     try {
       await fetch("/api/admin/auth", { method: "DELETE" });
-      router.push("/admin/login");
-    } catch {
+    } finally {
       router.push("/admin/login");
     }
-  };
+  }, [router]);
+
+  const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const resetIdleTimer = () => {
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+      idleTimerRef.current = setTimeout(handleLogout, IDLE_TIMEOUT_MS);
+    };
+
+    ACTIVITY_EVENTS.forEach((event) => window.addEventListener(event, resetIdleTimer));
+    resetIdleTimer();
+
+    return () => {
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+      ACTIVITY_EVENTS.forEach((event) => window.removeEventListener(event, resetIdleTimer));
+    };
+  }, [handleLogout]);
 
   return (
     <div className="flex min-h-screen w-full bg-slate-50">

@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { isAuthorizedAdminRequest } from "@/lib/admin-auth";
 
 export async function GET(request: NextRequest) {
-  if (!isAuthorizedAdminRequest(request)) {
+  if (!(await isAuthorizedAdminRequest(request))) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 

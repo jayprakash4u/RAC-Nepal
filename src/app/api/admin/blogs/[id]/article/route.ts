@@ -1,35 +1,36 @@
 import { NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
+import type { NextRequest } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { isAuthorizedAdminRequest } from "@/lib/admin-auth";
 
-const BLOG_ARTICLES_JSON_PATH = path.join(process.cwd(), "src", "data", "blog-articles.json");
-
-interface BlogArticle {
-  author: string;
-  sections: readonly BlogArticleBlock[];
-}
-
-interface BlogArticleBlock {
-  type: "paragraph" | "heading" | "list" | "callout";
-  text?: string;
-  items?: readonly string[];
-}
+const AUTHOR = "RAC Nepal Rheumatology Team";
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  if (!(await isAuthorizedAdminRequest(request))) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const { id } = await params;
-    const articles = JSON.parse(await fs.readFile(BLOG_ARTICLES_JSON_PATH, "utf-8")) as Record<string, BlogArticle>;
-    const article = articles[id];
+    const post = await prisma.blogPost.findUnique({ where: { id } });
 
-    if (!article) {
-      return NextResponse.json({ article: { author: "RAC Nepal Rheumatology Team", sections: [] } });
+    if (!post) {
+      return NextResponse.json({ article: { author: AUTHOR, sections: [] } });
     }
 
-    return NextResponse.json({ article });
-  } catch {
-    return NextResponse.json({ article: { author: "RAC Nepal Rheumatology Team", sections: [] } });
+    let sections: unknown[] = [];
+    try {
+      sections = JSON.parse(post.sections);
+    } catch {
+      sections = [];
+    }
+
+    return NextResponse.json({ article: { author: AUTHOR, sections } });
+  } catch (error) {
+    console.error("[admin/blogs] Failed to load article", error);
+    return NextResponse.json({ article: { author: AUTHOR, sections: [] } });
   }
 }

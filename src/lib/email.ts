@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { siteConfig } from "@/config/site";
 
 let cachedTransporter: nodemailer.Transporter | null | undefined;
 
@@ -83,6 +84,66 @@ export async function sendAppointmentNotificationEmail(
     return true;
   } catch (error) {
     console.error("[email] Failed to send appointment notification", error);
+    return false;
+  }
+}
+
+export type AppointmentStatus = "new" | "contacted" | "completed" | "cancelled";
+
+const STATUS_COPY: Record<Exclude<AppointmentStatus, "new">, { subject: string; message: string }> = {
+  contacted: {
+    subject: "Your appointment request is being processed",
+    message:
+      "Our care team has reviewed your appointment request and will be in touch shortly by phone or email to confirm the details.",
+  },
+  completed: {
+    subject: "Thank you for visiting us",
+    message:
+      "Thank you for your recent visit. If you have any follow-up questions, please don't hesitate to reach out.",
+  },
+  cancelled: {
+    subject: "Your appointment request was cancelled",
+    message:
+      "Your appointment request has been cancelled. If this was unexpected or you'd like to reschedule, please contact us and we'll be happy to help.",
+  },
+};
+
+export async function sendAppointmentStatusEmail(
+  patientEmail: string,
+  patientName: string,
+  status: AppointmentStatus,
+): Promise<boolean> {
+  if (status === "new") return false;
+
+  const transporter = getTransporter();
+  if (!transporter) {
+    console.error("[email] Skipped status update: SMTP not configured");
+    return false;
+  }
+
+  const copy = STATUS_COPY[status];
+
+  try {
+    await transporter.sendMail({
+      from: `"${siteConfig.shortName}" <${process.env.SMTP_USER}>`,
+      to: patientEmail,
+      subject: `${copy.subject} — ${siteConfig.shortName}`,
+      text: `Hi ${patientName},\n\n${copy.message}\n\n${siteConfig.shortName}\n${siteConfig.contact.phone}\n${siteConfig.contact.email}`,
+      html: `
+        <div style="font-family:sans-serif;font-size:14px;color:#0f172a;max-width:480px;">
+          <p>Hi ${patientName},</p>
+          <p>${copy.message}</p>
+          <p style="margin-top:24px;color:#475569;">
+            <strong>${siteConfig.shortName}</strong><br />
+            ${siteConfig.contact.phone}<br />
+            ${siteConfig.contact.email}
+          </p>
+        </div>
+      `,
+    });
+    return true;
+  } catch (error) {
+    console.error("[email] Failed to send status update email", error);
     return false;
   }
 }

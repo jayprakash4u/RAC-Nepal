@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { blogPosts, type BlogPost } from "@/data/blogs";
+import type { BlogPost } from "@/data/blogs";
 import { cn } from "@/lib/cn";
 
 function formatDate(isoDate: string) {
@@ -50,15 +50,17 @@ function RelatedPostCard({ post }: { post: BlogPost }) {
 }
 
 export function BlogRelatedPosts({
+  posts,
   currentSlug,
   category,
   className,
 }: {
+  posts: readonly BlogPost[];
   currentSlug: string;
   category: string;
   className?: string;
 }) {
-  const related = blogPosts
+  const related = posts
     .filter((post) => post.slug !== currentSlug)
     .sort((a, b) => {
       const aMatch = a.category === category ? 1 : 0;

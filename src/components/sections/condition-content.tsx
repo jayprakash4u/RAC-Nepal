@@ -55,11 +55,21 @@ export function ConditionContent({ condition }: { condition: ConditionPageData }
           </div>
 
           <div className="w-full lg:w-[62%] lg:pt-md">
-            <h1 className="font-display text-[2.5rem] leading-none font-normal text-slate-300 sm:text-[3rem] lg:text-[3.25rem]">
+            <div className="flex items-center gap-2.5">
+              <span
+                aria-hidden="true"
+                className="h-[3px] w-8 shrink-0 rounded-full bg-primary"
+              />
+              <p className="font-display text-eyebrow font-semibold tracking-[0.16em] text-primary uppercase">
+                Condition Overview
+              </p>
+            </div>
+
+            <h1 className="font-display mt-3 text-h2 leading-[1.15] font-bold text-pretty text-navy sm:mt-4 lg:text-h1">
               {condition.title}
             </h1>
 
-            <div className="mt-2xl flex flex-col gap-xl">
+            <div className="mt-xl flex flex-col gap-lg">
               {condition.paragraphs.map((paragraph, index) => (
                 <ConditionParagraph key={index} segments={paragraph} />
               ))}

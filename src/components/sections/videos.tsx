@@ -5,7 +5,6 @@ import { useState } from "react";
 import { Container, Section, SectionHeader } from "@/components/ui";
 import { VideosMobileCarousel } from "@/components/sections/videos-mobile-carousel";
 import {
-  featuredVideos,
   videoCategoryLabels,
   videosSection,
   type VideoItem,
@@ -167,7 +166,13 @@ function VideoCard({ video }: { video: VideoItem }) {
   );
 }
 
-export function Videos() {
+export function Videos({ videos }: { videos: readonly VideoItem[] }) {
+  const featuredVideos = videos.slice(0, videosSection.featuredLimit);
+
+  if (featuredVideos.length === 0) {
+    return null;
+  }
+
   return (
     <Section background="default" spacing="default">
       <Container size="wide">

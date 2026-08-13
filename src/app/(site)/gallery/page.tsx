@@ -1,6 +1,7 @@
 import { GalleryGrid } from "@/components/sections/gallery-grid";
 import { GalleryPageHero } from "@/components/sections/gallery-page-hero";
 import { siteConfig } from "@/config/site";
+import { getGalleryImages } from "@/lib/content";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,11 +9,13 @@ export const metadata: Metadata = {
   description: `View photos from ${siteConfig.name} — our facilities, team, and rheumatology care in Kathmandu, Nepal.`,
 };
 
-export default function GalleryPage() {
+export default async function GalleryPage() {
+  const images = await getGalleryImages();
+
   return (
     <>
       <GalleryPageHero />
-      <GalleryGrid />
+      <GalleryGrid images={images} />
     </>
   );
 }

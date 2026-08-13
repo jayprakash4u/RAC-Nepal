@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import AdminLayout from "../admin-layout";
+import { PencilIcon, PlusIcon, TestimonialIcon, TrashIcon } from "../_components/icons";
+import { ConfirmDialog, EmptyState, FormSection, PageHeader, RowSkeleton, StatCard, inputClass, labelClass } from "../_components/ui";
 
 type Testimonial = {
   id: string;
@@ -17,12 +20,31 @@ type Testimonial = {
 
 type TestimonialPayload = Omit<Testimonial, "id"> & { image?: { src: string; alt: string } };
 
+const EMPTY_FORM = { quote: "", name: "", role: "", initials: "", imageSrc: "", imageAlt: "" };
+
+function Avatar({ testimonial }: { testimonial: Pick<Testimonial, "image" | "initials" | "name"> }) {
+  if (testimonial.image?.src) {
+    return (
+      <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full border border-slate-200 bg-slate-100">
+        <Image src={testimonial.image.src} alt={testimonial.image.alt} fill className="object-cover" />
+      </div>
+    );
+  }
+  return (
+    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary-soft/15 text-sm font-semibold text-primary-dark">
+      {testimonial.initials || testimonial.name.slice(0, 2).toUpperCase()}
+    </div>
+  );
+}
+
 export default function AdminTestimonialsPage() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<Testimonial | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [form, setForm] = useState({ quote: "", name: "", role: "", initials: "", imageSrc: "", imageAlt: "" });
+  const [form, setForm] = useState(EMPTY_FORM);
 
   const fetchTestimonials = async () => {
     try {
@@ -85,7 +107,7 @@ export default function AdminTestimonialsPage() {
       });
 
       if (res.ok) {
-        setForm({ quote: "", name: "", role: "", initials: "", imageSrc: "", imageAlt: "" });
+        setForm(EMPTY_FORM);
         fetchTestimonials();
       }
     } catch {
@@ -96,8 +118,7 @@ export default function AdminTestimonialsPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this testimonial?")) return;
-
+    setDeletingId(id);
     try {
       const res = await fetch(`/api/admin/testimonials/${id}`, { method: "DELETE" });
       if (res.ok) {
@@ -105,6 +126,9 @@ export default function AdminTestimonialsPage() {
       }
     } catch {
       console.error("Failed to delete testimonial");
+    } finally {
+      setDeletingId(null);
+      setPendingDelete(null);
     }
   };
 
@@ -148,7 +172,7 @@ export default function AdminTestimonialsPage() {
 
       if (res.ok) {
         setEditingId(null);
-        setForm({ quote: "", name: "", role: "", initials: "", imageSrc: "", imageAlt: "" });
+        setForm(EMPTY_FORM);
         fetchTestimonials();
       }
     } catch {
@@ -160,68 +184,67 @@ export default function AdminTestimonialsPage() {
 
   const cancelEdit = () => {
     setEditingId(null);
-    setForm({ quote: "", name: "", role: "", initials: "", imageSrc: "", imageAlt: "" });
+    setForm(EMPTY_FORM);
   };
 
   return (
     <AdminLayout>
       <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
-        <div className="mb-8">
-          <h1 className="text-xl font-semibold text-navy sm:text-2xl">Patient Experiences</h1>
-          <p className="mt-1 text-xs text-slate-600 sm:text-small">
-            Manage testimonials for the home page
-          </p>
+        <PageHeader
+          title="Patient Experiences"
+          description="Manage testimonials shown on the home page"
+        />
+
+        <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <StatCard label="Total Testimonials" value={loading ? "–" : testimonials.length} icon={<TestimonialIcon className="h-5 w-5" />} />
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Form */}
-          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-medium text-navy">
-              {editingId ? "Edit Testimonial" : "Add New Testimonial"}
-            </h2>
+          <FormSection title={editingId ? "Edit Testimonial" : "Add New Testimonial"}>
             <form onSubmit={editingId ? handleUpdateSubmit : handleSubmit} className="mt-4 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-navy">Full Name</label>
+                <label className={labelClass}>Full Name</label>
                 <input
                   type="text"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  className="mt-1 w-full rounded-md border border-slate-200 px-3 py-2 text-sm"
+                  className={inputClass}
                   placeholder="Patient name"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-navy">Role / Condition</label>
+                <label className={labelClass}>Role / Condition</label>
                 <input
                   type="text"
                   value={form.role}
                   onChange={(e) => setForm({ ...form, role: e.target.value })}
-                  className="mt-1 w-full rounded-md border border-slate-200 px-3 py-2 text-sm"
+                  className={inputClass}
                   placeholder="e.g. Rheumatoid Arthritis Patient, Kathmandu"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-navy">Initials</label>
+                <label className={labelClass}>Initials</label>
                 <input
                   type="text"
                   value={form.initials}
                   onChange={(e) => setForm({ ...form, initials: e.target.value })}
-                  className="mt-1 w-full rounded-md border border-slate-200 px-3 py-2 text-sm"
+                  className={inputClass}
                   placeholder="e.g. SS"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-navy">Quote</label>
+                <label className={labelClass}>Quote</label>
                 <textarea
                   value={form.quote}
                   onChange={(e) => setForm({ ...form, quote: e.target.value })}
-                  className="mt-1 w-full rounded-md border border-slate-200 px-3 py-2 text-sm"
+                  className={inputClass}
                   rows={4}
                   placeholder="Patient testimonial quote"
                   required
@@ -229,86 +252,105 @@ export default function AdminTestimonialsPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-navy">Image URL (optional)</label>
+                <label className={labelClass}>Image URL (optional)</label>
                 <input
                   type="text"
                   value={form.imageSrc}
                   onChange={(e) => setForm({ ...form, imageSrc: e.target.value })}
-                  className="mt-1 w-full rounded-md border border-slate-200 px-3 py-2 text-sm"
+                  className={inputClass}
                   placeholder="/images/what our patient/1.jpg"
                 />
               </div>
 
               {form.imageSrc && (
                 <div>
-                  <label className="block text-sm font-medium text-navy">Image Alt Text</label>
+                  <label className={labelClass}>Image Alt Text</label>
                   <input
                     type="text"
                     value={form.imageAlt}
                     onChange={(e) => setForm({ ...form, imageAlt: e.target.value })}
-                    className="mt-1 w-full rounded-md border border-slate-200 px-3 py-2 text-sm"
+                    className={inputClass}
                     placeholder="Portrait of [Name], RAC Nepal patient"
                   />
                 </div>
               )}
 
-              <div className="flex gap-2">
+              <div className="flex gap-2 pt-1">
                 <button
                   type="submit"
                   disabled={saving}
-                  className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-dark disabled:opacity-50"
                 >
+                  {!editingId && <PlusIcon className="h-4 w-4" />}
                   {saving ? "Saving..." : editingId ? "Update Testimonial" : "Add Testimonial"}
                 </button>
                 {editingId && (
                   <button
                     type="button"
                     onClick={cancelEdit}
-                    className="rounded-md border border-slate-200 px-4 py-2 text-sm font-medium text-navy hover:bg-slate-50"
+                    className="rounded-lg border border-slate-200 px-4 py-2.5 text-sm font-medium text-navy transition-colors hover:bg-slate-50"
                   >
                     Cancel
                   </button>
                 )}
               </div>
             </form>
-          </div>
+          </FormSection>
 
           {/* List */}
-          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-medium text-navy">Existing Testimonials</h2>
+          <FormSection title="Existing Testimonials">
             {loading ? (
-              <p className="mt-4 text-sm text-slate-600">Loading...</p>
+              <div className="mt-4 space-y-3">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <RowSkeleton key={i} />
+                ))}
+              </div>
             ) : testimonials.length === 0 ? (
-              <p className="mt-4 text-sm text-slate-600">No testimonials yet</p>
+              <div className="mt-4">
+                <EmptyState icon={<TestimonialIcon className="h-6 w-6" />} title="No testimonials yet" description="Add your first patient story using the form." />
+              </div>
             ) : (
               <ul className="mt-4 space-y-3">
                 {testimonials.map((testimonial) => (
-                  <li key={testimonial.id} className="flex items-start justify-between gap-3 rounded-lg border border-slate-100 p-3">
+                  <li key={testimonial.id} className="flex items-start gap-3 rounded-lg border border-slate-100 p-3 transition-colors hover:border-slate-200 hover:bg-slate-50/60">
+                    <Avatar testimonial={testimonial} />
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-navy truncate">{testimonial.name}</p>
-                      <p className="text-xs text-slate-500 line-clamp-2">{testimonial.quote}</p>
+                      <p className="truncate text-sm font-medium text-navy">{testimonial.name}</p>
+                      <p className="truncate text-xs text-slate-500">{testimonial.role}</p>
+                      <p className="mt-1 line-clamp-2 text-xs text-slate-500">&ldquo;{testimonial.quote}&rdquo;</p>
                     </div>
                     <div className="flex shrink-0 gap-1">
                       <button
                         onClick={() => handleUpdate(testimonial.id)}
-                        className="rounded-md px-2 py-1 text-xs font-medium text-primary hover:bg-primary-soft/20"
+                        className="flex h-8 w-8 items-center justify-center rounded-md text-primary transition-colors hover:bg-primary-soft/15"
+                        aria-label={`Edit ${testimonial.name}`}
                       >
-                        Edit
+                        <PencilIcon className="h-4 w-4" />
                       </button>
                       <button
-                        onClick={() => handleDelete(testimonial.id)}
-                        className="rounded-md px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
+                        onClick={() => setPendingDelete(testimonial)}
+                        className="flex h-8 w-8 items-center justify-center rounded-md text-rose-600 transition-colors hover:bg-rose-50"
+                        aria-label={`Delete ${testimonial.name}`}
                       >
-                        Delete
+                        <TrashIcon className="h-4 w-4" />
                       </button>
                     </div>
                   </li>
                 ))}
               </ul>
             )}
-          </div>
+          </FormSection>
         </div>
       </div>
+
+      <ConfirmDialog
+        open={!!pendingDelete}
+        title="Delete this testimonial?"
+        description={pendingDelete ? `${pendingDelete.name}'s testimonial will be removed from the home page.` : undefined}
+        busy={!!deletingId}
+        onCancel={() => setPendingDelete(null)}
+        onConfirm={() => pendingDelete && handleDelete(pendingDelete.id)}
+      />
     </AdminLayout>
   );
 }

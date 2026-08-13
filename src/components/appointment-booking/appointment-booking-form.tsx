@@ -23,13 +23,47 @@ export function AppointmentBookingForm({
   onSuccess,
 }: AppointmentBookingFormProps) {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
   const { form, appointmentTypes, preferredTimes, success } =
     appointmentBookingContent;
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setSubmitted(true);
-    onSuccess?.();
+    setError("");
+    setSubmitting(true);
+
+    const formData = new FormData(event.currentTarget);
+
+    try {
+      const response = await fetch("/api/appointment-booking", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.get("name"),
+          phone: formData.get("phone"),
+          email: formData.get("email"),
+          appointmentType: formData.get("appointmentType"),
+          preferredDate: formData.get("preferredDate"),
+          preferredTime: formData.get("preferredTime"),
+          message: formData.get("message"),
+          source: formData.get("source"),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSubmitted(true);
+        onSuccess?.();
+      } else {
+        setError(data.message || "Something went wrong. Please try again or call us.");
+      }
+    } catch {
+      setError("Something went wrong. Please try again or call us.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (submitted) {
@@ -145,9 +179,15 @@ export function AppointmentBookingForm({
         <input type="hidden" name="source" value={options.source} readOnly />
       ) : null}
 
+      {error ? (
+        <p className="rounded-md border border-rose-200 bg-rose-50 px-md py-sm text-small text-rose-700">
+          {error}
+        </p>
+      ) : null}
+
       <div>
-        <Button type="submit" size="lg" className="w-full sm:w-auto">
-          {form.submitLabel}
+        <Button type="submit" size="lg" className="w-full sm:w-auto" disabled={submitting}>
+          {submitting ? "Sending..." : form.submitLabel}
         </Button>
       </div>
     </form>

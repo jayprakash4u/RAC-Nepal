@@ -3,8 +3,7 @@ import Link from "next/link";
 import { BlogArticleBody } from "@/components/sections/blog-article-body";
 import { BlogRelatedPosts } from "@/components/sections/blog-related-posts";
 import { Button, Container, Section } from "@/components/ui";
-import { getBlogArticleBySlug } from "@/data/blog-articles";
-import { blogPosts, getBlogPostBySlug } from "@/data/blogs";
+import { getBlogArticleBySlug, getBlogPostBySlug, getBlogPosts } from "@/lib/content";
 import { siteConfig } from "@/config/site";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -13,15 +12,16 @@ type BlogPostPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export function generateStaticParams() {
-  return blogPosts.map((post) => ({ slug: post.slug }));
+export async function generateStaticParams() {
+  const posts = await getBlogPosts();
+  return posts.map((post) => ({ slug: post.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = getBlogPostBySlug(slug);
+  const post = await getBlogPostBySlug(slug);
 
   if (!post) {
     return { title: "Article Not Found" };
@@ -48,8 +48,11 @@ function formatDate(isoDate: string) {
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
-  const post = getBlogPostBySlug(slug);
-  const article = getBlogArticleBySlug(slug);
+  const [post, article, allPosts] = await Promise.all([
+    getBlogPostBySlug(slug),
+    getBlogArticleBySlug(slug),
+    getBlogPosts(),
+  ]);
 
   if (!post || !article) {
     notFound();
@@ -129,6 +132,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </div>
 
           <BlogRelatedPosts
+            posts={allPosts}
             currentSlug={post.slug}
             category={post.category}
             className="mt-3xl border-t border-slate-200 pt-3xl"

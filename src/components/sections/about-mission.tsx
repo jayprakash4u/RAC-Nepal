@@ -112,38 +112,58 @@ const missionIcons: Record<
 
 function MissionConnector() {
   return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 100 320"
-      className="h-full min-h-[18rem] w-full"
-      preserveAspectRatio="none"
-    >
-      <path
-        d="M 0 160 C 42 160, 42 52, 100 52"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        className="text-slate-200"
+    <div className="relative h-full min-h-[18rem] w-full">
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 100 320"
+        className="h-full w-full"
+        preserveAspectRatio="none"
+      >
+        <path
+          d="M 0 160 C 42 160, 42 52, 100 52"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          className="text-slate-200"
+        />
+        <path
+          d="M 0 160 L 100 160"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          className="text-slate-200"
+        />
+        <path
+          d="M 0 160 C 42 160, 42 268, 100 268"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          className="text-slate-200"
+        />
+      </svg>
+
+      {/*
+        Endpoint dots are plain HTML, not SVG circles: the SVG above is stretched
+        non-uniformly (preserveAspectRatio="none") to match the row's dynamic
+        height, which would otherwise squash <circle> markers into ellipses.
+      */}
+      <span
+        aria-hidden="true"
+        className="absolute top-1/2 left-0 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20"
       />
-      <path
-        d="M 0 160 L 100 160"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        className="text-slate-200"
+      <span
+        aria-hidden="true"
+        className="absolute top-[16.25%] left-full h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary"
       />
-      <path
-        d="M 0 160 C 42 160, 42 268, 100 268"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        className="text-slate-200"
+      <span
+        aria-hidden="true"
+        className="absolute top-1/2 left-full h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary"
       />
-      <circle cx="0" cy="160" r="5" className="fill-primary/20" />
-      <circle cx="100" cy="52" r="5" className="fill-primary" />
-      <circle cx="100" cy="160" r="5" className="fill-primary" />
-      <circle cx="100" cy="268" r="5" className="fill-primary" />
-    </svg>
+      <span
+        aria-hidden="true"
+        className="absolute top-[83.75%] left-full h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary"
+      />
+    </div>
   );
 }
 

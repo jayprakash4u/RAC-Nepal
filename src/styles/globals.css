@@ -233,23 +233,30 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #020505;
+  background: var(--color-navy);
   overflow: hidden;
+  opacity: 1;
+  transition: opacity 450ms ease-out;
+}
+
+.preloader--exiting {
+  opacity: 0;
 }
 
 .preloader__bg {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(circle at 1px 1px, rgba(20, 150, 168, 0.08) 1px, transparent 0) 0 0 / 28px 28px,
-    radial-gradient(ellipse at center, #08313a 0%, #000 70%);
-  filter: contrast(1.05);
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--color-primary-dark) 30%, var(--color-navy)) 0%,
+    var(--color-navy) 68%
+  );
 }
 
 .preloader__vignette {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.75) 100%);
+  background: radial-gradient(circle at center, transparent 45%, rgb(0 0 0 / 0.45) 100%);
   pointer-events: none;
 }
 
@@ -260,8 +267,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1.25rem;
+  gap: 1.5rem;
   padding: 1.5rem;
+  animation: preloader-content-in 550ms ease-out both;
 }
 
 .preloader__logo-wrap {
@@ -274,9 +282,9 @@
   position: absolute;
   inset: -28%;
   border-radius: 9999px;
-  background: radial-gradient(circle, rgba(20, 150, 168, 0.28), transparent 70%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-primary) 30%, transparent), transparent 70%);
   filter: blur(18px);
-  animation: preloader-pulse 2.4s ease-in-out infinite;
+  animation: preloader-pulse 2.6s ease-in-out infinite;
 }
 
 .preloader__ring {
@@ -284,20 +292,22 @@
   inset: -14%;
   width: calc(100% + 28%);
   height: calc(100% + 28%);
+  color: var(--color-primary);
 }
 
 .preloader__ring-track {
   fill: none;
-  stroke: rgba(20, 150, 168, 0.12);
+  stroke: color-mix(in srgb, var(--color-primary) 16%, transparent);
   stroke-width: 1.5;
 }
 
 .preloader__ring-arc {
   fill: none;
+  stroke: currentColor;
   stroke-width: 2.5;
   stroke-linecap: round;
   stroke-dasharray: 140 400;
-  animation: preloader-spin 2.8s linear infinite;
+  animation: preloader-spin 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   transform-box: fill-box;
   transform-origin: center;
 }
@@ -307,23 +317,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
-  border-radius: 0;
 }
 
 .preloader__logo-img {
-  height: 5.5rem;
+  height: 4.5rem;
   width: auto;
   object-fit: contain;
-  filter: drop-shadow(0 0 18px rgba(20, 150, 168, 0.45));
-  opacity: 1;
+  filter: drop-shadow(0 0 16px color-mix(in srgb, var(--color-primary) 45%, transparent));
 }
 
 .preloader__text {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.4rem;
   text-align: center;
 }
 
@@ -331,26 +338,21 @@
   font-family: var(--font-display, var(--font-sans));
   font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.26em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  background: linear-gradient(180deg, #e2e8f0 0%, #94a3b8 55%, #cbd5e1 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.08);
+  color: white;
 }
 
 .preloader__subtitle {
   font-family: var(--font-display, var(--font-sans));
-  font-size: 0.65rem;
+  font-size: 0.6875rem;
   font-weight: 600;
-  letter-spacing: 0.34em;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: #67e8f9;
-  text-shadow: 0 0 18px rgba(34, 211, 238, 0.35);
+  color: color-mix(in srgb, var(--color-primary) 65%, white);
 }
 
-.preloader__footer {
+.preloader__progress {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -358,45 +360,36 @@
   margin-top: 0.25rem;
 }
 
-.preloader__tagline {
+.preloader__progress-track {
+  width: 8rem;
+  height: 3px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--color-primary) 18%, transparent);
+  overflow: hidden;
+}
+
+.preloader__progress-fill {
+  display: block;
+  height: 100%;
+  width: 8%;
+  border-radius: inherit;
+  background: var(--color-primary);
+  animation: preloader-progress 950ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.preloader__progress-fill--complete {
+  animation: none;
+  width: 100%;
+  transition: width 280ms ease-out;
+}
+
+.preloader__loading-label {
   font-family: var(--font-display, var(--font-sans));
-  font-size: 0.6rem;
+  font-size: 0.625rem;
   font-weight: 600;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: #94a3b8;
-  text-shadow: 0 0 14px rgba(148, 163, 184, 0.35);
-}
-
-.preloader__wait {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-family: var(--font-display, var(--font-sans));
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: #22d3ee;
-  text-shadow: 0 0 18px rgba(34, 211, 238, 0.4);
-}
-
-.preloader__dot {
-  display: inline-block;
-  width: 4px;
-  height: 4px;
-  border-radius: 9999px;
-  background: #22d3ee;
-  box-shadow: 0 0 10px #22d3ee;
-  animation: preloader-dots 1.5s ease-in-out infinite;
-}
-
-.preloader__dot:nth-child(2) {
-  animation-delay: 160ms;
-}
-
-.preloader__dot:nth-child(3) {
-  animation-delay: 320ms;
+  color: color-mix(in srgb, white 55%, transparent);
 }
 
 @keyframes preloader-spin {
@@ -408,7 +401,7 @@
 @keyframes preloader-pulse {
   0%,
   100% {
-    opacity: 0.8;
+    opacity: 0.75;
     transform: scale(1);
   }
   55% {
@@ -417,15 +410,36 @@
   }
 }
 
-@keyframes preloader-dots {
-  0%,
-  100% {
-    opacity: 0.25;
+@keyframes preloader-content-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
     transform: translateY(0);
   }
-  50% {
-    opacity: 1;
-    transform: translateY(-2px);
+}
+
+@keyframes preloader-progress {
+  from {
+    width: 8%;
+  }
+  to {
+    width: 88%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preloader__logo-glow,
+  .preloader__ring-arc,
+  .preloader__content {
+    animation: none;
+  }
+
+  .preloader__progress-fill {
+    animation: none;
+    width: 88%;
   }
 }
 
@@ -442,30 +456,22 @@
   }
 
   .preloader__content {
-    gap: 1rem;
+    gap: 1.25rem;
     padding: 1rem;
   }
 }
 
 @media (min-width: 640px) {
   .preloader__logo-img {
-    height: 11rem;
+    height: 6.5rem;
   }
 
   .preloader__title {
     font-size: 0.875rem;
-    letter-spacing: 0.3em;
+    letter-spacing: 0.26em;
   }
 
   .preloader__subtitle {
-    font-size: 0.75rem;
-  }
-
-  .preloader__tagline {
-    font-size: 0.75rem;
-  }
-
-  .preloader__wait {
     font-size: 0.75rem;
   }
 }

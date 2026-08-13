@@ -3,11 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { Container, Section, SectionHeader } from "@/components/ui";
-import {
-  testimonials,
-  testimonialsSection,
-  type Testimonial,
-} from "@/data/testimonials";
+import { testimonialsSection, type Testimonial } from "@/data/testimonials";
 import { cn } from "@/lib/cn";
 
 const DESKTOP_CARDS_VISIBLE = 3;
@@ -210,7 +206,11 @@ function CarouselControls({
   );
 }
 
-function TestimonialsMobileCarousel() {
+function TestimonialsMobileCarousel({
+  testimonials,
+}: {
+  testimonials: readonly Testimonial[];
+}) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
@@ -225,13 +225,13 @@ function TestimonialsMobileCarousel() {
 
   const goNext = useCallback(() => {
     setActiveIndex((current) => (current + 1) % testimonials.length);
-  }, []);
+  }, [testimonials.length]);
 
   const goPrev = useCallback(() => {
     setActiveIndex(
       (current) => (current - 1 + testimonials.length) % testimonials.length,
     );
-  }, []);
+  }, [testimonials.length]);
 
   useEffect(() => {
     if (isPaused || reduceMotion || testimonials.length <= 1) {
@@ -240,7 +240,7 @@ function TestimonialsMobileCarousel() {
 
     const timer = window.setInterval(goNext, AUTO_INTERVAL_MS);
     return () => window.clearInterval(timer);
-  }, [goNext, isPaused, reduceMotion]);
+  }, [goNext, isPaused, reduceMotion, testimonials.length]);
 
   const pause = () => setIsPaused(true);
   const resume = () => setIsPaused(false);
@@ -297,7 +297,11 @@ function TestimonialsMobileCarousel() {
   );
 }
 
-function TestimonialsDesktopCarousel() {
+function TestimonialsDesktopCarousel({
+  testimonials,
+}: {
+  testimonials: readonly Testimonial[];
+}) {
   const [page, setPage] = useState(0);
 
   const pageCount = Math.max(
@@ -342,7 +346,11 @@ function TestimonialsDesktopCarousel() {
   );
 }
 
-export function Testimonials() {
+export function Testimonials({ testimonials }: { testimonials: readonly Testimonial[] }) {
+  if (testimonials.length === 0) {
+    return null;
+  }
+
   return (
     <Section background="surface" spacing="default" className="relative overflow-hidden">
       <div
@@ -362,8 +370,8 @@ export function Testimonials() {
           decoratedEyebrow
         />
 
-        <TestimonialsMobileCarousel />
-        <TestimonialsDesktopCarousel />
+        <TestimonialsMobileCarousel testimonials={testimonials} />
+        <TestimonialsDesktopCarousel testimonials={testimonials} />
       </Container>
     </Section>
   );

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { Container, Section } from "@/components/ui";
 import { MobileAutoCarousel } from "@/components/ui/mobile-auto-carousel";
-import { galleryImages, type GalleryImage } from "@/data/gallery";
+import type { GalleryImage } from "@/data/gallery";
 import { cn } from "@/lib/cn";
 
 function ExpandIcon() {
@@ -280,8 +280,12 @@ function GalleryLightbox({
   );
 }
 
-export function GalleryGrid() {
+export function GalleryGrid({ images: galleryImages }: { images: readonly GalleryImage[] }) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  if (galleryImages.length === 0) {
+    return null;
+  }
 
   return (
     <>

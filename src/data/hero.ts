@@ -19,12 +19,20 @@ export const heroContent = {
   ],
   images: [
     {
-      src: "/images/homeherosectionimage2.png",
+      src: "/images/homeherosectionimge/1.png",
       alt: "Rheumatology consultation and patient care at RAC Nepal",
     },
     {
-      src: "/images/homeherosection3.png",
+      src: "/images/homeherosectionimge/222222.png",
       alt: "Advanced rheumatology treatment and joint care at RAC Nepal",
+    },
+    {
+      src: "/images/homeherosectionimge/3333.png",
+      alt: "Specialized rheumatology services in Kathmandu",
+    },
+    {
+      src: "/images/homeherosectionimge/4444.png",
+      alt: "Comprehensive autoimmune and joint care at RAC Nepal",
     },
   ],
   primaryCta: {

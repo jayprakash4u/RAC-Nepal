@@ -111,7 +111,7 @@ export function Hero() {
             <HeroCopy />
           </div>
 
-          <div className="hero-media order-first w-full max-w-[34rem] lg:order-none lg:max-w-[36rem] xl:max-w-[38rem]">
+          <div className="hero-media order-first w-full lg:order-none">
             <HeroImageCarousel />
           </div>
         </div>

@@ -1,17 +1,38 @@
-@layer base {
-  #admin-login,
-  #admin-gallery {
-    width: 100%;
-    max-width: none;
-    min-width: 0;
-  }
+/**
+ * Admin-panel-only styles, loaded from `app/(admin)/layout.tsx`.
+ *
+ * The `#admin-login` / `#admin-gallery` width resets that used to live here
+ * were undoing the public site's layout rules. The admin panel now has its own
+ * root layout and no longer inherits them, so they've been dropped.
+ */
 
-  #admin-login input,
-  #admin-login button,
-  #admin-gallery input,
-  #admin-gallery button {
-    width: auto;
-    max-width: none;
-    min-width: 0;
+@keyframes admin-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes admin-modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@layer base {
+  /* Admin tables and long content scroll inside their own containers, so the
+     page itself should never scroll sideways on a narrow screen. */
+  .admin-scroll-x {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
   }
 }

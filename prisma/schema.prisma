@@ -7,14 +7,14 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "sqlserver"
 }
 
 // An admin account. Password is stored as a bcrypt hash, never plaintext.
 model AdminUser {
   id           String    @id @default(cuid())
-  username     String    @unique @db.VarChar(100)
-  passwordHash String    @db.VarChar(200)
+  username     String    @unique @db.NVarChar(100)
+  passwordHash String    @db.NVarChar(200)
   createdAt    DateTime  @default(now())
   lastLoginAt  DateTime?
   sessions     Session[]
@@ -26,7 +26,7 @@ model AdminUser {
 // SHA-256 hash is stored here so a DB leak alone can't be replayed as a cookie.
 model Session {
   id        String    @id @default(cuid())
-  tokenHash String    @unique @db.VarChar(200)
+  tokenHash String    @unique @db.NVarChar(200)
   userId    String
   user      AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime  @default(now())
@@ -38,15 +38,15 @@ model Session {
 // A request submitted through the site's "Book an Appointment" form.
 model AppointmentRequest {
   id              String    @id @default(cuid())
-  name            String    @db.VarChar(200)
-  phone           String    @db.VarChar(50)
-  email           String    @db.VarChar(200)
-  appointmentType String    @db.VarChar(50)
+  name            String    @db.NVarChar(200)
+  phone           String    @db.NVarChar(50)
+  email           String    @db.NVarChar(200)
+  appointmentType String    @db.NVarChar(50)
   preferredDate   DateTime? @db.Date
-  preferredTime   String?   @db.VarChar(50)
-  message         String?   @db.VarChar(2000)
-  source          String?   @db.VarChar(100)
-  status          String    @default("new") @db.VarChar(20) // new | contacted | completed | cancelled
+  preferredTime   String?   @db.NVarChar(50)
+  message         String?   @db.NVarChar(2000)
+  source          String?   @db.NVarChar(100)
+  status          String    @default("new") @db.NVarChar(20) // new | contacted | completed | cancelled
   emailSent       Boolean   @default(false)
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
@@ -56,8 +56,8 @@ model AppointmentRequest {
 
 model GalleryImage {
   id        String   @id @default(cuid())
-  src       String   @db.VarChar(500)
-  alt       String   @db.VarChar(300)
+  src       String   @db.NVarChar(500)
+  alt       String   @db.NVarChar(300)
   order     Int      @default(0)
   createdAt DateTime @default(now())
 
@@ -66,12 +66,12 @@ model GalleryImage {
 
 model Testimonial {
   id        String   @id @default(cuid())
-  quote     String   @db.VarChar(2000)
-  name      String   @db.VarChar(200)
-  role      String   @db.VarChar(200)
-  initials  String   @db.VarChar(10)
-  imageSrc  String?  @db.VarChar(500)
-  imageAlt  String?  @db.VarChar(300)
+  quote     String   @db.NVarChar(2000)
+  name      String   @db.NVarChar(200)
+  role      String   @db.NVarChar(200)
+  initials  String   @db.NVarChar(10)
+  imageSrc  String?  @db.NVarChar(500)
+  imageAlt  String?  @db.NVarChar(300)
   order     Int      @default(0)
   createdAt DateTime @default(now())
 
@@ -80,9 +80,9 @@ model Testimonial {
 
 model Video {
   id           String   @id @default(cuid())
-  youtubeId    String   @db.VarChar(50)
-  title        String   @db.VarChar(300)
-  category     String   @db.VarChar(50)
+  youtubeId    String   @db.NVarChar(50)
+  title        String   @db.NVarChar(300)
+  category     String   @db.NVarChar(50)
   startSeconds Int?
   order        Int      @default(0)
   createdAt    DateTime @default(now())
@@ -95,15 +95,15 @@ model Video {
 // type into its own table for how this content is actually authored and read.
 model BlogPost {
   id          String   @id @default(cuid())
-  slug        String   @unique @db.VarChar(200)
-  title       String   @db.VarChar(300)
-  excerpt     String   @db.VarChar(1000)
-  category    String   @db.VarChar(100)
+  slug        String   @unique @db.NVarChar(200)
+  title       String   @db.NVarChar(300)
+  excerpt     String   @db.NVarChar(1000)
+  category    String   @db.NVarChar(100)
   publishedAt DateTime @db.Date
-  readTime    String   @db.VarChar(50)
-  imageSrc    String   @db.VarChar(500)
-  imageAlt    String   @db.VarChar(300)
-  sections    String   @db.LongText
+  readTime    String   @db.NVarChar(50)
+  imageSrc    String   @db.NVarChar(500)
+  imageAlt    String   @db.NVarChar(300)
+  sections    String   @db.NVarChar(Max)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

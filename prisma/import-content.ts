@@ -2,7 +2,7 @@
 // videos, blog posts + article sections) into the database. Safe to re-run —
 // skips anything that already exists.
 import "dotenv/config";
-import { PrismaMariaDb } from "@prisma/adapter-mariadb";
+import { PrismaMssql } from "@prisma/adapter-mssql";
 import { PrismaClient } from "../src/generated/prisma/client";
 import galleryJson from "../src/data/gallery.json";
 import testimonialsJson from "../src/data/testimonials.json";
@@ -39,14 +39,13 @@ type BlogPost = {
 type BlogArticle = { author: string; sections: unknown[] };
 
 async function main() {
-  const adapter = new PrismaMariaDb({
-    host: process.env.DB_HOST ?? "localhost",
-    port: Number(process.env.DB_PORT ?? 3306),
+  const adapter = new PrismaMssql({
+    server: process.env.DB_HOST ?? "localhost",
+    port: Number(process.env.DB_PORT ?? 1433),
     database: process.env.DB_NAME,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    connectTimeout: 30000,
-    ssl: process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : undefined,
+    options: { trustServerCertificate: true, encrypt: true },
   });
   const prisma = new PrismaClient({ adapter });
 

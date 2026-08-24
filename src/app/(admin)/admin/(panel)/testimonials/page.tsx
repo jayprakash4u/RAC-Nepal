@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { PencilIcon, PlusIcon, TestimonialIcon, TrashIcon } from "../../_components/icons";
-import { ConfirmDialog, EmptyState, FormSection, PageHeader, RowSkeleton, StatCard, inputClass, labelClass } from "../../_components/ui";
+import { CloseIcon, PencilIcon, PlusIcon, TestimonialIcon, TrashIcon, UploadIcon } from "../../_components/icons";
+import { Alert, ConfirmDialog, EmptyState, FormSection, PageHeader, RowSkeleton, StatCard, inputClass, labelClass } from "../../_components/ui";
 
 type Testimonial = {
   id: string;
@@ -17,9 +17,7 @@ type Testimonial = {
   initials: string;
 };
 
-type TestimonialPayload = Omit<Testimonial, "id"> & { image?: { src: string; alt: string } };
-
-const EMPTY_FORM = { quote: "", name: "", role: "", initials: "", imageSrc: "", imageAlt: "" };
+const EMPTY_FORM = { quote: "", name: "", role: "", initials: "", imageAlt: "" };
 
 function Avatar({ testimonial }: { testimonial: Pick<Testimonial, "image" | "initials" | "name"> }) {
   if (testimonial.image?.src) {
@@ -44,6 +42,33 @@ export default function AdminTestimonialsPage() {
   const [pendingDelete, setPendingDelete] = useState<Testimonial | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(EMPTY_FORM);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [removeExistingImage, setRemoveExistingImage] = useState(false);
+  const [error, setError] = useState("");
+
+  const resetImageState = () => {
+    if (imagePreview && imageFile) URL.revokeObjectURL(imagePreview);
+    setImageFile(null);
+    setImagePreview(null);
+    setRemoveExistingImage(false);
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (imagePreview && imageFile) URL.revokeObjectURL(imagePreview);
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
+    setRemoveExistingImage(false);
+  };
+
+  const handleRemoveImage = () => {
+    if (imagePreview && imageFile) URL.revokeObjectURL(imagePreview);
+    setImageFile(null);
+    setImagePreview(null);
+    setRemoveExistingImage(true);
+  };
 
   const fetchTestimonials = async () => {
     try {
@@ -86,31 +111,34 @@ export default function AdminTestimonialsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
+    setError("");
 
     try {
-      const payload: TestimonialPayload = {
-        quote: form.quote,
-        name: form.name,
-        role: form.role,
-        initials: form.initials,
-      };
-
-      if (form.imageSrc) {
-        payload.image = { src: form.imageSrc, alt: form.imageAlt || form.name };
+      const formData = new FormData();
+      formData.append("quote", form.quote);
+      formData.append("name", form.name);
+      formData.append("role", form.role);
+      formData.append("initials", form.initials);
+      if (imageFile) {
+        formData.append("image", imageFile);
+        formData.append("imageAlt", form.imageAlt || form.name);
       }
 
       const res = await fetch("/api/admin/testimonials", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: formData,
       });
 
-      if (res.ok) {
+      const data = await res.json();
+      if (res.ok && data.success) {
         setForm(EMPTY_FORM);
+        resetImageState();
         fetchTestimonials();
+      } else {
+        setError(data.message || "Failed to save testimonial");
       }
     } catch {
-      console.error("Failed to save testimonial");
+      setError("Failed to save testimonial");
     } finally {
       setSaving(false);
     }
@@ -141,9 +169,11 @@ export default function AdminTestimonialsPage() {
       name: testimonial.name,
       role: testimonial.role,
       initials: testimonial.initials,
-      imageSrc: testimonial.image?.src || "",
       imageAlt: testimonial.image?.alt || "",
     });
+    setImageFile(null);
+    setImagePreview(testimonial.image?.src || null);
+    setRemoveExistingImage(false);
   };
 
   const handleUpdateSubmit = async (e: React.FormEvent) => {
@@ -151,31 +181,37 @@ export default function AdminTestimonialsPage() {
     if (!editingId) return;
 
     setSaving(true);
-    try {
-      const payload: TestimonialPayload = {
-        quote: form.quote,
-        name: form.name,
-        role: form.role,
-        initials: form.initials,
-      };
+    setError("");
 
-      if (form.imageSrc) {
-        payload.image = { src: form.imageSrc, alt: form.imageAlt || form.name };
+    try {
+      const formData = new FormData();
+      formData.append("quote", form.quote);
+      formData.append("name", form.name);
+      formData.append("role", form.role);
+      formData.append("initials", form.initials);
+      if (imageFile) {
+        formData.append("image", imageFile);
+        formData.append("imageAlt", form.imageAlt || form.name);
+      } else if (removeExistingImage) {
+        formData.append("removeImage", "true");
       }
 
       const res = await fetch(`/api/admin/testimonials/${editingId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: formData,
       });
 
-      if (res.ok) {
+      const data = await res.json();
+      if (res.ok && data.success) {
         setEditingId(null);
         setForm(EMPTY_FORM);
+        resetImageState();
         fetchTestimonials();
+      } else {
+        setError(data.message || "Failed to update testimonial");
       }
     } catch {
-      console.error("Failed to update testimonial");
+      setError("Failed to update testimonial");
     } finally {
       setSaving(false);
     }
@@ -184,6 +220,7 @@ export default function AdminTestimonialsPage() {
   const cancelEdit = () => {
     setEditingId(null);
     setForm(EMPTY_FORM);
+    resetImageState();
   };
 
   return (
@@ -196,6 +233,8 @@ export default function AdminTestimonialsPage() {
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <StatCard label="Total Testimonials" value={loading ? "–" : testimonials.length} icon={<TestimonialIcon className="h-5 w-5" />} />
       </div>
+
+      {error && <Alert tone="error">{error}</Alert>}
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Form */}
@@ -250,17 +289,38 @@ export default function AdminTestimonialsPage() {
             </div>
 
             <div>
-              <label className={labelClass}>Image URL (optional)</label>
-              <input
-                type="text"
-                value={form.imageSrc}
-                onChange={(e) => setForm({ ...form, imageSrc: e.target.value })}
-                className={inputClass}
-                placeholder="/images/what our patient/1.jpg"
-              />
+              <label className={labelClass}>Photo (optional)</label>
+              {imagePreview ? (
+                <div className="mt-2 flex items-center gap-3">
+                  <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border border-slate-200 bg-slate-100">
+                    <Image src={imagePreview} alt="Selected preview" fill className="object-cover" />
+                  </div>
+                  <div className="flex gap-2">
+                    <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-navy transition-colors hover:bg-slate-50">
+                      <UploadIcon className="h-3.5 w-3.5" />
+                      Replace
+                      <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
+                    </label>
+                    <button
+                      type="button"
+                      onClick={handleRemoveImage}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-rose-600 transition-colors hover:bg-rose-50"
+                    >
+                      <CloseIcon className="h-3.5 w-3.5" />
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <label className="mt-2 inline-flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-500 transition-colors hover:border-primary hover:text-primary">
+                  <UploadIcon className="h-4 w-4" />
+                  Upload photo
+                  <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
+                </label>
+              )}
             </div>
 
-            {form.imageSrc && (
+            {imagePreview && (
               <div>
                 <label className={labelClass}>Image Alt Text</label>
                 <input

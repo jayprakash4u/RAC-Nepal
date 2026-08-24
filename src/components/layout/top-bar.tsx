@@ -1,6 +1,7 @@
 import { siteConfig } from "@/config/site";
 import { Container } from "@/components/ui";
 import { cn } from "@/lib/cn";
+import type { SocialLinks as SocialLinksData } from "@/lib/content";
 import { SocialLinks } from "./social-links";
 
 function PhoneIcon() {
@@ -81,7 +82,7 @@ function TopBarItem({
   return <span className={itemClassName}>{content}</span>;
 }
 
-export function TopBar() {
+export function TopBar({ social }: { social: SocialLinksData }) {
   const { contact } = siteConfig;
 
   return (
@@ -112,6 +113,7 @@ export function TopBar() {
         </div>
 
         <SocialLinks
+          social={social}
           className="hidden border-l border-white/15 pl-md sm:flex md:pl-lg"
           linkClassName="h-7 w-7 text-slate-100 hover:text-white"
         />

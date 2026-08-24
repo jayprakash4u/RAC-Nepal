@@ -1,8 +1,21 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { promises as fs } from "fs";
+import path from "path";
 import { prisma } from "@/lib/prisma";
 import { isAuthorizedAdminRequest } from "@/lib/admin-auth";
 import type { Testimonial as TestimonialRow } from "@/generated/prisma/client";
+
+const TESTIMONIAL_IMAGES_DIR = path.join(process.cwd(), "public", "images", "what our patient");
+
+async function saveTestimonialImage(file: File) {
+  const bytes = await file.arrayBuffer();
+  const buffer = Buffer.from(bytes);
+  const originalName = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
+  const fileName = `${Date.now()}-${originalName}`;
+  await fs.writeFile(path.join(TESTIMONIAL_IMAGES_DIR, fileName), buffer);
+  return `/images/what our patient/${fileName}`;
+}
 
 function toApiShape(row: TestimonialRow) {
   return {
@@ -43,8 +56,22 @@ export async function PUT(
 
   try {
     const { id } = await params;
-    const body = await request.json();
-    const { quote, name, role, initials, image } = body;
+    const formData = await request.formData();
+    const quote = formData.get("quote") as string;
+    const name = formData.get("name") as string;
+    const role = formData.get("role") as string;
+    const initials = formData.get("initials") as string;
+    const imageAlt = formData.get("imageAlt") as string | null;
+    const file = formData.get("image") as File | null;
+    const removeImage = formData.get("removeImage") === "true";
+
+    let imageUpdate = {};
+    if (file && file.size > 0) {
+      const imageSrc = await saveTestimonialImage(file);
+      imageUpdate = { imageSrc, imageAlt: imageAlt || name };
+    } else if (removeImage) {
+      imageUpdate = { imageSrc: null, imageAlt: null };
+    }
 
     const row = await prisma.testimonial.update({
       where: { id },
@@ -53,7 +80,7 @@ export async function PUT(
         ...(name ? { name } : {}),
         ...(role ? { role } : {}),
         ...(initials ? { initials } : {}),
-        ...(image !== undefined ? { imageSrc: image?.src || null, imageAlt: image?.alt || null } : {}),
+        ...imageUpdate,
       },
     });
 

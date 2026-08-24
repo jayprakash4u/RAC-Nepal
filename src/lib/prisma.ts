@@ -1,19 +1,23 @@
-import { PrismaMssql } from "@prisma/adapter-mssql";
+import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import { PrismaClient } from "@/generated/prisma/client";
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
 function createPrismaClient() {
-  const adapter = new PrismaMssql({
-    server: process.env.DB_HOST ?? "localhost",
-    port: Number(process.env.DB_PORT ?? 1433),
-    database: process.env.DB_NAME,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    options: {
-      trustServerCertificate: true,
-      encrypt: true,
-    },
+  const sslMode = process.env.MYSQL_SSL;
+  const adapter = new PrismaMariaDb({
+    host: process.env.MYSQL_HOST ?? "localhost",
+    port: Number(process.env.MYSQL_PORT ?? 3306),
+    database: process.env.MYSQL_DATABASE,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    connectionLimit: Number(process.env.MYSQL_CONNECTION_LIMIT ?? 10),
+    ssl:
+      sslMode === "skip-verify"
+        ? { rejectUnauthorized: false }
+        : sslMode === "true"
+          ? {}
+          : undefined,
   });
 
   return new PrismaClient({ adapter });

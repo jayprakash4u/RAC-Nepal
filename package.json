@@ -7,10 +7,11 @@
     "build": "next build",
     "start": "next start -p 3300",
     "lint": "eslint",
-    "db:seed": "tsx prisma/seed.ts"
+    "db:seed": "tsx prisma/seed.ts",
+    "db:import-content": "tsx prisma/import-content.ts"
   },
   "dependencies": {
-    "@prisma/adapter-mssql": "^7.9.1",
+    "@prisma/adapter-mariadb": "^7.9.1",
     "@prisma/client": "^7.9.1",
     "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",

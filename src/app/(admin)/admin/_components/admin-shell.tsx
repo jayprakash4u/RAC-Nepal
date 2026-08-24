@@ -16,6 +16,7 @@ import {
   LogoIcon,
   LogoutIcon,
   MenuIcon,
+  ShareIcon,
   TestimonialIcon,
   VideoIcon,
 } from "./icons";
@@ -45,6 +46,10 @@ const NAV_GROUPS: { heading: string; items: NavItem[] }[] = [
       { href: "/admin/testimonials", label: "Patient Experiences", icon: TestimonialIcon },
       { href: "/admin/blogs", label: "Blogs", icon: BlogIcon },
     ],
+  },
+  {
+    heading: "Settings",
+    items: [{ href: "/admin/settings", label: "Social Media", icon: ShareIcon }],
   },
 ];
 

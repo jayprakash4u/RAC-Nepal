@@ -1,15 +1,16 @@
 import { Container } from "@/components/ui";
+import type { SocialLinks as SocialLinksData } from "@/lib/content";
 import { HeaderNav } from "./header-nav";
 import { Logo } from "./logo";
 import { TopBar } from "./top-bar";
 
-export function Header() {
+export function Header({ social }: { social: SocialLinksData }) {
   return (
     <header
       className="sticky top-0 z-header isolate overflow-visible [--site-header-offset:7.5rem]"
       data-site-header
     >
-      <TopBar />
+      <TopBar social={social} />
 
       <div className="overflow-visible border-b border-slate-200/80 bg-white/95 shadow-sm backdrop-blur-md">
         <Container

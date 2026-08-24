@@ -3,6 +3,7 @@ import { siteConfig } from "@/config/site";
 import { mainNavigation } from "@/config/navigation";
 import { isNavDropdown, type NavLink } from "@/types/navigation";
 import { Container } from "@/components/ui";
+import type { SocialLinks as SocialLinksData } from "@/lib/content";
 import Link from "next/link";
 import { Logo } from "./logo";
 import { SocialLinks } from "./social-links";
@@ -159,7 +160,7 @@ function ClockIcon() {
   );
 }
 
-export function Footer() {
+export function Footer({ social }: { social: SocialLinksData }) {
   const { contact } = siteConfig;
   const currentYear = new Date().getFullYear();
   const conditionsNav = getDropdownByLabel("Conditions Treated");
@@ -182,7 +183,7 @@ export function Footer() {
         <div className="flex flex-col gap-md md:hidden">
           <div className="flex flex-wrap items-center justify-between gap-x-md gap-y-sm">
             <Logo imageClassName="h-9" />
-            <SocialLinks />
+            <SocialLinks social={social} />
           </div>
 
           <div>
@@ -247,7 +248,7 @@ export function Footer() {
             <p className="text-xs font-medium tracking-[0.15em] text-primary uppercase">
               {siteConfig.tagline}
             </p>
-            <SocialLinks className="mt-xs" />
+            <SocialLinks social={social} className="mt-xs" />
           </div>
 
           <div>

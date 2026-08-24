@@ -1,5 +1,5 @@
-import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/cn";
+import type { SocialLinks as SocialLinksData } from "@/lib/content";
 
 function FacebookIcon() {
   return (
@@ -50,12 +50,15 @@ const socialIcons = {
 } as const;
 
 type SocialLinksProps = {
+  social: SocialLinksData;
   className?: string;
   linkClassName?: string;
 };
 
-export function SocialLinks({ className, linkClassName }: SocialLinksProps) {
-  const { social } = siteConfig.topBar;
+export function SocialLinks({ social, className, linkClassName }: SocialLinksProps) {
+  if (Object.keys(social).length === 0) {
+    return null;
+  }
 
   return (
     <div className={cn("flex items-center gap-xs", className)}>
